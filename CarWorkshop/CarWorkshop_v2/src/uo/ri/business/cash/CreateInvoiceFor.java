@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import alb.util.console.Console;
 import alb.util.date.DateUtil;
@@ -48,7 +50,8 @@ public class CreateInvoiceFor {
 		this.idsAveria = lista;
 	}
 
-	public List<Long> execute() throws BusinessException {
+	public Map<String,Object> execute() throws BusinessException {
+		Map<String, Object> factura = new HashMap<String, Object>();
 		try {
 			connection = Jdbc.getConnection();
 			connection.setAutoCommit(false);
@@ -65,6 +68,13 @@ public class CreateInvoiceFor {
 			long idFactura = crearFactura(numeroFactura, fechaFactura, iva, importe);
 			vincularAveriasConFactura(idFactura, idsAveria);
 			cambiarEstadoAverias(idsAveria, "FACTURADA");
+			
+			factura.put("numeroFactura", numeroFactura);
+			factura.put("fechaFactura", fechaFactura);
+			factura.put("totalFactura", totalFactura);
+			factura.put("iva", iva);
+			factura.put("importe", importe);
+			
 
 			mostrarFactura(numeroFactura, fechaFactura, totalFactura, iva, importe);
 
@@ -86,10 +96,11 @@ public class CreateInvoiceFor {
 		} finally {
 			Jdbc.close(connection);
 		}
-		return idsAveria;
+		return factura;
 
 	}
 
+	
 	private void mostrarFactura(long numeroFactura, Date fechaFactura, double totalFactura, double iva,
 			double totalConIva) {
 

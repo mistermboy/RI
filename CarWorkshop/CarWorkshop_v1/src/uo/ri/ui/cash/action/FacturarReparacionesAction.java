@@ -2,6 +2,7 @@ package uo.ri.ui.cash.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import alb.util.console.Console;
 import alb.util.menu.Action;
@@ -25,7 +26,8 @@ public class FacturarReparacionesAction implements Action {
 		} while (masAverias());
 		
 		CreateInvoiceFor c = new CreateInvoiceFor(idsAveria);
-		idsAveria = c.execute();
+		
+		Map<String, Object> factura = c.execute();
 		
 	}
 
