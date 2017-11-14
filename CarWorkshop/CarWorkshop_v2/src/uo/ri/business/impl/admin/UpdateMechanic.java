@@ -1,4 +1,4 @@
-package uo.ri.business.admin;
+package uo.ri.business.impl.admin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,18 +7,22 @@ import java.sql.SQLException;
 
 import alb.util.jdbc.Jdbc;
 
-public class DeleteMechanic {
+public class UpdateMechanic {
 
-	private long idMechanic;
+	private static String SQL = "update TMecanicos " + "set nombre = ?, apellidos = ? " + "where id = ?";
 
-	private static String SQL = "delete from TMecanicos where id = ?";
+	private long id;
+	private String nombre;
+	private String apellidos;
 
-	public DeleteMechanic(long idMechanic) {
-		this.idMechanic = idMechanic;
+	public UpdateMechanic(long id, String nombre, String apellidos) {
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.id = id;
 	}
 
 	public void execute() {
-
+		// Procesar
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -27,7 +31,9 @@ public class DeleteMechanic {
 			c = Jdbc.getConnection();
 
 			pst = c.prepareStatement(SQL);
-			pst.setLong(1, idMechanic);
+			pst.setString(1, nombre);
+			pst.setString(2, apellidos);
+			pst.setLong(3, id);
 
 			pst.executeUpdate();
 

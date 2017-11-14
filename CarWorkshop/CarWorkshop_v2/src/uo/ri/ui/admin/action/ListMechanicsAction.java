@@ -1,6 +1,7 @@
 package uo.ri.ui.admin.action;
 
-import uo.ri.business.admin.FindAllMechanics;
+import uo.ri.business.impl.AdminServiceImpl;
+import uo.ri.business.impl.admin.FindAllMechanics;
 import uo.ri.common.BusinessException;
 
 import java.util.List;
@@ -16,7 +17,8 @@ public class ListMechanicsAction implements Action {
 
 		Console.println("\nListado de mecánicos\n");
 
-		List<Map<String,Object>> map = new FindAllMechanics().execute();
+		AdminServiceImpl admin = new AdminServiceImpl();
+		List<Map<String,Object>> map = admin.findAllMechanics();
 		for(Map<String,Object> m:map) {
 			for(Map.Entry<String,Object> entry:m.entrySet()) {
 				Console.print(entry.getKey() + entry.getValue());
