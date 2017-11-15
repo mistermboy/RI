@@ -2,9 +2,8 @@ package uo.ri.ui.admin.action;
 
 import alb.util.console.Console;
 import alb.util.menu.Action;
-import uo.ri.business.impl.AdminServiceImpl;
-import uo.ri.business.impl.admin.AddMechanic;
 import uo.ri.common.BusinessException;
+import uo.ri.conf.ServicesFactory;
 
 public class AddMechanicAction implements Action {
 
@@ -14,9 +13,8 @@ public class AddMechanicAction implements Action {
 		// Pedir datos
 		String nombre = Console.readString("Nombre");
 		String apellidos = Console.readString("Apellidos");
-
-		AdminServiceImpl admin = new AdminServiceImpl();
-		admin.addMechanic(nombre, apellidos);
+		
+		ServicesFactory.getAdminService().addMechanic(nombre, apellidos);
 
 		// Mostrar resultado
 		Console.println("Nuevo mecánico añadido");
