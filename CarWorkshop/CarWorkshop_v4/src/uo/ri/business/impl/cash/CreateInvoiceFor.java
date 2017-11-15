@@ -4,43 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import alb.util.console.Console;
 import alb.util.date.DateUtil;
 import alb.util.jdbc.Jdbc;
 import alb.util.math.Round;
 import uo.ri.common.BusinessException;
+import uo.ri.conf.Conf;
 
 public class CreateInvoiceFor {
-
-	private static final String SQL_IMPORTE_REPUESTOS = "select sum(s.cantidad * r.precio) "
-			+ "	from  TSustituciones s, TRepuestos r " + "	where s.repuesto_id = r.id "
-			+ "		and s.intervencion_averia_id = ?";
-
-	private static final String SQL_IMPORTE_MANO_OBRA = "select sum(i.minutos * tv.precioHora / 60) "
-			+ "	from TAverias a, TIntervenciones i, TVehiculos v, TTiposVehiculo tv" + "	where i.averia_id = a.id "
-			+ "		and a.vehiculo_id = v.id" + "		and v.tipo_id = tv.id" + "		and a.id = ?"
-			+ "		and a.status = 'TERMINADA'";
-
-	private static final String SQL_UPDATE_IMPORTE_AVERIA = "update TAverias set importe = ? where id = ?";
-
-	private static final String SQL_ULTIMO_NUMERO_FACTURA = "select max(numero) from TFacturas";
-
-	private static final String SQL_INSERTAR_FACTURA = "insert into TFacturas(numero, fecha, iva, importe, status) "
-			+ "	values(?, ?, ?, ?, ?)";
-
-	private static final String SQL_VINCULAR_AVERIA_FACTURA = "update TAverias set factura_id = ? where id = ?";
-
-	private static final String SQL_ACTUALIZAR_ESTADO_AVERIA = "update TAverias set status = ? where id = ?";
-
-	private static final String SQL_VERIFICAR_ESTADO_AVERIA = "select status from TAverias where id = ?";
-
-	private static final String SQL_RECUPERAR_CLAVE_GENERADA = "select id from TFacturas where numero = ?";
 
 	private Connection connection;
 
@@ -50,7 +25,7 @@ public class CreateInvoiceFor {
 		this.idsAveria = lista;
 	}
 
-	public Map<String,Object> execute() throws BusinessException {
+	public Map<String, Object> execute() throws BusinessException {
 		Map<String, Object> factura = new HashMap<String, Object>();
 		try {
 			connection = Jdbc.getConnection();
@@ -68,16 +43,15 @@ public class CreateInvoiceFor {
 			long idFactura = crearFactura(numeroFactura, fechaFactura, iva, importe);
 			vincularAveriasConFactura(idFactura, idsAveria);
 			cambiarEstadoAverias(idsAveria, "FACTURADA");
-			
+
 			factura.put("numeroFactura", numeroFactura);
 			factura.put("fechaFactura", fechaFactura);
 			factura.put("totalFactura", totalFactura);
 			factura.put("iva", iva);
 			factura.put("importe", importe);
-			
 
-			//mostrarFactura(numeroFactura, fechaFactura, totalFactura, iva, importe);
-			//La factura ahora se muestra desde la capa de presentación (ui)
+			// mostrarFactura(numeroFactura, fechaFactura, totalFactura, iva, importe);
+			// La factura ahora se muestra desde la capa de presentación (ui)
 
 			connection.commit();
 		} catch (SQLException e) {
@@ -101,15 +75,12 @@ public class CreateInvoiceFor {
 
 	}
 
-	
-
-	@SuppressWarnings("resource")
 	private void verificarAveriasTerminadas(List<Long> idsAveria) throws SQLException, BusinessException {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_VERIFICAR_ESTADO_AVERIA);
+			pst = connection.prepareStatement(Conf.get("SQL_VERIFICAR_ESTADO_AVERIA"));
 
 			for (Long idAveria : idsAveria) {
 				pst.setLong(1, idAveria);
@@ -136,7 +107,7 @@ public class CreateInvoiceFor {
 
 		PreparedStatement pst = null;
 		try {
-			pst = connection.prepareStatement(SQL_ACTUALIZAR_ESTADO_AVERIA);
+			pst = connection.prepareStatement(Conf.get("SQL_ACTUALIZAR_ESTADO_AVERIA"));
 
 			for (Long idAveria : idsAveria) {
 				pst.setString(1, status);
@@ -153,7 +124,7 @@ public class CreateInvoiceFor {
 
 		PreparedStatement pst = null;
 		try {
-			pst = connection.prepareStatement(SQL_VINCULAR_AVERIA_FACTURA);
+			pst = connection.prepareStatement(Conf.get("SQL_VINCULAR_AVERIA_FACTURA"));
 
 			for (Long idAveria : idsAveria) {
 				pst.setLong(1, idFactura);
@@ -172,7 +143,7 @@ public class CreateInvoiceFor {
 		PreparedStatement pst = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_INSERTAR_FACTURA);
+			pst = connection.prepareStatement(Conf.get("SQL_INSERTAR_FACTURA"));
 			pst.setLong(1, numeroFactura);
 			pst.setDate(2, new java.sql.Date(fechaFactura.getTime()));
 			pst.setDouble(3, iva);
@@ -193,7 +164,7 @@ public class CreateInvoiceFor {
 		ResultSet rs = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_RECUPERAR_CLAVE_GENERADA);
+			pst = connection.prepareStatement(Conf.get("SQL_RECUPERAR_CLAVE_GENERADA"));
 			pst.setLong(1, numeroFactura);
 			rs = pst.executeQuery();
 			rs.next();
@@ -210,7 +181,7 @@ public class CreateInvoiceFor {
 		ResultSet rs = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_ULTIMO_NUMERO_FACTURA);
+			pst = connection.prepareStatement(Conf.get("SQL_ULTIMO_NUMERO_FACTURA"));
 			rs = pst.executeQuery();
 
 			if (rs.next()) {
@@ -246,7 +217,7 @@ public class CreateInvoiceFor {
 		PreparedStatement pst = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_UPDATE_IMPORTE_AVERIA);
+			pst = connection.prepareStatement(Conf.get("SQL_UPDATE_IMPORTE_AVERIA"));
 			pst.setDouble(1, totalAveria);
 			pst.setLong(2, idAveria);
 			pst.executeUpdate();
@@ -260,7 +231,7 @@ public class CreateInvoiceFor {
 		ResultSet rs = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_IMPORTE_REPUESTOS);
+			pst = connection.prepareStatement(Conf.get("SQL_IMPORTE_REPUESTOS"));
 			pst.setLong(1, idAveria);
 
 			rs = pst.executeQuery();
@@ -280,7 +251,7 @@ public class CreateInvoiceFor {
 		ResultSet rs = null;
 
 		try {
-			pst = connection.prepareStatement(SQL_IMPORTE_MANO_OBRA);
+			pst = connection.prepareStatement(Conf.get("SQL_IMPORTE_MANO_OBRA"));
 			pst.setLong(1, idAveria);
 
 			rs = pst.executeQuery();

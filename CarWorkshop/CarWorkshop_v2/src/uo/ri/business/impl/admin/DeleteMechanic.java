@@ -6,11 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import alb.util.jdbc.Jdbc;
-import uo.ri.conf.Conf;
 
 public class DeleteMechanic {
 
 	private long idMechanic;
+
+	private static String SQL = "delete from TMecanicos where id = ?";
 
 	public DeleteMechanic(long idMechanic) {
 		this.idMechanic = idMechanic;
@@ -25,7 +26,7 @@ public class DeleteMechanic {
 		try {
 			c = Jdbc.getConnection();
 
-			pst = c.prepareStatement(Conf.get("SQL_DELETE_MECHANIC"));
+			pst = c.prepareStatement(SQL);
 			pst.setLong(1, idMechanic);
 
 			pst.executeUpdate();

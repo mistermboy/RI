@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import alb.util.jdbc.Jdbc;
-import uo.ri.conf.Conf;
 
 public class UpdateMechanic {
+
+	private static String SQL = "update TMecanicos " + "set nombre = ?, apellidos = ? " + "where id = ?";
 
 	private long id;
 	private String nombre;
@@ -21,6 +22,7 @@ public class UpdateMechanic {
 	}
 
 	public void execute() {
+		// Procesar
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -28,7 +30,7 @@ public class UpdateMechanic {
 		try {
 			c = Jdbc.getConnection();
 
-			pst = c.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
+			pst = c.prepareStatement(SQL);
 			pst.setString(1, nombre);
 			pst.setString(2, apellidos);
 			pst.setLong(3, id);

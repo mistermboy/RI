@@ -1,7 +1,8 @@
 package uo.ri.ui.admin.action;
 
+import uo.ri.business.impl.AdminServiceImpl;
+import uo.ri.business.impl.admin.UpdateMechanic;
 import uo.ri.common.BusinessException;
-import uo.ri.conf.ServicesFactory;
 import alb.util.console.Console;
 import alb.util.menu.Action;
 
@@ -15,7 +16,8 @@ public class UpdateMechanicAction implements Action {
 		String nombre = Console.readString("Nombre");
 		String apellidos = Console.readString("Apellidos");
 
-		ServicesFactory.getAdminService().updateMechanic(id, nombre, apellidos);
+		AdminServiceImpl admin = new AdminServiceImpl();
+		admin.updateMechanic(id, nombre, apellidos);
 
 		// Mostrar resultado
 		Console.println("Mecánico actualizado");

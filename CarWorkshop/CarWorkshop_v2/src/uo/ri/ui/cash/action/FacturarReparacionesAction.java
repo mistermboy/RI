@@ -7,35 +7,42 @@ import java.util.Map;
 
 import alb.util.console.Console;
 import alb.util.menu.Action;
+import uo.ri.business.impl.CashServiceImpl;
+import uo.ri.business.impl.cash.CreateInvoiceFor;
 import uo.ri.common.BusinessException;
-import uo.ri.conf.ServicesFactory;
 
 public class FacturarReparacionesAction implements Action {
 
+	
 	public FacturarReparacionesAction() {
-
+		
 	}
-
+	
 	@Override
 	public void execute() throws BusinessException {
 		List<Long> idsAveria = new ArrayList<Long>();
-
+		
 		do {
 			Long id = Console.readLong("ID de averia");
 			idsAveria.add(id);
 		} while (masAverias());
-
-		Map<String, Object> factura = ServicesFactory.getCashService().createInvoiceFor(idsAveria);
-
-		mostrarFactura((long) factura.get("numeroFactura"), (Date) factura.get("fechaFactura"),
-				(double) factura.get("totalFactura"), (double) factura.get("iva"), (double) factura.get("importe"));
-
+		
+		CashServiceImpl c = new CashServiceImpl();
+		Map<String, Object> factura = c.createInvoiceFor(idsAveria);
+		
+		mostrarFactura((long) factura.get("numeroFactura"),
+				(Date) factura.get("fechaFactura"),
+				(double) factura.get("totalFactura"),
+				(double) factura.get("iva"),
+				(double) factura.get("importe"));
+		
 	}
 
 	private boolean masAverias() {
 		return Console.readString("¿Añadir más averias? (s/n) ").equalsIgnoreCase("s");
 	}
-
+	
+	
 	private void mostrarFactura(long numeroFactura, Date fechaFactura, double totalFactura, double iva,
 			double totalConIva) {
 
