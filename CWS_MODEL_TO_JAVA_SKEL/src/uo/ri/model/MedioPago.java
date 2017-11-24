@@ -1,10 +1,15 @@
 package uo.ri.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class MedioPago {
 
 	protected double acumulado = 0.0;
 
 	private Cliente cliente;
+
+	private Set<Cargo> cargos = new HashSet<>();
 
 	public Cliente getCliente() {
 		return cliente;
@@ -12,6 +17,14 @@ public abstract class MedioPago {
 
 	void _setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public double getAcumulado() {
+		return acumulado;
+	}
+
+	public void setAcumulado(double acumulado) {
+		this.acumulado = acumulado;
 	}
 
 	@Override
@@ -37,6 +50,14 @@ public abstract class MedioPago {
 		} else if (!cliente.equals(other.cliente))
 			return false;
 		return true;
+	}
+
+	Set<Cargo> _getCargos() {
+		return cargos;
+	}
+
+	public Set<Cargo> getCargos() {
+		return new HashSet<>(cargos);
 	}
 
 }

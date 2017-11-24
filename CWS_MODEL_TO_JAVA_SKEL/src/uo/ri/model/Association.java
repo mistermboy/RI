@@ -34,11 +34,11 @@ public class Association {
 
 		public static void link(Cliente cliente, MedioPago mp) {
 			mp._setCliente(cliente);
-			cliente._getMediosDePago().add(mp);
+			cliente._getMediosPago().add(mp);
 		}
 
 		public static void unlink(Cliente cliente, MedioPago mp) {
-			cliente._getMediosDePago().remove(mp);
+			cliente._getMediosPago().remove(mp);
 			mp._setCliente(null);
 		}
 	}
@@ -57,9 +57,39 @@ public class Association {
 	}
 
 	public static class Facturar {
+
+		public static void link(Factura factura, Averia averia) {
+			averia._setFactura(factura);
+			factura._getAverias().add(averia);
+
+		}
+
+		public static void unlink(Factura factura, Averia averia) {
+			factura._getAverias().remove(averia);
+			averia._setFactura(null);
+
+		}
+
 	}
 
 	public static class Cargar {
+
+		public static void link(Factura factura, Cargo cargo, MedioPago medioPago) {
+			cargo._setFactura(factura);
+			cargo._setMedioPago(medioPago);
+			factura._getCargos().add(cargo);
+			medioPago._getCargos().add(cargo);
+
+		}
+
+		public static void unlink(Cargo cargo) {
+			cargo.getFactura()._getCargos().remove(cargo);
+			cargo.getMedioPago()._getCargos().remove(cargo);
+			cargo._setFactura(null);
+			cargo._setMedioPago(null);
+
+		}
+
 	}
 
 	public static class Asignar {
@@ -96,17 +126,18 @@ public class Association {
 	public static class Sustituir {
 
 		public static void link(Repuesto repuesto, Sustitucion sustitucion, Intervencion intervencion) {
-			sustitucion._setRepuesto(repuesto);
 			sustitucion._setIntervencion(intervencion);
-			repuesto.getSustituciones().add(sustitucion);
-			intervencion.getSustituciones().add(sustitucion);
+			sustitucion._setRepuesto(repuesto);
+			intervencion._getSustituciones().add(sustitucion);
+			repuesto._getSustituciones().add(sustitucion);
 		}
 
 		public static void unlink(Sustitucion sustitucion) {
-			sustitucion.getRepuesto().getSustituciones().add(sustitucion);
-			sustitucion.getIntervencion().getSustituciones().add(sustitucion);
-			sustitucion._setRepuesto(null);
+			sustitucion.getIntervencion()._getSustituciones().remove(sustitucion);
+			sustitucion.getRepuesto()._getSustituciones().remove(sustitucion);
 			sustitucion._setIntervencion(null);
+			sustitucion._setRepuesto(null);
+
 		}
 
 	}

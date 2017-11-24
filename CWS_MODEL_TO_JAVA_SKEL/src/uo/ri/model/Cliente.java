@@ -92,11 +92,11 @@ public class Cliente {
 		return new HashSet<>(vehiculos);
 	}
 
-	Set<MedioPago> _getMediosDePago() {
+	Set<MedioPago> _getMediosPago() {
 		return mediosDePago;
 	}
 
-	public Set<MedioPago> getMediosDePago() {
+	public Set<MedioPago> getMediosPago() {
 		return new HashSet<>(mediosDePago);
 	}
 

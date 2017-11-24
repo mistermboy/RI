@@ -16,6 +16,12 @@ public class Repuesto {
 		this.codigo = codigo;
 	}
 
+	public Repuesto(String codigo, String descripcion, double precio) {
+		this(codigo);
+		this.descripcion = descripcion;
+		this.precio = precio;
+	}
+
 	public String getDescripcion() {
 		return descripcion;
 	}

@@ -37,8 +37,13 @@ public class Averia {
 	 */
 	public void assignTo(Mecanico mecanico) {
 		// Solo se puede asignar una averia que está ABIERTA
-		// linkado de averia y mecanico
-		// la averia pasa a ASIGNADA
+		if (this.status.equals(AveriaStatus.ABIERTA)) {
+			// linkado de averia y mecanico
+			Association.Asignar.link(mecanico, this);
+			// la averia pasa a ASIGNADA
+			this.setStatus(AveriaStatus.ASIGNADA);
+		}
+
 	}
 
 	/**
@@ -47,9 +52,16 @@ public class Averia {
 	 */
 	public void markAsFinished() {
 		// Se verifica que está en estado ASIGNADA
-		// se calcula el importe
-		// se desvincula mecanico y averia
-		// el status cambia a TERMINADA
+		if (this.status.equals(AveriaStatus.ASIGNADA)) {
+			// se calcula el importe
+			
+			// se desvincula mecanico y averia
+			Association.Asignar.unlink(mecanico, this);
+			// el status cambia a TERMINADA
+			this.setStatus(AveriaStatus.TERMINADA);
+
+		}
+
 	}
 
 	/**
@@ -58,7 +70,11 @@ public class Averia {
 	 */
 	public void reopen() {
 		// Solo se puede reabrir una averia que está TERMINADA
-		// la averia pasa a ABIERTA
+		if (this.status.equals(AveriaStatus.TERMINADA)) {
+			// la averia pasa a ABIERTA
+			this.setStatus(AveriaStatus.ABIERTA);
+		}
+
 	}
 
 	/**
@@ -66,7 +82,22 @@ public class Averia {
 	 */
 	public void markBackToFinished() {
 		// verificar que la averia está FACTURADA
-		// cambiar status a TERMINADA
+		if (this.status.equals(AveriaStatus.FACTURADA)) {
+			// cambiar status a TERMINADA
+			this.setStatus(AveriaStatus.TERMINADA);
+		}
+
+	}
+
+	/**
+	 * Se marca una avería como facturada
+	 */
+	public void markAsInvoiced() {
+		// verificar que la averia está TERMINADA
+		if (this.status.equals(AveriaStatus.TERMINADA)) {
+			// cambiar status a FACTURADA
+			this.setStatus(AveriaStatus.FACTURADA);
+		}
 	}
 
 	public String getDescripcion() {

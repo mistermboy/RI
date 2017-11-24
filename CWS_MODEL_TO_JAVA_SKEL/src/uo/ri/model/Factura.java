@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
 
 public class Factura {
@@ -12,9 +13,10 @@ public class Factura {
 	private Date fecha;
 	private double importe;
 	private double iva;
-	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
+	private FacturaStatus facturaStatus = FacturaStatus.SIN_ABONAR;
 
 	private Set<Averia> averias = new HashSet<>();
+	private Set<Cargo> cargos = new HashSet<>();
 
 	public Factura(Long numero) {
 		super();
@@ -33,10 +35,18 @@ public class Factura {
 	 */
 	public void addAveria(Averia averia) {
 		// Verificar que la factura está en estado SIN_ABONAR
-		// Verificar que La averia está TERMINADA
-		// linkar factura y averia
-		// marcar la averia como FACTURADA ( averia.markAsInvoiced() )
-		// calcular el importe
+		if (this.getStatus().equals(FacturaStatus.SIN_ABONAR)) {
+			// Verificar que La averia está TERMINADA
+			if (averia.getStatus().equals(AveriaStatus.TERMINADA)) {
+				// linkar factura y averia
+				Association.Facturar.link(this, averia);
+				// marcar la averia como FACTURADA ( averia.markAsInvoiced() )
+				averia.markAsInvoiced();
+				// calcular el importe
+				calcularImporte();
+			}
+		}
+
 	}
 
 	/**
@@ -44,8 +54,8 @@ public class Factura {
 	 * factura
 	 */
 	void calcularImporte() {
-		// iva = ...
-		// importe = ...
+		 iva = 3;
+		 importe = 4;
 	}
 
 	/**
@@ -56,10 +66,16 @@ public class Factura {
 	 */
 	public void removeAveria(Averia averia) {
 		// verificar que la factura está sin abonar
-		// desenlazar factura y averia
-		// la averia vuelve al estado FINALIZADA ( averia.markBackToFinished() )
-		// TODO Auto-generated method stub
-		// volver a calcular el importe
+		if (this.getStatus().equals(FacturaStatus.SIN_ABONAR)) {
+			// desenlazar factura y averia
+			Association.Facturar.unlink(this, averia);
+			// la averia vuelve al estado FINALIZADA ( averia.markBackToFinished() )
+			 averia.markBackToFinished();
+			// volver a calcular el importe
+			// calcularImporte();
+			 importe=0;
+		}
+		
 	}
 
 	public Date getFecha() {
@@ -79,11 +95,11 @@ public class Factura {
 	}
 
 	public FacturaStatus getStatus() {
-		return status;
+		return facturaStatus;
 	}
 
 	public void setStatus(FacturaStatus status) {
-		this.status = status;
+		this.facturaStatus = status;
 	}
 
 	public Long getNumero() {
@@ -100,6 +116,14 @@ public class Factura {
 
 	public Set<Averia> getAverias() {
 		return new HashSet<>(averias);
+	}
+
+	Set<Cargo> _getCargos() {
+		return cargos;
+	}
+
+	public Set<Cargo> getCargos() {
+		return new HashSet<>(cargos);
 	}
 
 }
