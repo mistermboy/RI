@@ -1,5 +1,6 @@
 package uo.ri.domain;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class FacturaTest {
 		averias.add( averia );
 		Factura factura = new Factura( 0L, averias );
 		
+		assertEquals(302.5,factura.getImporte(),0.1);
 		assertTrue( factura.getImporte() ==  302.5 );
 	}
 

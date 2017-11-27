@@ -1,9 +1,15 @@
 package uo.ri.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import alb.util.date.DateUtil;
+import alb.util.math.Round;
+import uo.ri.model.exception.BusinessException;
 import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
 
@@ -26,6 +32,33 @@ public class Factura {
 	public Factura(Long numero, Date fecha) {
 		this(numero);
 		this.fecha = fecha;
+	}
+
+	public Factura(long numero, List<Averia> averias) throws BusinessException {
+		this(numero);
+		for (Averia a : averias) {
+			if (a.getStatus() != AveriaStatus.TERMINADA) {
+				throw new BusinessException("Avería no terminada");
+			} else {
+				// this.averias.add(a);
+				addAveria(a);
+			}
+
+		}
+	}
+
+	public Factura(long numero, Date fecha, List<Averia> averias) throws BusinessException {
+		this(numero, fecha);
+		for (Averia a : averias) {
+			if (a.getStatus() != AveriaStatus.TERMINADA) {
+				throw new BusinessException("Avería no terminada");
+			} else {
+				// this.averias.add(a);
+				addAveria(a);
+			}
+
+		}
+
 	}
 
 	/**
@@ -52,10 +85,15 @@ public class Factura {
 	/**
 	 * Calcula el importe de la avería y su IVA, teniendo en cuenta la fecha de
 	 * factura
+	 * 
+	 * @throws ParseException
 	 */
 	void calcularImporte() {
-		 iva = 3;
-		 importe = 4;
+		double acum = 0;
+		for (Averia averia : averias) {
+			acum += averia.getImporte();
+		}
+		this.importe = Round.twoCents((acum * getIva()) + acum);
 	}
 
 	/**
@@ -70,12 +108,12 @@ public class Factura {
 			// desenlazar factura y averia
 			Association.Facturar.unlink(this, averia);
 			// la averia vuelve al estado FINALIZADA ( averia.markBackToFinished() )
-			 averia.markBackToFinished();
+			averia.markBackToFinished();
 			// volver a calcular el importe
 			// calcularImporte();
-			 importe=0;
+			importe = 0;
 		}
-		
+
 	}
 
 	public Date getFecha() {
@@ -87,7 +125,16 @@ public class Factura {
 	}
 
 	public double getIva() {
-		return iva;
+		Date limit = DateUtil.fromString("01/07/2012");
+
+		if (this.fecha != null) {
+			Date actual = DateUtil.fromString(
+					"" + this.fecha.getDay() + "/" + this.fecha.getMonth() + "/" + this.fecha.getYear() + "");
+			if (actual.before(limit)) {
+				return 0.18;
+			}
+		}
+		return 0.21;
 	}
 
 	public void setIva(double iva) {

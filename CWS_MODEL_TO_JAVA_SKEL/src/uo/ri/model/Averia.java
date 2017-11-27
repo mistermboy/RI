@@ -54,13 +54,22 @@ public class Averia {
 		// Se verifica que está en estado ASIGNADA
 		if (this.status.equals(AveriaStatus.ASIGNADA)) {
 			// se calcula el importe
-			
+			calcularImporteAveria();
 			// se desvincula mecanico y averia
 			Association.Asignar.unlink(mecanico, this);
 			// el status cambia a TERMINADA
 			this.setStatus(AveriaStatus.TERMINADA);
 
 		}
+
+	}
+
+	private void calcularImporteAveria() {
+		double acum = 0;
+		for (Intervencion intervencion:intervenciones) {
+			acum += intervencion.getImporte();
+		}
+		this.importe = acum;
 
 	}
 

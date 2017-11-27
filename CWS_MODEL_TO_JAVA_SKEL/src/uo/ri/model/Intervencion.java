@@ -15,6 +15,16 @@ public class Intervencion {
 		super();
 		Association.Intervenir.link(averia, this, mecanico);
 	}
+	
+	public double getImporte() {
+		double acum=0;
+		for(Sustitucion sustitucion:sustituciones) {
+			acum+=sustitucion.getImporte();
+		}
+		acum+=(getMinutos() * this.averia.getVehiculo().getTipo().getPrecioHora())/60;
+		return acum;
+	}
+	
 
 	public Averia getAveria() {
 		return averia;

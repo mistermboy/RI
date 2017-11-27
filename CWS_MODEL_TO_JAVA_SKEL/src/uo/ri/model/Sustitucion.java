@@ -8,7 +8,11 @@ public class Sustitucion {
 
 	public Sustitucion(Repuesto repuesto, Intervencion intervencion) {
 		super();
-		Association.Sustituir.link(repuesto,this,intervencion);
+		Association.Sustituir.link(repuesto, this, intervencion);
+	}
+
+	public double getImporte() {
+		return this.cantidad * this.repuesto.getPrecio();
 	}
 
 	public Repuesto getRepuesto() {
