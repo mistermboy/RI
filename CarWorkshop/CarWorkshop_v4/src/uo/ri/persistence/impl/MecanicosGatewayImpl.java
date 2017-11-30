@@ -40,7 +40,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
@@ -57,7 +57,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
@@ -105,7 +105,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}

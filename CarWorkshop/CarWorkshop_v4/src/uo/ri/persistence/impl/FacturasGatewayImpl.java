@@ -64,7 +64,7 @@ public class FacturasGatewayImpl implements FacturasGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error actualizando el estado de una avería");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
@@ -84,7 +84,7 @@ public class FacturasGatewayImpl implements FacturasGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error vinculando una avería a una factura");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
@@ -105,7 +105,7 @@ public class FacturasGatewayImpl implements FacturasGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error insertando una factura");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
@@ -157,7 +157,7 @@ public class FacturasGatewayImpl implements FacturasGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error actualizando el importe de una avería");
 		} finally {
-			Jdbc.close(rs, pst);
+			Jdbc.close(pst);
 		}
 
 	}
