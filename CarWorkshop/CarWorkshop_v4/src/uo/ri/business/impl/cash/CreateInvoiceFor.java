@@ -1,8 +1,6 @@
 package uo.ri.business.impl.cash;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,12 +10,9 @@ import java.util.Map;
 import alb.util.date.DateUtil;
 import alb.util.jdbc.Jdbc;
 import alb.util.math.Round;
-import oracle.net.aso.f;
 import uo.ri.common.BusinessException;
-import uo.ri.conf.Conf;
 import uo.ri.conf.PersistenceFactory;
 import uo.ri.persistence.FacturasGateway;
-import uo.ri.persistence.MecanicosGateway;
 
 public class CreateInvoiceFor {
 

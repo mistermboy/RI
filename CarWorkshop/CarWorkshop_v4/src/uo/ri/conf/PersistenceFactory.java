@@ -7,6 +7,8 @@ import uo.ri.persistence.impl.MecanicosGatewayImpl;
 
 public class PersistenceFactory {
 
+	public PersistenceFactory() {}
+	
 	public static MecanicosGateway getMecanicosGateway() {
 		return new MecanicosGatewayImpl();
 	}
