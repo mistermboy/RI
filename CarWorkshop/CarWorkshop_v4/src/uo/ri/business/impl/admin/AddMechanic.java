@@ -1,12 +1,12 @@
 package uo.ri.business.impl.admin;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import alb.util.jdbc.Jdbc;
-import uo.ri.conf.Conf;
+import uo.ri.common.BusinessException;
+import uo.ri.conf.PersistenceFactory;
+import uo.ri.persistence.MecanicosGateway;
 
 public class AddMechanic {
 
@@ -20,25 +20,24 @@ public class AddMechanic {
 
 	}
 
-	public void execute() {
+	public void execute() throws BusinessException {
 
 		Connection c = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
 
 		try {
 			c = Jdbc.getConnection();
 
-			pst = c.prepareStatement(Conf.get("SQL_INSERT_MECHANIC"));
-			pst.setString(1, nombre);
-			pst.setString(2, apellidos);
-
-			pst.executeUpdate();
+			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
+			mGate.setConnection(c);
+			
+			mGate.insertMechanic(this.nombre, this.apellidos);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} catch (BusinessException e) {
+			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
-			Jdbc.close(rs, pst, c);
+			Jdbc.close(c);
 		}
 	}
 

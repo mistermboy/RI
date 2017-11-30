@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import alb.util.jdbc.Jdbc;
-import uo.ri.conf.Conf;
+import uo.ri.common.BusinessException;
+import uo.ri.conf.PersistenceFactory;
+import uo.ri.persistence.MecanicosGateway;
 
 public class UpdateMechanic {
 
@@ -20,7 +22,7 @@ public class UpdateMechanic {
 		this.id = id;
 	}
 
-	public void execute() {
+	public void execute() throws BusinessException {
 		Connection c = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -28,16 +30,16 @@ public class UpdateMechanic {
 		try {
 			c = Jdbc.getConnection();
 
-			pst = c.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
-			pst.setString(1, nombre);
-			pst.setString(2, apellidos);
-			pst.setLong(3, id);
-
-			pst.executeUpdate();
+			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
+			mGate.setConnection(c);
+			
+			mGate.update(nombre, apellidos, id);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} finally {
+		}  catch (BusinessException e) {
+			throw new BusinessException("Error actualizando un mecánico");
+		}finally {
 			Jdbc.close(rs, pst, c);
 		}
 	}

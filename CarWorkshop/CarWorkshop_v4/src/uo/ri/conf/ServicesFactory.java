@@ -7,10 +7,6 @@ import uo.ri.business.impl.CashServiceImpl;
 
 public class ServicesFactory {
 
-	public ServicesFactory() {
-
-	}
-
 	public static AdminService getAdminService() {
 		return new AdminServiceImpl();
 	}

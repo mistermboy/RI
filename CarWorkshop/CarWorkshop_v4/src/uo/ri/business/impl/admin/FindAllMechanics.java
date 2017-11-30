@@ -5,16 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import alb.util.jdbc.Jdbc;
-import uo.ri.conf.Conf;
+import uo.ri.common.BusinessException;
+import uo.ri.conf.PersistenceFactory;
+import uo.ri.persistence.MecanicosGateway;
 
 public class FindAllMechanics {
 
-	public List<Map<String, Object>> execute() {
+	public List<Map<String, Object>> execute() throws BusinessException {
 
 		List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
 
@@ -25,19 +26,15 @@ public class FindAllMechanics {
 		try {
 			c = Jdbc.getConnection();
 
-			pst = c.prepareStatement(Conf.get("SQL_FIND_ALL_MECHANICS"));
+			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
+			mGate.setConnection(c);
 
-			rs = pst.executeQuery();
-			while (rs.next()) {
-				Map<String, Object> m = new HashMap<String, Object>();
-				m.put("id", rs.getInt("id"));
-				m.put("nombre", rs.getInt("nombre"));
-				m.put("apellidos", rs.getInt("apellidos"));
-				map.add(m);
+			map = mGate.findAllMechanics();
 
-			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} catch (BusinessException e) {
+			throw new BusinessException("Error sacando todos los mecánicos");
 		} finally {
 			Jdbc.close(rs, pst, c);
 		}
