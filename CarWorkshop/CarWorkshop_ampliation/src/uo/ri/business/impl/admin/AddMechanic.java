@@ -30,7 +30,7 @@ public class AddMechanic {
 			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
 			mGate.setConnection(c);
 			
-			mGate.insertMechanic(this.nombre, this.apellidos);
+			mGate.save(this.nombre, this.apellidos);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

@@ -10,9 +10,9 @@ public interface MecanicosGateway {
 
 	void setConnection(Connection con);
 
-	void insertMechanic(String nombre, String apellidos) throws BusinessException;
+	void save(String nombre, String apellidos) throws BusinessException;
 
-	void deleteMechanic(long idMechanic) throws BusinessException;
+	void delete(long idMechanic) throws BusinessException;
 
 	List<Map<String, Object>> findAllMechanics() throws BusinessException;
 

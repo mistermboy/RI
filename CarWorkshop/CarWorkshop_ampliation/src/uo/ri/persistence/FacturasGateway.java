@@ -12,7 +12,7 @@ public interface FacturasGateway {
 
 	void vincularAveriaFactura(long idFactura, List<Long> idsAveria) throws BusinessException;
 
-	void insertarFactura(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
+	void save(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
 			throws BusinessException;
 
 	long recuperarClaveGenerada(long numeroFactura) throws BusinessException;

@@ -45,7 +45,7 @@ public class FacturasGatewayImpl implements FacturasGateway {
 	}
 
 	@Override
-	public void insertarFactura(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
+	public void save(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
 			throws BusinessException {
 		try {
 			pst = conection.prepareStatement(Conf.get("SQL_INSERTAR_FACTURA"));

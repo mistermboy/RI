@@ -27,7 +27,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 	}
 
 	@Override
-	public void insertMechanic(String nombre, String apellidos) throws BusinessException {
+	public void save(String nombre, String apellidos) throws BusinessException {
 
 		try {
 			pst = conection.prepareStatement(Conf.get("SQL_INSERT_MECHANIC"));
@@ -46,7 +46,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 	}
 
 	@Override
-	public void deleteMechanic(long idMechanic) throws BusinessException {
+	public void delete(long idMechanic) throws BusinessException {
 		try {
 
 			pst = conection.prepareStatement(Conf.get("SQL_DELETE_MECHANIC"));
@@ -55,13 +55,12 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un mecánico");
+			throw new BusinessException("Error eliminando un mecánico");
 		} finally {
 			Jdbc.close(pst);
 		}
 
 	}
-
 
 	@Override
 	public List<Map<String, Object>> findAllMechanics() throws BusinessException {
@@ -83,14 +82,14 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 			}
 
 		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un mecánico");
+			throw new BusinessException("Error buscando todos los mecánicos");
 		} finally {
 			Jdbc.close(rs, pst);
 		}
 
 		return map;
 	}
-	
+
 	@Override
 	public void update(String nombre, String apellidos, long id) throws BusinessException {
 		try {
@@ -103,7 +102,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un mecánico");
+			throw new BusinessException("Error actualizando un mecánico");
 		} finally {
 			Jdbc.close(pst);
 		}

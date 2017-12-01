@@ -108,7 +108,7 @@ public class CreateInvoiceFor {
 		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
 		fGate.setConnection(connection);
 
-		fGate.insertarFactura(numeroFactura, fechaFactura, iva, totalConIva);
+		fGate.save(numeroFactura, fechaFactura, iva, totalConIva);
 
 		return getGeneratedKey(numeroFactura); // Id de la nueva factura generada
 
