@@ -29,8 +29,6 @@ public class FindAllMechanics {
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} catch (BusinessException e) {
-			throw new BusinessException("Error sacando todos los mecánicos");
 		} finally {
 			Jdbc.close(c);
 		}

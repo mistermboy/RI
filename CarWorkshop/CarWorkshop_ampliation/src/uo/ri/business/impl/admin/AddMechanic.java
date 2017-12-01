@@ -34,8 +34,6 @@ public class AddMechanic {
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} catch (BusinessException e) {
-			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
 			Jdbc.close(c);
 		}

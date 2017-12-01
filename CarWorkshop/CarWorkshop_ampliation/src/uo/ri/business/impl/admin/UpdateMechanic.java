@@ -32,14 +32,12 @@ public class UpdateMechanic {
 
 			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
 			mGate.setConnection(c);
-			
+
 			mGate.update(nombre, apellidos, id);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}  catch (BusinessException e) {
-			throw new BusinessException("Error actualizando un mecánico");
-		}finally {
+		} finally {
 			Jdbc.close(rs, pst, c);
 		}
 	}

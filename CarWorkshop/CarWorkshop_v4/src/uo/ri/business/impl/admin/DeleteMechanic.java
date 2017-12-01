@@ -25,13 +25,11 @@ public class DeleteMechanic {
 
 			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
 			mGate.setConnection(c);
-			
+
 			mGate.delete(idMechanic);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}catch (BusinessException e) {
-			throw new BusinessException("Error eliminando un mecánico");
 		} finally {
 			Jdbc.close(c);
 		}

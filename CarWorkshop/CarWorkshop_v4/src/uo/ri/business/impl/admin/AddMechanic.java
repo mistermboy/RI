@@ -29,13 +29,11 @@ public class AddMechanic {
 
 			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
 			mGate.setConnection(c);
-			
+
 			mGate.save(this.nombre, this.apellidos);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} catch (BusinessException e) {
-			throw new BusinessException("Error añadiendo un mecánico");
 		} finally {
 			Jdbc.close(c);
 		}
