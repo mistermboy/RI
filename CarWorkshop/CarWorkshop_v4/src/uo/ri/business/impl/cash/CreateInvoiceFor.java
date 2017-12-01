@@ -12,6 +12,7 @@ import alb.util.jdbc.Jdbc;
 import alb.util.math.Round;
 import uo.ri.common.BusinessException;
 import uo.ri.conf.PersistenceFactory;
+import uo.ri.persistence.AveriasGateway;
 import uo.ri.persistence.FacturasGateway;
 
 public class CreateInvoiceFor {
@@ -76,19 +77,19 @@ public class CreateInvoiceFor {
 
 	private void verificarAveriasTerminadas(List<Long> idsAveria) throws SQLException, BusinessException {
 
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
+		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
+		aGate.setConnection(connection);
 
-		fGate.verificarEstadoAveria(idsAveria);
+		aGate.verificarEstadoAveria(idsAveria);
 
 	}
 
 	private void cambiarEstadoAverias(List<Long> idsAveria, String status) throws SQLException, BusinessException {
 
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
+		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
+		aGate.setConnection(connection);
 
-		fGate.actualizarEstadoAveria(idsAveria, status);
+		aGate.actualizarEstadoAveria(idsAveria, status);
 
 	}
 
@@ -150,27 +151,27 @@ public class CreateInvoiceFor {
 
 	private void actualizarImporteAveria(Long idAveria, double totalAveria) throws SQLException, BusinessException {
 
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
+		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
+		aGate.setConnection(connection);
 
-		fGate.actualizarImporteAveria(idAveria, totalAveria);
+		aGate.actualizarImporteAveria(idAveria, totalAveria);
 
 	}
 
 	private double consultaImporteRepuestos(Long idAveria) throws SQLException, BusinessException {
 
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
+		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
+		aGate.setConnection(connection);
 
-		return fGate.importeRepuestos(idAveria);
+		return aGate.importeRepuestos(idAveria);
 	}
 
 	private double consultaImporteManoObra(Long idAveria) throws BusinessException, SQLException {
 
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
+		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
+		aGate.setConnection(connection);
 
-		return fGate.importeManoObra(idAveria);
+		return aGate.importeManoObra(idAveria);
 
 	}
 
