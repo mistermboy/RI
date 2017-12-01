@@ -14,14 +14,14 @@ public class AddClient {
 	private String nombre;
 	private String apellidos;
 	private String correo;
-	private int cPostal;
+	private int zipcode;
 	private int telefono;
 
 	public AddClient(String dni, String nombre, String apellidos, int cPostal, int telefono, String correo) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-		this.cPostal = cPostal;
+		this.zipcode = cPostal;
 		this.telefono = telefono;
 		this.correo = correo;
 	}
@@ -32,11 +32,11 @@ public class AddClient {
 
 		try {
 			c = Jdbc.getConnection();
-
-			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
-			mGate.setConnection(c);
-			
-			mGate.save(this.nombre, this.apellidos);
+//
+//			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
+//			mGate.setConnection(c);
+//			
+//			mGate.save(this.nombre, this.apellidos);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
