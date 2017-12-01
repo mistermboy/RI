@@ -1,8 +1,6 @@
 package uo.ri.business.impl.admin;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +18,6 @@ public class FindAllMechanics {
 		List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
 
 		Connection c = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
 
 		try {
 			c = Jdbc.getConnection();
@@ -36,7 +32,7 @@ public class FindAllMechanics {
 		} catch (BusinessException e) {
 			throw new BusinessException("Error sacando todos los mecánicos");
 		} finally {
-			Jdbc.close(rs, pst, c);
+			Jdbc.close(c);
 		}
 
 		return map;

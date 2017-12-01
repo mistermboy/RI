@@ -26,7 +26,7 @@ public class DeleteMechanic {
 			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
 			mGate.setConnection(c);
 			
-			mGate.deleteMechanic(idMechanic);
+			mGate.delete(idMechanic);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
