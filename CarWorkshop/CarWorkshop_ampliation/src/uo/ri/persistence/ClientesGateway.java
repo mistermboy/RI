@@ -10,13 +10,12 @@ public interface ClientesGateway {
 
 	void setConnection(Connection con);
 
-	void save(String dni, String nombre, String apellidos, int cPostal, int telefono, String correo)
+	void save(String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
 			throws BusinessException;
 
 	void delete(long idClient) throws BusinessException;
 
-	void update(String dni, String nombre, String apellidos, int cPostal, int telefono, String correo,long idClient)
-			throws BusinessException;
+	void update(long idClient, String nombre, String apellidos) throws BusinessException;
 
 	String showClient(long idClient) throws BusinessException;
 

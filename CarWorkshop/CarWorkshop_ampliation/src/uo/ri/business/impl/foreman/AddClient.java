@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import alb.util.jdbc.Jdbc;
 import uo.ri.common.BusinessException;
 import uo.ri.conf.PersistenceFactory;
-import uo.ri.persistence.MecanicosGateway;
+import uo.ri.persistence.ClientesGateway;
 
 public class AddClient {
 
@@ -25,26 +25,25 @@ public class AddClient {
 		this.telefono = telefono;
 		this.correo = correo;
 	}
-	
+
 	public void execute() throws BusinessException {
-	
+
 		Connection c = null;
 
 		try {
 			c = Jdbc.getConnection();
-//
-//			MecanicosGateway mGate = PersistenceFactory.getMecanicosGateway();
-//			mGate.setConnection(c);
-//			
-//			mGate.save(this.nombre, this.apellidos);
+
+			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
+			cGate.setConnection(c);
+
+			cGate.save(dni, nombre, apellidos, zipcode, telefono, correo);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}finally {
+		} finally {
 			Jdbc.close(c);
 		}
-		
+
 	}
-	
 
 }

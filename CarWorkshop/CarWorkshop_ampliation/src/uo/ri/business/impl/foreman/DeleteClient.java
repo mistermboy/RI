@@ -8,18 +8,17 @@ import uo.ri.common.BusinessException;
 import uo.ri.conf.PersistenceFactory;
 import uo.ri.persistence.ClientesGateway;
 
-public class ShowClientDetail {
+public class DeleteClient {
 
 	private Long idClient;
 
-	public ShowClientDetail(Long idClient) {
+	public DeleteClient(Long idClient) {
 		this.idClient = idClient;
 	}
 
-	public String execute() throws BusinessException {
+	public void execute() throws BusinessException {
 
 		Connection c = null;
-		String details = "";
 
 		try {
 			c = Jdbc.getConnection();
@@ -27,14 +26,14 @@ public class ShowClientDetail {
 			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
 			cGate.setConnection(c);
 
-			details = cGate.showClient(idClient);
+			cGate.delete(idClient);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			Jdbc.close(c);
 		}
-		return details;
+
 	}
 
 }

@@ -69,8 +69,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	}
 
 	@Override
-	public void update(String dni, String nombre, String apellidos, int cPostal, int telefono, String correo,
-			long idClient) throws BusinessException {
+	public void update(long idClient, String nombre, String apellidos) throws BusinessException {
 
 		try {
 
