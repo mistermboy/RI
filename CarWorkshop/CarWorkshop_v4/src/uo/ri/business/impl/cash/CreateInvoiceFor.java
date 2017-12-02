@@ -75,7 +75,7 @@ public class CreateInvoiceFor {
 
 	}
 
-	private void verificarAveriasTerminadas(List<Long> idsAveria) throws SQLException, BusinessException {
+	private void verificarAveriasTerminadas(List<Long> idsAveria) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
 		aGate.setConnection(connection);
@@ -84,7 +84,7 @@ public class CreateInvoiceFor {
 
 	}
 
-	private void cambiarEstadoAverias(List<Long> idsAveria, String status) throws SQLException, BusinessException {
+	private void cambiarEstadoAverias(List<Long> idsAveria, String status) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
 		aGate.setConnection(connection);
@@ -103,7 +103,7 @@ public class CreateInvoiceFor {
 	}
 
 	private long crearFactura(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
-			throws SQLException, BusinessException {
+			throws BusinessException {
 
 		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
 		fGate.setConnection(connection);
@@ -114,7 +114,7 @@ public class CreateInvoiceFor {
 
 	}
 
-	private long getGeneratedKey(long numeroFactura) throws SQLException, BusinessException {
+	private long getGeneratedKey(long numeroFactura) throws BusinessException {
 
 		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
 		fGate.setConnection(connection);
@@ -122,7 +122,7 @@ public class CreateInvoiceFor {
 		return fGate.recuperarClaveGenerada(numeroFactura);
 	}
 
-	private Long generarNuevoNumeroFactura() throws SQLException, BusinessException {
+	private Long generarNuevoNumeroFactura() throws BusinessException {
 
 		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
 		fGate.setConnection(connection);
@@ -134,7 +134,7 @@ public class CreateInvoiceFor {
 		return DateUtil.fromString("1/7/2012").before(fechaFactura) ? 21.0 : 18.0;
 	}
 
-	protected double calcularImportesAverias(List<Long> idsAveria) throws BusinessException, SQLException {
+	protected double calcularImportesAverias(List<Long> idsAveria) throws BusinessException {
 
 		double totalFactura = 0.0;
 		for (Long idAveria : idsAveria) {
@@ -149,7 +149,7 @@ public class CreateInvoiceFor {
 		return totalFactura;
 	}
 
-	private void actualizarImporteAveria(Long idAveria, double totalAveria) throws SQLException, BusinessException {
+	private void actualizarImporteAveria(Long idAveria, double totalAveria) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
 		aGate.setConnection(connection);
@@ -158,7 +158,7 @@ public class CreateInvoiceFor {
 
 	}
 
-	private double consultaImporteRepuestos(Long idAveria) throws SQLException, BusinessException {
+	private double consultaImporteRepuestos(Long idAveria) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
 		aGate.setConnection(connection);
@@ -166,7 +166,7 @@ public class CreateInvoiceFor {
 		return aGate.importeRepuestos(idAveria);
 	}
 
-	private double consultaImporteManoObra(Long idAveria) throws BusinessException, SQLException {
+	private double consultaImporteManoObra(Long idAveria) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
 		aGate.setConnection(connection);

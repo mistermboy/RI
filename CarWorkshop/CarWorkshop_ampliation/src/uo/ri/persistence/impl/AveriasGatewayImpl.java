@@ -26,6 +26,9 @@ public class AveriasGatewayImpl implements AveriasGateway {
 	@Override
 	public void verificarEstadoAveria(List<Long> idsAveria) throws BusinessException {
 		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_VERIFICAR_ESTADO_AVERIA"));
+
 			for (Long idAveria : idsAveria) {
 				pst.setLong(1, idAveria);
 
