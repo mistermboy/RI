@@ -18,14 +18,16 @@ public class AddClientAction implements Action {
 		int telefono = Console.readInt("Telefono");
 		String correo = Console.readString("Correo");
 
-		String recomendacion = Console.readString("¿Viene usted recomendado por otro cliente?  [Si|No]");
+	//	String recomendacion = Console.readString("¿Viene usted recomendado por otro cliente?  [Si|No]");
 
-		if (recomendacion.equals("Si")) {
-			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
-		} else if (recomendacion.equals("No")) {
-			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
-		}
+//		if (recomendacion.equals("Si")) {
+//			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
+//		} else if (recomendacion.equals("No")) {
+//			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
+//		}
 
+		ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
+		
 		// Mostrar resultado
 		Console.println("Nuevo cliente añadido");
 

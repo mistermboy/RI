@@ -42,6 +42,8 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 			pst.executeUpdate();
 
+			insertMedioPago(getIdCliente(dni));
+
 		} catch (SQLException e) {
 			throw new BusinessException("Error añadiendo un cliente");
 		} finally {
@@ -53,17 +55,25 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	@Override
 	public void delete(long idClient) throws BusinessException {
 
-		try {
-			pst = conection.prepareStatement(Conf.get("SQL_DELETE_CLIENT"));
+		if (getNumberOfVehiculos(idClient) == 0) {
 
-			pst.setLong(1, idClient);
+			try {
+				deleteMedioPago(idClient);
 
-			pst.executeUpdate();
+				pst = conection.prepareStatement(Conf.get("SQL_DELETE_CLIENT"));
 
-		} catch (SQLException e) {
-			throw new BusinessException("Error eliminando un cliente");
-		} finally {
-			Jdbc.close(pst);
+				pst.setLong(1, idClient);
+
+				pst.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error eliminando un cliente");
+			} finally {
+				Jdbc.close(pst);
+			}
+		} else {
+			throw new BusinessException(
+					"No ha sido posible eliminar dicho cliente ya que dispone de vehículos registrados");
 		}
 
 	}
@@ -95,7 +105,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 	@Override
 	public String showClient(long idClient) throws BusinessException {
-		
+
 		String client = "";
 
 		try {
@@ -105,7 +115,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 			rs = pst.executeQuery();
 
-			while(rs.next()) {
+			while (rs.next()) {
 				client = rs.getString("dni");
 				client += "\t";
 				client += rs.getString("nombre");
@@ -118,13 +128,11 @@ public class ClientesGatewayImpl implements ClientesGateway {
 				client += "\t";
 				client += rs.getInt("email");
 			}
-			
-
 
 		} catch (SQLException e) {
 			throw new BusinessException("Error mostrando un cliente");
 		} finally {
-			Jdbc.close(pst);
+			Jdbc.close(rs, pst);
 		}
 		return client;
 	}
@@ -177,6 +185,122 @@ public class ClientesGatewayImpl implements ClientesGateway {
 			Jdbc.close(rs, pst);
 		}
 		return ids;
+	}
+
+	private void insertMedioPago(Long idClient) throws BusinessException {
+
+		String dType = "TMetalico";
+		int acumulado = 0;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_INSERT_MEDIOPAGO"));
+
+			pst.setString(1, dType);
+			pst.setInt(2, acumulado);
+			pst.setLong(3, idClient);
+
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error insertando un medio de pago de tipo metálico a un nuevo cliente");
+		} finally {
+			Jdbc.close(pst);
+		}
+
+	}
+
+	private void deleteMedioPago(Long idClient) throws BusinessException {
+
+		long idMedioPago = getIDMedioPago(idClient);
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_DELETE_MEDIOPAGO"));
+
+			pst.setLong(1, idMedioPago);
+
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error eliminando el medio de pago de tipo metálico del cliente");
+		} finally {
+			Jdbc.close(pst);
+		}
+
+	}
+
+	private int getNumberOfVehiculos(Long idClient) throws BusinessException {
+
+		int cont = 0;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_VEHICULOS_BY_ID_CLIENTE"));
+
+			pst.setLong(1, idClient);
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				cont++;
+			}
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando los vehiculos de un cliente");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+		return cont;
+	}
+
+	private long getIdCliente(String dni) throws BusinessException {
+
+		long idCLient = 0;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ID_CLIENTE"));
+
+			pst.setString(1, dni);
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				idCLient = rs.getLong("id");
+			}
+
+			return idCLient;
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando los vehiculos de un cliente");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+
+	}
+
+	private long getIDMedioPago(Long idCliente) throws BusinessException {
+
+		long idMedioPago = 0;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ID_MEDIOPAGO"));
+
+			pst.setLong(1, idCliente);
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				idMedioPago = rs.getLong("id");
+			}
+
+			return idMedioPago;
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando los vehiculos de un cliente");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+
 	}
 
 }

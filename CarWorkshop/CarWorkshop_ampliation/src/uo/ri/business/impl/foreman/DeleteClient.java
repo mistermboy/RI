@@ -25,7 +25,7 @@ public class DeleteClient {
 
 			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
 			cGate.setConnection(c);
-
+			
 			cGate.delete(idClient);
 
 		} catch (SQLException e) {

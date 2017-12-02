@@ -1,10 +1,12 @@
 package uo.ri.conf;
 
 import uo.ri.persistence.AveriasGateway;
+import uo.ri.persistence.BonosGateway;
 import uo.ri.persistence.ClientesGateway;
 import uo.ri.persistence.FacturasGateway;
 import uo.ri.persistence.MecanicosGateway;
 import uo.ri.persistence.impl.AveriasGatewayImpl;
+import uo.ri.persistence.impl.BonosGatewayImpl;
 import uo.ri.persistence.impl.ClientesGatewayImpl;
 import uo.ri.persistence.impl.FacturasGatewayImpl;
 import uo.ri.persistence.impl.MecanicosGatewayImpl;
@@ -30,4 +32,8 @@ public class PersistenceFactory {
 		return new ClientesGatewayImpl();
 	}
 
+	public static BonosGateway getBonosGateway() {
+		return new BonosGatewayImpl();
+	}
+	
 }
