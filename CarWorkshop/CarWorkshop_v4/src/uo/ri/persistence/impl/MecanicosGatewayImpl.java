@@ -75,8 +75,8 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 			while (rs.next()) {
 				Map<String, Object> m = new HashMap<String, Object>();
 				m.put("id", rs.getInt("id"));
-				m.put("nombre", rs.getInt("nombre"));
-				m.put("apellidos", rs.getInt("apellidos"));
+				m.put("nombre", rs.getString("nombre"));
+				m.put("apellidos", rs.getString("apellidos"));
 				map.add(m);
 
 			}
