@@ -11,13 +11,22 @@ import uo.ri.persistence.ClientesGateway;
 public class UpdateClient {
 
 	private Long idClient;
+	
+	private String dni;
 	private String nombre;
 	private String apellidos;
+	private String correo;
+	private int zipcode;
+	private int telefono;
 
-	public UpdateClient(Long idClient, String nombre, String apellidos) {
-		this.idClient = idClient;
+	public UpdateClient(long idClient,String dni, String nombre,String apellidos,int zipcode, int telefono, String correo) {
+		this.dni = dni;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
+		this.zipcode = zipcode;
+		this.telefono = telefono;
+		this.correo = correo;
+		this.idClient=idClient;
 	}
 
 	public void execute() throws BusinessException {
@@ -30,7 +39,7 @@ public class UpdateClient {
 			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
 			cGate.setConnection(c);
 
-			cGate.update(idClient, nombre, apellidos);
+			cGate.update(idClient, dni, nombre, apellidos, zipcode, telefono, correo);;
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

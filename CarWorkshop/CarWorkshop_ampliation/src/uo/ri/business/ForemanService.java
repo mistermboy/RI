@@ -13,7 +13,7 @@ public interface ForemanService {
 	 
 	 List<Map<String, Object>> findAllClients() throws BusinessException;
 	 
-	 void updateClient(Long idClient,String nombre, String apellidos)  throws BusinessException;
+	 void updateClient(long idClient,String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)  throws BusinessException;
 	 
 	 String showDetailClient(Long idClient)  throws BusinessException;
 	

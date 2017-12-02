@@ -15,9 +15,13 @@ public interface ClientesGateway {
 
 	void delete(long idClient) throws BusinessException;
 
-	void update(long idClient, String nombre, String apellidos) throws BusinessException;
+	void update(long id, String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
+			throws BusinessException;
 
 	String showClient(long idClient) throws BusinessException;
 
 	List<Map<String, Object>> findAllClients() throws BusinessException;
+
+	List<Long> findAllClientsId() throws BusinessException;
+
 }

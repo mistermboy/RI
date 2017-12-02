@@ -38,9 +38,10 @@ public class ForemanServiceImpl implements ForemanService {
 	}
 
 	@Override
-	public void updateClient(Long idClient, String nombre, String apellidos) throws BusinessException {
+	public void updateClient(long idClient, String dni, String nombre, String apellidos, int zipcode, int telefono,
+			String correo) throws BusinessException {
 
-		UpdateClient u = new UpdateClient(idClient, nombre, apellidos);
+		UpdateClient u = new UpdateClient(idClient, dni, nombre, apellidos, zipcode, telefono, correo);
 		u.execute();
 
 	}

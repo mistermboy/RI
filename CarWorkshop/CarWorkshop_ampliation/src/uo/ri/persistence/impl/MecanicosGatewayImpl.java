@@ -91,14 +91,13 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 	}
 
 	@Override
-	public void update(String nombre, String apellidos, long id) throws BusinessException {
+	public void update(String nombre, String apellidos,long idClient) throws BusinessException {
 		try {
 
 			pst = conection.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
 			pst.setString(1, nombre);
 			pst.setString(2, apellidos);
-			pst.setLong(3, id);
-
+			
 			pst.executeUpdate();
 
 		} catch (SQLException e) {

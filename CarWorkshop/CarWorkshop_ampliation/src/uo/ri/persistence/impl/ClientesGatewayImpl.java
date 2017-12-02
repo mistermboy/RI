@@ -69,14 +69,19 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	}
 
 	@Override
-	public void update(long idClient, String nombre, String apellidos) throws BusinessException {
+	public void update(long idClient, String dni, String nombre, String apellidos, int zipcode, int telefono,
+			String correo) throws BusinessException {
 
 		try {
 
 			pst = conection.prepareStatement(Conf.get("SQL_UPDATE_CLIENT"));
 			pst.setString(1, nombre);
 			pst.setString(2, apellidos);
-			pst.setLong(3, idClient);
+			pst.setString(3, dni);
+			pst.setInt(4, zipcode);
+			pst.setInt(5, telefono);
+			pst.setString(6, correo);
+			pst.setLong(7, idClient);
 
 			pst.executeUpdate();
 
@@ -90,6 +95,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 	@Override
 	public String showClient(long idClient) throws BusinessException {
+		
 		String client = "";
 
 		try {
@@ -99,25 +105,28 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 			rs = pst.executeQuery();
 
-			client += rs.getString("dni");
-			client += "\t";
-			client += rs.getString("nombre");
-			client += "\t";
-			client += rs.getString("apellidos");
-			client += "\t";
-			client += rs.getInt("zipcode");
-			client += "\t";
-			client += rs.getInt("telefono");
-			client += "\t";
-			client += rs.getInt("correo");
+			while(rs.next()) {
+				client = rs.getString("dni");
+				client += "\t";
+				client += rs.getString("nombre");
+				client += "\t";
+				client += rs.getString("apellidos");
+				client += "\t";
+				client += rs.getInt("zipcode");
+				client += "\t";
+				client += rs.getInt("telefono");
+				client += "\t";
+				client += rs.getInt("email");
+			}
+			
 
-			return client;
 
 		} catch (SQLException e) {
 			throw new BusinessException("Error mostrando un cliente");
 		} finally {
 			Jdbc.close(pst);
 		}
+		return client;
 	}
 
 	@Override
@@ -133,8 +142,8 @@ public class ClientesGatewayImpl implements ClientesGateway {
 			while (rs.next()) {
 				Map<String, Object> m = new HashMap<String, Object>();
 				m.put("id", rs.getInt("id"));
-				m.put("nombre", rs.getInt("nombre"));
-				m.put("apellidos", rs.getInt("apellidos"));
+				m.put("nombre", rs.getString("nombre"));
+				m.put("apellidos", rs.getString("apellidos"));
 				map.add(m);
 
 			}
@@ -146,6 +155,28 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		}
 
 		return map;
+	}
+
+	@Override
+	public List<Long> findAllClientsId() throws BusinessException {
+
+		List<Long> ids = new ArrayList<Long>();
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_ID"));
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				ids.add(rs.getLong("id"));
+			}
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando todos los ids de los clientes");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+		return ids;
 	}
 
 }

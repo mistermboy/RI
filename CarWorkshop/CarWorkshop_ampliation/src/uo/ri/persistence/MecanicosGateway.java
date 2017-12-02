@@ -16,6 +16,6 @@ public interface MecanicosGateway {
 
 	List<Map<String, Object>> findAllMechanics() throws BusinessException;
 
-	void update(String nombre, String apellidos, long id) throws BusinessException;
+	void update(String nombre, String apellidos,long idClient) throws BusinessException;
 
 }
