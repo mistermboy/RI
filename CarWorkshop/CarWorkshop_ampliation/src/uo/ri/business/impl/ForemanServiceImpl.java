@@ -5,6 +5,7 @@ import java.util.Map;
 
 import uo.ri.business.ForemanService;
 import uo.ri.business.impl.foreman.AddClient;
+import uo.ri.business.impl.foreman.AddClientWithRecomendator;
 import uo.ri.business.impl.foreman.FindAllClients;
 import uo.ri.business.impl.foreman.DeleteClient;
 import uo.ri.business.impl.foreman.ShowClientDetail;
@@ -14,13 +15,23 @@ import uo.ri.common.BusinessException;
 public class ForemanServiceImpl implements ForemanService {
 
 	@Override
-	public void addClient(String dni, String nombre, String apellidos, int cPostal, int telefono, String correo)
+	public void addClient(String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
 			throws BusinessException {
 
-		AddClient a = new AddClient(dni, nombre, apellidos, cPostal, telefono, correo);
+		AddClient a = new AddClient(dni, nombre, apellidos, zipcode, telefono, correo);
 		a.execute();
 
 	}
+	
+	@Override
+	public void addClientWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono,
+			String correo, long idRecomendador) throws BusinessException {
+	
+		AddClientWithRecomendator aR = new AddClientWithRecomendator(dni, nombre, apellidos, zipcode, telefono, correo,idRecomendador);
+		aR.execute();
+		
+	}
+	
 
 	@Override
 	public void deleteClient(Long idClient) throws BusinessException {
@@ -52,5 +63,7 @@ public class ForemanServiceImpl implements ForemanService {
 		ShowClientDetail s = new ShowClientDetail(idClient);
 		return s.execute();
 	}
+
+	
 
 }

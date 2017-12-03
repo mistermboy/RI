@@ -45,12 +45,41 @@ public class ClientesGatewayImpl implements ClientesGateway {
 			insertMedioPago(getIdCliente(dni));
 
 		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un cliente");
+			throw new BusinessException("Error añadiendo un cliente sin recomendación");
 		} finally {
 			Jdbc.close(pst);
 		}
 
 	}
+	
+
+	@Override
+	public void saveWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono,
+			String correo, Long idRecomendador) throws BusinessException {
+		
+		try {
+			pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT_WITH_RECOMENDATOR"));
+
+			pst.setString(1, dni);
+			pst.setString(2, nombre);
+			pst.setString(3, apellidos);
+			pst.setInt(4, zipcode);
+			pst.setInt(5, telefono);
+			pst.setString(6, correo);
+			pst.setLong(7, idRecomendador);
+
+			pst.executeUpdate();
+
+			insertMedioPago(getIdCliente(dni));
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error añadiendo un cliente con recomendación");
+		} finally {
+			Jdbc.close(pst);
+		}
+		
+	}
+	
 
 	@Override
 	public void delete(long idClient) throws BusinessException {

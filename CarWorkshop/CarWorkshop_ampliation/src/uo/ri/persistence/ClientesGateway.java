@@ -13,6 +13,9 @@ public interface ClientesGateway {
 	void save(String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
 			throws BusinessException;
 
+	void saveWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono, String correo,
+			Long idRecomendador) throws BusinessException;
+
 	void delete(long idClient) throws BusinessException;
 
 	void update(long id, String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
