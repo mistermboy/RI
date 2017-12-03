@@ -95,7 +95,7 @@ public class AveriasGatewayImpl implements AveriasGateway {
 
 			rs = pst.executeQuery();
 			if (rs.next() == false) {
-				return 0.0; // La averia puede no tener repuestos
+				return 0.0;
 			}
 
 			return rs.getDouble(1);
@@ -129,7 +129,7 @@ public class AveriasGatewayImpl implements AveriasGateway {
 
 	@Override
 	public void insertBonoAveria(Long idAveria) throws BusinessException {
-		
+
 		try {
 			pst = conection.prepareStatement(Conf.get("SQL_INSERT_BONO_AVERIA"));
 
@@ -142,7 +142,7 @@ public class AveriasGatewayImpl implements AveriasGateway {
 		} finally {
 			Jdbc.close(pst);
 		}
-		
+
 	}
 
 }

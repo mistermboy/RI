@@ -50,9 +50,6 @@ public class CreateInvoiceFor {
 			factura.put("iva", iva);
 			factura.put("importe", importe);
 
-			// mostrarFactura(numeroFactura, fechaFactura, totalFactura, iva, importe);
-			// La factura ahora se muestra desde la capa de presentación (ui)
-
 			connection.commit();
 		} catch (SQLException e) {
 			try {
