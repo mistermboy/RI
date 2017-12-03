@@ -64,7 +64,7 @@ public class MediospagoGatewayImp implements MediospagoGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error sacando el código del último bono");
 		} finally {
-			Jdbc.close(pst);
+			Jdbc.close(rs,pst);
 		}
 
 	}

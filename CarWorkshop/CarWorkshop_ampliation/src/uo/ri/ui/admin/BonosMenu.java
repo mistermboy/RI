@@ -8,7 +8,7 @@ public class BonosMenu extends BaseMenu{
 	public BonosMenu() {
 		menuOptions = new Object[][] { 
 			{"Administrador > Gestión de bonos", null},
-			{"Generar bonos", GenerateBonosAction.class}
+			{"Generar bonos por tres averias", GenerateBonosAction.class}
 			
 		};
 	}

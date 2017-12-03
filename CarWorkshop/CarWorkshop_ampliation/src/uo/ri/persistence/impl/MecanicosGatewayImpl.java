@@ -47,17 +47,22 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 
 	@Override
 	public void delete(long idMechanic) throws BusinessException {
-		try {
 
-			pst = conection.prepareStatement(Conf.get("SQL_DELETE_MECHANIC"));
-			pst.setLong(1, idMechanic);
+		if (existMechanic(idMechanic)) {
+			try {
 
-			pst.executeUpdate();
+				pst = conection.prepareStatement(Conf.get("SQL_DELETE_MECHANIC"));
+				pst.setLong(1, idMechanic);
 
-		} catch (SQLException e) {
-			throw new BusinessException("Error eliminando un mecánico");
-		} finally {
-			Jdbc.close(pst);
+				pst.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error eliminando un mecánico");
+			} finally {
+				Jdbc.close(pst);
+			}
+		} else {
+			throw new BusinessException("El id del mecánico que se desea borrar no existe");
 		}
 
 	}
@@ -90,22 +95,68 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 		return map;
 	}
 
-	@Override
-	public void update(String nombre, String apellidos,long idClient) throws BusinessException {
+	public List<Long> findAllMechanicsID() throws BusinessException {
+
+		List<Long> map = new ArrayList<Long>();
+
 		try {
 
-			pst = conection.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
-			pst.setString(1, nombre);
-			pst.setString(2, apellidos);
-			
-			pst.executeUpdate();
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_MECHANICS_ID"));
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				map.add(rs.getLong("id"));
+
+			}
 
 		} catch (SQLException e) {
-			throw new BusinessException("Error actualizando un mecánico");
+			throw new BusinessException("Error buscando todos los  ids de mecánicos");
 		} finally {
-			Jdbc.close(pst);
+			Jdbc.close(rs, pst);
 		}
 
+		return map;
+	}
+
+	@Override
+	public void update(String nombre, String apellidos, long idMechanic) throws BusinessException {
+
+		if (existMechanic(idMechanic)) {
+
+			try {
+
+				pst = conection.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
+				pst.setString(1, nombre);
+				pst.setString(2, apellidos);
+
+				pst.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error actualizando un mecánico");
+			} finally {
+				Jdbc.close(pst);
+			}
+		} else {
+			throw new BusinessException("El id del mecánico que se desea actualizar no existe");
+		}
+
+	}
+
+	/**
+	 * Comprueba si existe el mecánico que se le pasa como parámetro
+	 * 
+	 * @return
+	 * @throws BusinessException
+	 */
+	private boolean existMechanic(Long idMechanic) throws BusinessException {
+
+		List<Long> idsMecanicos = findAllMechanicsID();
+		for (Long l : idsMecanicos) {
+			if (l == idMechanic) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

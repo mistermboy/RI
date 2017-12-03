@@ -14,14 +14,16 @@ public class ListClientsByRecomendatorAction implements Action {
 	public void execute() throws BusinessException {
 
 		long idRecomendador = Console.readLong("Id del recomendador");
-		
-		Console.println("\nListado de Clientes Recomendados por el cliente con id "+ idRecomendador );
 
-		List<Map<String, Object>> map = ServicesFactory.getForemanService().findAllClientsByRecomendator(idRecomendador);
+		Console.println("\nListado de Clientes Recomendados por el cliente con id " + idRecomendador);
+
+		List<Map<String, Object>> map = ServicesFactory.getForemanService()
+				.findAllClientsByRecomendator(idRecomendador);
 		for (Map<String, Object> m : map) {
 			for (Map.Entry<String, Object> entry : m.entrySet()) {
-				Console.print(entry.getKey() + entry.getValue());
+				Console.print(entry.getKey() + "\t" + entry.getValue() + "\n");
 			}
+			Console.println();
 		}
 
 	}

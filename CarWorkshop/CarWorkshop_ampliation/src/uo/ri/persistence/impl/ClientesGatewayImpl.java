@@ -30,24 +30,29 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	public void save(String dni, String nombre, String apellidos, int zipcode, int telefono, String correo)
 			throws BusinessException {
 
-		try {
-			pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT"));
+		if (!existDni(dni)) {
 
-			pst.setString(1, dni);
-			pst.setString(2, nombre);
-			pst.setString(3, apellidos);
-			pst.setInt(4, zipcode);
-			pst.setInt(5, telefono);
-			pst.setString(6, correo);
+			try {
+				pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT"));
 
-			pst.executeUpdate();
+				pst.setString(1, dni);
+				pst.setString(2, nombre);
+				pst.setString(3, apellidos);
+				pst.setInt(4, zipcode);
+				pst.setInt(5, telefono);
+				pst.setString(6, correo);
 
-			insertMedioPago(getIdCliente(dni));
+				pst.executeUpdate();
 
-		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un cliente sin recomendación");
-		} finally {
-			Jdbc.close(pst);
+				insertMedioPago(getIdCliente(dni));
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error añadiendo un cliente sin recomendación");
+			} finally {
+				Jdbc.close(pst);
+			}
+		} else {
+			throw new BusinessException("El dni que se desea registrar ya existe");
 		}
 
 	}
@@ -56,34 +61,38 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	public void saveWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono,
 			String correo, Long idRecomendador) throws BusinessException {
 
-		if (existRecomendador(idRecomendador)) {
-			if (facturasPagadas(idRecomendador) > 0) {
+		if (!existDni(dni)) {
+			if (existRecomendador(idRecomendador)) {
+				if (facturasPagadas(idRecomendador) > 0) {
 
-				try {
-					pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT_WITH_RECOMENDATOR"));
+					try {
+						pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT_WITH_RECOMENDATOR"));
 
-					pst.setString(1, dni);
-					pst.setString(2, nombre);
-					pst.setString(3, apellidos);
-					pst.setInt(4, zipcode);
-					pst.setInt(5, telefono);
-					pst.setString(6, correo);
-					pst.setLong(7, idRecomendador);
+						pst.setString(1, dni);
+						pst.setString(2, nombre);
+						pst.setString(3, apellidos);
+						pst.setInt(4, zipcode);
+						pst.setInt(5, telefono);
+						pst.setString(6, correo);
+						pst.setLong(7, idRecomendador);
 
-					pst.executeUpdate();
+						pst.executeUpdate();
 
-					insertMedioPago(getIdCliente(dni));
+						insertMedioPago(getIdCliente(dni));
 
-				} catch (SQLException e) {
-					throw new BusinessException("Error añadiendo un cliente con recomendación");
-				} finally {
-					Jdbc.close(pst);
+					} catch (SQLException e) {
+						throw new BusinessException("Error añadiendo un cliente con recomendación");
+					} finally {
+						Jdbc.close(pst);
+					}
+				} else {
+					throw new BusinessException("El recomendador necesita tener al menos 1 factura pagada");
 				}
 			} else {
-				throw new BusinessException("El recomendador necesita tener al menos 1 factura pagada");
+				throw new BusinessException("El id del recomendador no existe");
 			}
 		} else {
-			throw new BusinessException("El id del recomendador no existe");
+			throw new BusinessException("El dni que se desea registrar ya existe");
 		}
 
 	}
@@ -91,25 +100,30 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	@Override
 	public void delete(long idClient) throws BusinessException {
 
-		if (getNumberOfVehiculos(idClient) == 0) {
+		if (existIdCliente(idClient)) {
 
-			try {
-				deleteMedioPago(idClient);
+			if (getNumberOfVehiculos(idClient) == 0) {
 
-				pst = conection.prepareStatement(Conf.get("SQL_DELETE_CLIENT"));
+				try {
+					deleteMedioPago(idClient);
 
-				pst.setLong(1, idClient);
+					pst = conection.prepareStatement(Conf.get("SQL_DELETE_CLIENT"));
 
-				pst.executeUpdate();
+					pst.setLong(1, idClient);
 
-			} catch (SQLException e) {
-				throw new BusinessException("Error eliminando un cliente");
-			} finally {
-				Jdbc.close(pst);
+					pst.executeUpdate();
+
+				} catch (SQLException e) {
+					throw new BusinessException("Error eliminando un cliente");
+				} finally {
+					Jdbc.close(pst);
+				}
+			} else {
+				throw new BusinessException(
+						"No ha sido posible eliminar dicho cliente ya que dispone de vehículos registrados");
 			}
 		} else {
-			throw new BusinessException(
-					"No ha sido posible eliminar dicho cliente ya que dispone de vehículos registrados");
+			throw new BusinessException("El id del cliente introducido no existe");
 		}
 
 	}
@@ -118,23 +132,28 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	public void update(long idClient, String dni, String nombre, String apellidos, int zipcode, int telefono,
 			String correo) throws BusinessException {
 
-		try {
+		if (existIdCliente(idClient)) {
 
-			pst = conection.prepareStatement(Conf.get("SQL_UPDATE_CLIENT"));
-			pst.setString(1, nombre);
-			pst.setString(2, apellidos);
-			pst.setString(3, dni);
-			pst.setInt(4, zipcode);
-			pst.setInt(5, telefono);
-			pst.setString(6, correo);
-			pst.setLong(7, idClient);
+			try {
 
-			pst.executeUpdate();
+				pst = conection.prepareStatement(Conf.get("SQL_UPDATE_CLIENT"));
+				pst.setString(1, nombre);
+				pst.setString(2, apellidos);
+				pst.setString(3, dni);
+				pst.setInt(4, zipcode);
+				pst.setInt(5, telefono);
+				pst.setString(6, correo);
+				pst.setLong(7, idClient);
 
-		} catch (SQLException e) {
-			throw new BusinessException("Error actualizando un cliente");
-		} finally {
-			Jdbc.close(pst);
+				pst.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error actualizando un cliente");
+			} finally {
+				Jdbc.close(pst);
+			}
+		} else {
+			throw new BusinessException("El id del cliente introducido no existe");
 		}
 
 	}
@@ -142,35 +161,41 @@ public class ClientesGatewayImpl implements ClientesGateway {
 	@Override
 	public String showClient(long idClient) throws BusinessException {
 
-		String client = "";
+		if (existIdCliente(idClient)) {
 
-		try {
+			String client = "";
 
-			pst = conection.prepareStatement(Conf.get("SQL_SHOW_CLIENT"));
-			pst.setLong(1, idClient);
+			try {
 
-			rs = pst.executeQuery();
+				pst = conection.prepareStatement(Conf.get("SQL_SHOW_CLIENT"));
+				pst.setLong(1, idClient);
 
-			while (rs.next()) {
-				client = rs.getString("dni");
-				client += "\t";
-				client += rs.getString("nombre");
-				client += "\t";
-				client += rs.getString("apellidos");
-				client += "\t";
-				client += rs.getInt("zipcode");
-				client += "\t";
-				client += rs.getInt("telefono");
-				client += "\t";
-				client += rs.getInt("email");
+				rs = pst.executeQuery();
+
+				while (rs.next()) {
+					client = rs.getString("dni");
+					client += "\t";
+					client += rs.getString("nombre");
+					client += "\t";
+					client += rs.getString("apellidos");
+					client += "\t";
+					client += rs.getInt("zipcode");
+					client += "\t";
+					client += rs.getInt("telefono");
+					client += "\t";
+					client += rs.getInt("email");
+				}
+
+			} catch (SQLException e) {
+				throw new BusinessException("Error mostrando un cliente");
+			} finally {
+				Jdbc.close(rs, pst);
 			}
-
-		} catch (SQLException e) {
-			throw new BusinessException("Error mostrando un cliente");
-		} finally {
-			Jdbc.close(rs, pst);
+			return client;
+		} else {
+			throw new BusinessException("El id del cliente introducido no existe");
 		}
-		return client;
+
 	}
 
 	@Override
@@ -241,6 +266,29 @@ public class ClientesGatewayImpl implements ClientesGateway {
 				m.put("nombre", rs.getString("nombre"));
 				m.put("apellidos", rs.getString("apellidos"));
 				map.add(m);
+
+			}
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando todos los clientes recomendados");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+
+		return map;
+	}
+
+	private List<String> findAllClientsDni() throws BusinessException {
+
+		List<String> map = new ArrayList<String>();
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_DNI"));
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				map.add(rs.getString("dni"));
 
 			}
 
@@ -393,6 +441,14 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		}
 	}
 
+	/**
+	 * Devuelve el número de facturas pagadas de un cliente (en este caso un
+	 * recomendador)
+	 * 
+	 * @param idRecomendador
+	 * @return
+	 * @throws BusinessException
+	 */
 	private int facturasPagadas(Long idRecomendador) throws BusinessException {
 
 		List<Long> idsClientes = new ArrayList<Long>();
@@ -441,6 +497,28 @@ public class ClientesGatewayImpl implements ClientesGateway {
 			Jdbc.close(rs, pst);
 		}
 
+	}
+
+	private boolean existDni(String dni) throws BusinessException {
+
+		List<String> clientes = findAllClientsDni();
+		for (String s : clientes) {
+			if (s.equals(dni)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean existIdCliente(long idCliente) throws BusinessException {
+
+		List<Long> clientes = findAllClientsId();
+		for (Long l : clientes) {
+			if (l == idCliente) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

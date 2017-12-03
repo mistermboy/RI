@@ -42,7 +42,7 @@ public class BonosGatewayImpl implements BonosGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error sacando los vehiculos de los clientes");
 		} finally {
-			Jdbc.close(pst);
+			Jdbc.close(rs,pst);
 		}
 
 		return ids;
@@ -65,7 +65,7 @@ public class BonosGatewayImpl implements BonosGateway {
 		} catch (SQLException e) {
 			throw new BusinessException("Error sacando las averias de los vehículos");
 		} finally {
-			Jdbc.close(pst);
+			Jdbc.close(rs,pst);
 		}
 
 		return ids;
