@@ -145,7 +145,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 	/**
 	 * Comprueba si existe el mecánico que se le pasa como parámetro
 	 * 
-	 * @return
+	 * @return true si existe, false en caso contrario
 	 * @throws BusinessException
 	 */
 	private boolean existMechanic(Long idMechanic) throws BusinessException {

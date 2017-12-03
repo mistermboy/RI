@@ -499,6 +499,13 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 	}
 
+	/**
+	 * Determina si el dni que se le pasa como parámetro ya existe.
+	 * 
+	 * @param dni
+	 * @return True si existe, false en caso contrario
+	 * @throws BusinessException
+	 */
 	private boolean existDni(String dni) throws BusinessException {
 
 		List<String> clientes = findAllClientsDni();
@@ -510,6 +517,13 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		return false;
 	}
 
+	/**
+	 * Determina si el id de un cliente que se le pasa por parámetro ya existe.
+	 * 
+	 * @param idCliente
+	 * @return True si existe, false en caso contrario
+	 * @throws BusinessException
+	 */
 	private boolean existIdCliente(long idCliente) throws BusinessException {
 
 		List<Long> clientes = findAllClientsId();

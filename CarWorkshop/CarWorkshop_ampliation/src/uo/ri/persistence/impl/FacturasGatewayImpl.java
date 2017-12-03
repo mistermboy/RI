@@ -89,8 +89,8 @@ public class FacturasGatewayImpl implements FacturasGateway {
 			rs = pst.executeQuery();
 
 			if (rs.next()) {
-				return rs.getLong(1) + 1; // +1, el siguiente
-			} else { // todavía no hay ninguna
+				return rs.getLong(1) + 1; 
+			} else {
 				return 1L;
 			}
 
