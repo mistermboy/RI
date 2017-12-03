@@ -51,35 +51,42 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		}
 
 	}
-	
 
 	@Override
 	public void saveWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono,
 			String correo, Long idRecomendador) throws BusinessException {
-		
-		try {
-			pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT_WITH_RECOMENDATOR"));
 
-			pst.setString(1, dni);
-			pst.setString(2, nombre);
-			pst.setString(3, apellidos);
-			pst.setInt(4, zipcode);
-			pst.setInt(5, telefono);
-			pst.setString(6, correo);
-			pst.setLong(7, idRecomendador);
+		if (existRecomendador(idRecomendador)) {
+			if (facturasPagadas(idRecomendador) > 0) {
 
-			pst.executeUpdate();
+				try {
+					pst = conection.prepareStatement(Conf.get("SQL_INSERT_CLIENT_WITH_RECOMENDATOR"));
 
-			insertMedioPago(getIdCliente(dni));
+					pst.setString(1, dni);
+					pst.setString(2, nombre);
+					pst.setString(3, apellidos);
+					pst.setInt(4, zipcode);
+					pst.setInt(5, telefono);
+					pst.setString(6, correo);
+					pst.setLong(7, idRecomendador);
 
-		} catch (SQLException e) {
-			throw new BusinessException("Error añadiendo un cliente con recomendación");
-		} finally {
-			Jdbc.close(pst);
+					pst.executeUpdate();
+
+					insertMedioPago(getIdCliente(dni));
+
+				} catch (SQLException e) {
+					throw new BusinessException("Error añadiendo un cliente con recomendación");
+				} finally {
+					Jdbc.close(pst);
+				}
+			} else {
+				throw new BusinessException("El recomendador necesita tener al menos 1 factura pagada");
+			}
+		} else {
+			throw new BusinessException("El id del recomendador no existe");
 		}
-		
+
 	}
-	
 
 	@Override
 	public void delete(long idClient) throws BusinessException {
@@ -215,7 +222,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		}
 		return ids;
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> findAllClientsByRecomendator(long idRecomendator) throws BusinessException {
 
@@ -226,7 +233,7 @@ public class ClientesGatewayImpl implements ClientesGateway {
 			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_BY_RECOMENDATOR"));
 
 			pst.setLong(1, idRecomendator);
-			
+
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Map<String, Object> m = new HashMap<String, Object>();
@@ -245,7 +252,6 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 		return map;
 	}
-	
 
 	private void insertMedioPago(Long idClient) throws BusinessException {
 
@@ -357,6 +363,80 @@ public class ClientesGatewayImpl implements ClientesGateway {
 
 		} catch (SQLException e) {
 			throw new BusinessException("Error buscando los vehiculos de un cliente");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+
+	}
+
+	private boolean existRecomendador(Long idRecomendador) throws BusinessException {
+
+		boolean exist = false;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_ID"));
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				if (rs.getLong("id") == idRecomendador) {
+					exist = true;
+				}
+			}
+
+			return exist;
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando todos los id de clientes");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+	}
+
+	private int facturasPagadas(Long idRecomendador) throws BusinessException {
+
+		List<Long> idsClientes = new ArrayList<Long>();
+		List<Long> idsMediospago = null;
+
+		int numFacturas = 0;
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_ID"));
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				idsClientes.add(rs.getLong("id"));
+			}
+
+			idsMediospago = new ArrayList<Long>();
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_MEDIOSPAGO_BY_ID_CLIENTE"));
+
+			pst.setLong(1, idRecomendador);
+
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				idsMediospago.add(rs.getLong("id"));
+			}
+
+			for (Long medioPago : idsMediospago) {
+
+				pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_FACTURAS_ABONADAS_BY_MEDIOSPAGO_ID"));
+
+				pst.setLong(1, medioPago);
+
+				rs = pst.executeQuery();
+				while (rs.next()) {
+					numFacturas += rs.getInt("total");
+				}
+
+			}
+
+			return numFacturas;
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando el número de factuas pagadas de un cliente");
 		} finally {
 			Jdbc.close(rs, pst);
 		}

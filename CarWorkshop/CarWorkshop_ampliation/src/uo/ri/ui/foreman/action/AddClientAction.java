@@ -21,7 +21,7 @@ public class AddClientAction implements Action {
 		String recomendacion = Console.readString("¿Viene usted recomendado por otro cliente?  [s|n]");
 
 		if (recomendacion.equals("s")) {
-			long idRecomendador = Console.readLong("Id del recomendador:");
+			long idRecomendador = Console.readLong("Id del recomendador");
 			ServicesFactory.getForemanService().addClientWithRecomendator(dni, nombre, apellidos, zipcode, telefono, correo,idRecomendador);
 		} else if (recomendacion.equals("n")) {
 			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
