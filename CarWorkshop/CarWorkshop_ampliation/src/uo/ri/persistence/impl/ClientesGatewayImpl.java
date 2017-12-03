@@ -173,17 +173,18 @@ public class ClientesGatewayImpl implements ClientesGateway {
 				rs = pst.executeQuery();
 
 				while (rs.next()) {
-					client = rs.getString("dni");
-					client += "\t";
+					client ="Dni: ";
+					client += rs.getString("dni");
+					client += "\t Nombre: ";
 					client += rs.getString("nombre");
-					client += "\t";
+					client += "\t Apellidos: ";
 					client += rs.getString("apellidos");
-					client += "\t";
+					client += "\t Zipcode: ";
 					client += rs.getInt("zipcode");
-					client += "\t";
+					client += "\t Telefono ";
 					client += rs.getInt("telefono");
-					client += "\t";
-					client += rs.getInt("email");
+					client += "\t Correo: ";
+					client += rs.getString("email");
 				}
 
 			} catch (SQLException e) {

@@ -10,18 +10,16 @@ public class UpdateClientAction implements Action {
 	@Override
 	public void execute() throws BusinessException {
 
-		// Pedir datos
 		Long idClient = Console.readLong("Id del cliente");
 		String nombre = Console.readString("Nombre");
 		String apellidos = Console.readString("Apellidos");
 		String dni = Console.readString("Dni");
-		int zipcode = Console.readInt("Codigo Postal");
-		int telefono = Console.readInt("Telefono");
+		int zipcode = Console.readInt("Codigo Postal(número)");
+		int telefono = Console.readInt("Telefono(número)");
 		String correo = Console.readString("Correo");
 
 		ServicesFactory.getForemanService().updateClient(idClient, nombre, apellidos, dni, zipcode, telefono, correo);
 
-		// Mostrar resultado
 		Console.println("Cliente actualizado");
 	}
 

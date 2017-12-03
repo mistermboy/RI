@@ -128,6 +128,7 @@ public class MecanicosGatewayImpl implements MecanicosGateway {
 				pst = conection.prepareStatement(Conf.get("SQL_UPDATE_MECHANIC"));
 				pst.setString(1, nombre);
 				pst.setString(2, apellidos);
+				pst.setLong(3, idMechanic);
 
 				pst.executeUpdate();
 
