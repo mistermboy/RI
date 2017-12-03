@@ -75,6 +75,26 @@ public class CreateInvoiceFor {
 
 	}
 
+	private long crearFactura(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
+			throws BusinessException {
+
+		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
+		fGate.setConnection(connection);
+
+		fGate.save(numeroFactura, fechaFactura, iva, totalConIva);
+
+		return getGeneratedKey(numeroFactura); // Id de la nueva factura generada
+
+	}
+
+	private Long generarNuevoNumeroFactura() throws BusinessException {
+
+		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
+		fGate.setConnection(connection);
+
+		return fGate.ultimoNumeroFactura();
+	}
+
 	private void verificarAveriasTerminadas(List<Long> idsAveria) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
@@ -102,51 +122,12 @@ public class CreateInvoiceFor {
 		fGate.vincularAveriaFactura(idFactura, idsAveria);
 	}
 
-	private long crearFactura(long numeroFactura, Date fechaFactura, double iva, double totalConIva)
-			throws BusinessException {
-
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
-
-		fGate.save(numeroFactura, fechaFactura, iva, totalConIva);
-
-		return getGeneratedKey(numeroFactura); // Id de la nueva factura generada
-
-	}
-
 	private long getGeneratedKey(long numeroFactura) throws BusinessException {
 
 		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
 		fGate.setConnection(connection);
 
 		return fGate.recuperarClaveGenerada(numeroFactura);
-	}
-
-	private Long generarNuevoNumeroFactura() throws BusinessException {
-
-		FacturasGateway fGate = PersistenceFactory.getFacturasGateway();
-		fGate.setConnection(connection);
-
-		return fGate.ultimoNumeroFactura();
-	}
-
-	private double porcentajeIva(double totalFactura, Date fechaFactura) {
-		return DateUtil.fromString("1/7/2012").before(fechaFactura) ? 21.0 : 18.0;
-	}
-
-	protected double calcularImportesAverias(List<Long> idsAveria) throws BusinessException {
-
-		double totalFactura = 0.0;
-		for (Long idAveria : idsAveria) {
-			double importeManoObra = consultaImporteManoObra(idAveria);
-			double importeRepuestos = consultaImporteRepuestos(idAveria);
-			double totalAveria = importeManoObra + importeRepuestos;
-
-			actualizarImporteAveria(idAveria, totalAveria);
-
-			totalFactura += totalAveria;
-		}
-		return totalFactura;
 	}
 
 	private void actualizarImporteAveria(Long idAveria, double totalAveria) throws BusinessException {
@@ -173,6 +154,25 @@ public class CreateInvoiceFor {
 
 		return aGate.importeManoObra(idAveria);
 
+	}
+
+	private double porcentajeIva(double totalFactura, Date fechaFactura) {
+		return DateUtil.fromString("1/7/2012").before(fechaFactura) ? 21.0 : 18.0;
+	}
+
+	protected double calcularImportesAverias(List<Long> idsAveria) throws BusinessException {
+
+		double totalFactura = 0.0;
+		for (Long idAveria : idsAveria) {
+			double importeManoObra = consultaImporteManoObra(idAveria);
+			double importeRepuestos = consultaImporteRepuestos(idAveria);
+			double totalAveria = importeManoObra + importeRepuestos;
+
+			actualizarImporteAveria(idAveria, totalAveria);
+
+			totalFactura += totalAveria;
+		}
+		return totalFactura;
 	}
 
 }

@@ -23,21 +23,46 @@ public class MediospagoGatewayImp implements MediospagoGateway {
 	}
 
 	@Override
-	public void createBonos(Long idCLiente) throws BusinessException {
+	public void createBonos(Long idCLiente, String codigo) throws BusinessException {
 
 		try {
 			pst = conection.prepareStatement(Conf.get("SQL_CREATE_BONOS"));
 
-			pst.setString(1,"TBonos");
+			pst.setString(1, "TBonos");
 			pst.setInt(2, 0);
-			pst.setInt(3, 20);
-			pst.setLong(4, idCLiente);
-			pst.setString(5,"Por 3 averias");
+			pst.setString(3, codigo);
+			pst.setInt(4, 20);
+			pst.setLong(5, idCLiente);
+			pst.setString(6, "Por tres averias");
 
 			pst.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new BusinessException("Error creando los bonos");
+		} finally {
+			Jdbc.close(pst);
+		}
+
+	}
+
+	@Override
+	public String getLastBonoCode() throws BusinessException {
+
+		String codigo = "";
+
+		try {
+			pst = conection.prepareStatement(Conf.get("SQL_GET_ALL_BONOS"));
+
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				codigo = rs.getString("codigo");
+			}
+
+			return codigo;
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error sacando el código del último bono");
 		} finally {
 			Jdbc.close(pst);
 		}

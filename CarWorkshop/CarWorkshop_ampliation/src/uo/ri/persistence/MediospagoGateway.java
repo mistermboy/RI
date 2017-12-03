@@ -8,6 +8,8 @@ public interface MediospagoGateway {
 
 	void setConnection(Connection conection);
 
-	void createBonos(Long idCLiente) throws BusinessException;
+	void createBonos(Long idCLiente, String codigo) throws BusinessException;
+
+	String getLastBonoCode() throws BusinessException;
 
 }

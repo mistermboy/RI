@@ -15,14 +15,19 @@ import uo.ri.persistence.MediospagoGateway;
 
 public class GenerateBonos {
 
+	/**
+	 * Genera los bonos
+	 * 
+	 * @throws BusinessException
+	 */
 	public void execute() throws BusinessException {
 
 		Connection c = null;
 		List<Long> idsClientes = new ArrayList<Long>();
 		List<Long> idsVehiculos = new ArrayList<Long>();
 		List<Long> idsAverias = new ArrayList<Long>();
-		
-		List<Long> acumAverias = new ArrayList<Long>();
+
+		List<Long> acumAverias = null;
 
 		try {
 			c = Jdbc.getConnection();
@@ -34,10 +39,11 @@ public class GenerateBonos {
 
 			idsClientes = cGate.findAllClientsId();
 			for (Long idC : idsClientes) {
+				acumAverias = new ArrayList<Long>();
 				idsVehiculos = bGate.getVehiculosByIdCliente(idC);
 				for (Long idV : idsVehiculos) {
 					idsAverias = bGate.getAveriasByIdVehiculo(idV);
-					for(Long averia:idsAverias) {
+					for (Long averia : idsAverias) {
 						acumAverias.add(averia);
 					}
 				}
@@ -51,6 +57,15 @@ public class GenerateBonos {
 		}
 	}
 
+	/**
+	 * Genera un nuevo bono en la tabla Mediospago y actualiza el usada_bono de las
+	 * averias
+	 * 
+	 * @param idsAverias
+	 * @param idC
+	 * @param c
+	 * @throws BusinessException
+	 */
 	private void createBono(List<Long> idsAverias, Long idC, Connection c) throws BusinessException {
 
 		AveriasGateway aGate = PersistenceFactory.getAveriasGateway();
@@ -62,18 +77,33 @@ public class GenerateBonos {
 		int nAverias = idsAverias.size() - moduloAverias;
 		int nBonos = nAverias / 3;
 
-		if (nAverias > 2) {
-			for (int i = 0; i < nAverias; i++) {
-				aGate.insertBonoAveria(idsAverias.get(i));
-			}
+		for (int i = 0; i < nAverias; i++) {
+			aGate.insertBonoAveria(idsAverias.get(i));
 		}
 
-		if (nBonos > 0) {
-			for (int i = 0; i < nBonos; i++) {
-				mGate.createBonos(idC);
-			}
+		for (int i = 0; i < nBonos; i++) {
+			String finalCode = generateNewCodigo(mGate);
+			mGate.createBonos(idC, finalCode);
 		}
 
+	}
+
+	/**
+	 * Genera un código para un nuevo bono. En función del último bono se le sumará
+	 * 10 al nuevo código
+	 * 
+	 * @param mGate
+	 * @return
+	 * @throws BusinessException
+	 */
+	private String generateNewCodigo(MediospagoGateway mGate) throws BusinessException {
+		String[] codes = mGate.getLastBonoCode().split("");
+		String code = "";
+		for (int i = 1; i < codes.length; i++) {
+			code += codes[i];
+		}
+		String finalCode = "B" + String.valueOf(Integer.valueOf(code) + 10);
+		return finalCode;
 	}
 
 }
