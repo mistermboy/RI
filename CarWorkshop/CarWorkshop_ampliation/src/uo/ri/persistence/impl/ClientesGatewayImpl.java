@@ -215,6 +215,37 @@ public class ClientesGatewayImpl implements ClientesGateway {
 		}
 		return ids;
 	}
+	
+	@Override
+	public List<Map<String, Object>> findAllClientsByRecomendator(long idRecomendator) throws BusinessException {
+
+		List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
+
+		try {
+
+			pst = conection.prepareStatement(Conf.get("SQL_FIND_ALL_CLIENTS_BY_RECOMENDATOR"));
+
+			pst.setLong(1, idRecomendator);
+			
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Map<String, Object> m = new HashMap<String, Object>();
+				m.put("id", rs.getInt("id"));
+				m.put("nombre", rs.getString("nombre"));
+				m.put("apellidos", rs.getString("apellidos"));
+				map.add(m);
+
+			}
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error buscando todos los clientes recomendados");
+		} finally {
+			Jdbc.close(rs, pst);
+		}
+
+		return map;
+	}
+	
 
 	private void insertMedioPago(Long idClient) throws BusinessException {
 

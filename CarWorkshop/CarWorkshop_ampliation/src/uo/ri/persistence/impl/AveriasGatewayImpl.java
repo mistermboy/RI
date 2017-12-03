@@ -127,4 +127,22 @@ public class AveriasGatewayImpl implements AveriasGateway {
 		}
 	}
 
+	@Override
+	public void insertBonoAveria(Long idAveria) throws BusinessException {
+		
+		try {
+			pst = conection.prepareStatement(Conf.get("SQL_INSERT_BONO_AVERIA"));
+
+			pst.setLong(1, idAveria);
+
+			pst.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new BusinessException("Error actualizando usada_bono en las averias");
+		} finally {
+			Jdbc.close(pst);
+		}
+		
+	}
+
 }

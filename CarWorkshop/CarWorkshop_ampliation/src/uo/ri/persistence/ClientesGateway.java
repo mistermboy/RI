@@ -27,4 +27,6 @@ public interface ClientesGateway {
 
 	List<Long> findAllClientsId() throws BusinessException;
 
+	List<Map<String, Object>> findAllClientsByRecomendator(long idRecomendator) throws BusinessException;
+
 }

@@ -25,7 +25,7 @@ public class BonosGatewayImpl implements BonosGateway {
 	}
 
 	@Override
-	public List<Long> getVehiculosByIdClientes(Long idCliente) throws BusinessException {
+	public List<Long> getVehiculosByIdCliente(Long idCliente) throws BusinessException {
 
 		List<Long> ids = new ArrayList<Long>();
 
@@ -49,7 +49,7 @@ public class BonosGatewayImpl implements BonosGateway {
 	}
 
 	@Override
-	public  List<Long> getAveriasByIdVehiculos(Long idVehiculo) throws BusinessException {
+	public  List<Long> getAveriasByIdVehiculo(Long idVehiculo) throws BusinessException {
 		List<Long> ids = new ArrayList<Long>();
 
 		try {

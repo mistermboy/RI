@@ -7,6 +7,7 @@ import uo.ri.business.ForemanService;
 import uo.ri.business.impl.foreman.AddClient;
 import uo.ri.business.impl.foreman.AddClientWithRecomendator;
 import uo.ri.business.impl.foreman.FindAllClients;
+import uo.ri.business.impl.foreman.FindAllClientsByRecomendator;
 import uo.ri.business.impl.foreman.DeleteClient;
 import uo.ri.business.impl.foreman.ShowClientDetail;
 import uo.ri.business.impl.foreman.UpdateClient;
@@ -22,16 +23,16 @@ public class ForemanServiceImpl implements ForemanService {
 		a.execute();
 
 	}
-	
+
 	@Override
 	public void addClientWithRecomendator(String dni, String nombre, String apellidos, int zipcode, int telefono,
 			String correo, long idRecomendador) throws BusinessException {
-	
-		AddClientWithRecomendator aR = new AddClientWithRecomendator(dni, nombre, apellidos, zipcode, telefono, correo,idRecomendador);
+
+		AddClientWithRecomendator aR = new AddClientWithRecomendator(dni, nombre, apellidos, zipcode, telefono, correo,
+				idRecomendador);
 		aR.execute();
-		
+
 	}
-	
 
 	@Override
 	public void deleteClient(Long idClient) throws BusinessException {
@@ -49,6 +50,13 @@ public class ForemanServiceImpl implements ForemanService {
 	}
 
 	@Override
+	public List<Map<String, Object>> findAllClientsByRecomendator(Long idRecomendador) throws BusinessException {
+
+		FindAllClientsByRecomendator fR = new FindAllClientsByRecomendator(idRecomendador);
+		return fR.execute();
+	}
+
+	@Override
 	public void updateClient(long idClient, String dni, String nombre, String apellidos, int zipcode, int telefono,
 			String correo) throws BusinessException {
 
@@ -63,7 +71,5 @@ public class ForemanServiceImpl implements ForemanService {
 		ShowClientDetail s = new ShowClientDetail(idClient);
 		return s.execute();
 	}
-
-	
 
 }

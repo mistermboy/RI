@@ -18,5 +18,7 @@ public interface AveriasGateway {
 	double importeRepuestos(Long idAveria) throws BusinessException;
 
 	double importeManoObra(Long idAveria) throws BusinessException;
+	
+	void insertBonoAveria(Long idAveria) throws BusinessException;
 
 }

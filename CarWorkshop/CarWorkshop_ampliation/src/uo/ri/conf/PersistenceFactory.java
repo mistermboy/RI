@@ -5,11 +5,13 @@ import uo.ri.persistence.BonosGateway;
 import uo.ri.persistence.ClientesGateway;
 import uo.ri.persistence.FacturasGateway;
 import uo.ri.persistence.MecanicosGateway;
+import uo.ri.persistence.MediospagoGateway;
 import uo.ri.persistence.impl.AveriasGatewayImpl;
 import uo.ri.persistence.impl.BonosGatewayImpl;
 import uo.ri.persistence.impl.ClientesGatewayImpl;
 import uo.ri.persistence.impl.FacturasGatewayImpl;
 import uo.ri.persistence.impl.MecanicosGatewayImpl;
+import uo.ri.persistence.impl.MediospagoGatewayImp;
 
 public class PersistenceFactory {
 
@@ -34,6 +36,10 @@ public class PersistenceFactory {
 
 	public static BonosGateway getBonosGateway() {
 		return new BonosGatewayImpl();
+	}
+	
+	public static MediospagoGateway getMediospagoGateway() {
+		return new MediospagoGatewayImp();
 	}
 	
 }

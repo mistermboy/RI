@@ -9,8 +9,8 @@ public interface BonosGateway {
 
 	void setConnection(Connection conection);
 
-	List<Long> getVehiculosByIdClientes(Long idCliente) throws BusinessException;
+	List<Long> getVehiculosByIdCliente(Long idCliente) throws BusinessException;
 
-	List<Long> getAveriasByIdVehiculos(Long idVehiculo) throws BusinessException;
+	List<Long> getAveriasByIdVehiculo(Long idVehiculo) throws BusinessException;
 
 }
