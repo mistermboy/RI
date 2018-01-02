@@ -3,18 +3,33 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TVehiculos")
 public class Vehiculo {
-
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)private Long id;
+	
 	private String marca;
-	private String matricula;
+	@Column(unique=true) private String matricula;
 	private String modelo;
+	
+	
+	@Column(name="NUM_AVERIAS") private int numAverias = 0;
+	@ManyToOne private Cliente cliente;
+	@ManyToOne private TipoVehiculo tipo;
+	@OneToMany(mappedBy="vehiculo") private Set<Averia> averias = new HashSet<>();
 
-	private int numAverias = 0;
-
-	private Cliente cliente;
-	private TipoVehiculo tipoVehiculo;
-	private Set<Averia> averias = new HashSet<>();
-
+	Vehiculo(){}
+	
 	public Vehiculo(String matricula) {
 		super();
 		this.matricula = matricula;
@@ -24,6 +39,12 @@ public class Vehiculo {
 		this(matricula);
 		this.marca = marca;
 		this.modelo = modelo;
+	}
+	
+	
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getMarca() {
@@ -43,7 +64,7 @@ public class Vehiculo {
 	}
 
 	public int getNumAverias() {
-		this.numAverias = averias.size();
+		numAverias = averias.size();
 		return numAverias;
 	}
 
@@ -59,7 +80,8 @@ public class Vehiculo {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((matricula == null) ? 0 : matricula.hashCode());
+		result = prime * result
+				+ ((matricula == null) ? 0 : matricula.hashCode());
 		return result;
 	}
 
@@ -80,6 +102,12 @@ public class Vehiculo {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Vehiculo [marca=" + marca + ", matricula=" + matricula
+				+ ", modelo=" + modelo + ", numAverias=" + numAverias + "]";
+	}
+
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -87,13 +115,13 @@ public class Vehiculo {
 	void _setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
+	
 	public TipoVehiculo getTipo() {
-		return tipoVehiculo;
+		return tipo;
 	}
 
-	void _setTipo(TipoVehiculo tipoVehiculo) {
-		this.tipoVehiculo = tipoVehiculo;
+	void _setTipo(TipoVehiculo tipo) {
+		this.tipo = tipo;
 	}
 
 	Set<Averia> _getAverias() {
@@ -103,5 +131,5 @@ public class Vehiculo {
 	public Set<Averia> getAverias() {
 		return new HashSet<>(averias);
 	}
-
+	
 }

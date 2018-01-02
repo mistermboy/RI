@@ -1,18 +1,23 @@
 package uo.ri.model.types;
 
-public class Address {
+import javax.persistence.Embeddable;
 
+@Embeddable
+public class Address {
+	
 	private String street;
 	private String city;
-	private String zipcode;
-
-	public Address(String street, String city, String zipcode) {
+	private String zipCode;
+	
+	Address() {}
+	
+	public Address(String street, String city, String zipCode) {
 		super();
 		this.street = street;
 		this.city = city;
-		this.zipcode = zipcode;
+		this.zipCode = zipCode;
 	}
-
+	
 	public String getStreet() {
 		return street;
 	}
@@ -21,8 +26,8 @@ public class Address {
 		return city;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	public String getZipCode() {
+		return zipCode;
 	}
 
 	@Override
@@ -31,7 +36,7 @@ public class Address {
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
-		result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
 	}
 
@@ -54,12 +59,17 @@ public class Address {
 				return false;
 		} else if (!street.equals(other.street))
 			return false;
-		if (zipcode == null) {
-			if (other.zipcode != null)
+		if (zipCode == null) {
+			if (other.zipCode != null)
 				return false;
-		} else if (!zipcode.equals(other.zipcode))
+		} else if (!zipCode.equals(other.zipCode))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Address [street=" + street + ", city=" + city + ", zipCode=" + zipCode + "]";
 	}
 
 }

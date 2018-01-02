@@ -3,23 +3,43 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Repuesto {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-	private String codigo;
+@Entity
+@Table(name = "TRepuestos")
+public class Repuesto  {
+
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)private Long id;
+	
+	@Column(unique=true) private String codigo;
 	private String descripcion;
 	private double precio;
-
-	private Set<Sustitucion> sustituciones = new HashSet<>();
-
+	
+	@OneToMany(mappedBy="repuesto") private Set<Sustitucion> sustituciones = new HashSet<>();
+	
+	Repuesto(){}
+	
 	public Repuesto(String codigo) {
 		super();
 		this.codigo = codigo;
 	}
-
+	
 	public Repuesto(String codigo, String descripcion, double precio) {
 		this(codigo);
 		this.descripcion = descripcion;
 		this.precio = precio;
+	}
+
+	
+	
+	public Long getId() {
+		return id;
 	}
 
 	public String getDescripcion() {
@@ -67,6 +87,12 @@ public class Repuesto {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Repuesto [codigo=" + codigo + ", descripcion=" + descripcion
+				+ ", precio=" + precio + "]";
+	}
+	
 	Set<Sustitucion> _getSustituciones() {
 		return sustituciones;
 	}
@@ -74,5 +100,6 @@ public class Repuesto {
 	public Set<Sustitucion> getSustituciones() {
 		return new HashSet<>(sustituciones);
 	}
-
+	
+	
 }

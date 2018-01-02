@@ -18,7 +18,7 @@ import uo.ri.model.Repuesto;
 import uo.ri.model.Sustitucion;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
-import uo.ri.model.exception.BusinessException;
+import uo.ri.util.exception.BusinessException;
 
 
 public class PagarTest {
@@ -91,7 +91,7 @@ public class PagarTest {
 
 	@Test
 	public void testCargarRemove() throws BusinessException {
-		Association.Cargar.unlink( cargo );
+		cargo.rewind();  // removes this charge: unlink from Invoice and PaymentMean
 		
 		assertTrue( ! metalico.getCargos().contains( cargo ));
 		assertTrue( metalico.getCargos().size() == 0 );

@@ -1,6 +1,5 @@
-package uo.ri.domain;
+﻿package uo.ri.domain;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import alb.util.date.DateUtil;
 import uo.ri.model.Association;
 import uo.ri.model.Averia;
 import uo.ri.model.Cliente;
@@ -21,10 +21,9 @@ import uo.ri.model.Repuesto;
 import uo.ri.model.Sustitucion;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
-import uo.ri.model.exception.BusinessException;
 import uo.ri.model.types.AveriaStatus;
 import uo.ri.model.types.FacturaStatus;
-import alb.util.date.DateUtil;
+import uo.ri.util.exception.BusinessException;
 
 
 public class FacturaTest {
@@ -62,7 +61,7 @@ public class FacturaTest {
 	}
 	
 	/**
-	 * Calculo del importe de factura con una avería de 260€ + IVA 21%
+	 * Cálculo del importe de factura con una avería de 260€ + IVA 21%
 	 * La averia se añade en el constructor  
 	 * @throws BusinessException
 	 */
@@ -72,12 +71,11 @@ public class FacturaTest {
 		averias.add( averia );
 		Factura factura = new Factura( 0L, averias );
 		
-		assertEquals(302.5,factura.getImporte(),0.1);
 		assertTrue( factura.getImporte() ==  302.5 );
 	}
 
 	/**
-	 * Calculo del importe de factura con una avería de 260€ + IVA 21%
+	 * Cálculo del importe de factura con una avería de 260€ + IVA 21%
 	 * La averia se añade por asociacion  
 	 * @throws BusinessException
 	 */
@@ -90,7 +88,7 @@ public class FacturaTest {
 	}
 
 	/**
-	 * Dos averias añadidas a la factura en el constructor
+	 * Dos averías añadidas a la factura en el constructor
 	 * @throws BusinessException
 	 */
 	@Test
@@ -147,8 +145,8 @@ public class FacturaTest {
 	}
 
 	/**
-	 * Una averia al añadirla a una factura cambia su estado a FACTURADA al 
-	 * añadirla por constructor
+	 * Una averia al añadirla a una factura por constructor cambia su 
+	 * estado a FACTURADA
 	 * @throws BusinessException
 	 */
 	@Test
@@ -209,8 +207,22 @@ public class FacturaTest {
 		
 		averia.markAsFinished();
 		
-		// importe = 100 repuesto + 37.5 mano de obra
+		// importe = 100 € repuesto + 37.5 € mano de obra
 		return averia;
+	}
+	
+	/**
+	 * La fecha de factura se devuelve clonada 
+	 */
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testSafeGetFechaClonada() {
+		Factura f = new Factura( 0L );
+		Date d = f.getFecha();
+		
+		d.setYear( 0 );
+		
+		assertTrue( averia.getFecha().getYear() == new Date().getYear());
 	}
 
 	private void sleep(int millis) {

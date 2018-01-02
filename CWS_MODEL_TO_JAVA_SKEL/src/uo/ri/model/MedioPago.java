@@ -3,20 +3,32 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TMediosPago")
+@Inheritance(strategy=InheritanceType.JOINED)
 public abstract class MedioPago {
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)private Long id;
 
 	protected double acumulado = 0.0;
-
-	private Cliente cliente;
-
-	private Set<Cargo> cargos = new HashSet<>();
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	void _setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	
+	@ManyToOne private Cliente cliente;
+	@OneToMany(mappedBy="medioPago") private Set<Cargo> cargos = new HashSet<>();
+	
+	MedioPago(){}
+	
+	public Long getId() {
+		return id;
 	}
 
 	public double getAcumulado() {
@@ -25,6 +37,15 @@ public abstract class MedioPago {
 
 	public void setAcumulado(double acumulado) {
 		this.acumulado = acumulado;
+	}
+	
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	void _setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	@Override
@@ -51,6 +72,7 @@ public abstract class MedioPago {
 			return false;
 		return true;
 	}
+	
 
 	Set<Cargo> _getCargos() {
 		return cargos;
@@ -59,5 +81,7 @@ public abstract class MedioPago {
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
 	}
-
+	
+	
+	
 }

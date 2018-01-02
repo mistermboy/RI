@@ -10,7 +10,7 @@ import org.junit.Test;
 import uo.ri.model.Association;
 import uo.ri.model.Cliente;
 import uo.ri.model.Vehiculo;
-import uo.ri.model.exception.BusinessException;
+import uo.ri.util.exception.BusinessException;
 
 
 public class PoseerTest {

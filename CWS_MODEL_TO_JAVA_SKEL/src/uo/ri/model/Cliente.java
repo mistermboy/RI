@@ -1,29 +1,56 @@
 package uo.ri.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import uo.ri.model.types.Address;
 
+@Entity
+@Table(name = "TClientes")
 public class Cliente {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
+	@Column(unique = true)
 	private String dni;
 	private String nombre;
 	private String apellidos;
 	private Address address;
 
+	@OneToMany(mappedBy = "cliente")
 	private Set<Vehiculo> vehiculos = new HashSet<>();
-	private Set<MedioPago> mediosDePago = new HashSet<>();
+	@OneToMany(mappedBy = "cliente")
+	private Set<MedioPago> mediosPago = new HashSet<>();
+	@OneToMany(mappedBy = "cliente")
+	private Set<Recomendacion> recomendaciones = new HashSet<>();
+
+	Cliente() {
+	}
 
 	public Cliente(String dni) {
 		super();
 		this.dni = dni;
 	}
 
-	public Cliente(String dni, String nombre, String apellido) {
+	public Cliente(String dni, String nombre, String apellidos) {
 		this(dni);
 		this.nombre = nombre;
 		this.apellidos = apellidos;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getNombre() {
@@ -84,6 +111,14 @@ public class Cliente {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
 	}
 
+	Set<Recomendacion> _getRecomendaciones() {
+		return recomendaciones;
+	}
+
+	public Set<Recomendacion> getRecomendaciones() {
+		return new HashSet<>(recomendaciones);
+	}
+
 	Set<Vehiculo> _getVehiculos() {
 		return vehiculos;
 	}
@@ -93,11 +128,119 @@ public class Cliente {
 	}
 
 	Set<MedioPago> _getMediosPago() {
-		return mediosDePago;
+		return mediosPago;
 	}
 
 	public Set<MedioPago> getMediosPago() {
-		return new HashSet<>(mediosDePago);
+		return new HashSet<>(mediosPago);
+	}
+
+	/**
+	 * Devuelve las averías que puede usar un cliente para un bono por 3 averias
+	 * 
+	 * @return List<Averia>
+	 */
+	public List<Averia> getAveriasBono3NoUsadas() {
+		List<Averia> avs = new ArrayList<Averia>();
+		for (Vehiculo v : vehiculos) {
+			for (Averia a : v.getAverias()) {
+				if (a.esElegibleParaBono3()) {
+					avs.add(a);
+				}
+			}
+		}
+		return avs;
+	}
+
+	/**
+	 * Deveulve si un cliente tiene derecho a un bono por recomendacioens
+	 * 
+	 * @return true en caso afirmativo, false en caso contrario
+	 */
+	public boolean elegibleBonoPorRecomendaciones() {
+		if (numRecomendaciones() >= 3) {
+			if (esRecienRegistrado() || vehiculoSinAverias() || notHasRecomendaciones()
+					|| recomendadosWithoutReparaciones()) {
+				return false;
+			}
+			if (checkUsadas()) {
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	/**
+	 * Comprueba si alguna de las recomendaciones ha sido usada
+	 * 
+	 * @return
+	 */
+	private boolean checkUsadas() {
+		for (Recomendacion r : this.getRecomendaciones()) {
+			if (r.isUsada_bono()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Devuelve el número de recomendaciones del cliente
+	 */
+	public int numRecomendaciones() {
+		return this.recomendaciones.size();
+
+	}
+
+	/**
+	 * Comprueba si los recomendados no tienen reparaciones
+	 * 
+	 * @return
+	 */
+	private boolean recomendadosWithoutReparaciones() {
+		for (Recomendacion r : this.getRecomendaciones()) {
+			for (Vehiculo v : r.getRecomendado().getVehiculos()) {
+				if (v.getAverias().size() > 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Comprueba si el cliente no tiene recomendaciones
+	 * 
+	 * @return true en caso afirmativo, false en caso contrario
+	 */
+	private boolean notHasRecomendaciones() {
+		return this.recomendaciones.size() == 0;
+	}
+
+	/**
+	 * Comprueba si el cliente tiene algún vehículo con averias
+	 * 
+	 * @return
+	 */
+	private boolean vehiculoSinAverias() {
+		for (Vehiculo v : this.getVehiculos()) {
+			if (v.getAverias().size() > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Comprueba si el cliente está recién registrado o no
+	 * 
+	 * @return true si está recién registrado, false en caso contrario
+	 */
+	private boolean esRecienRegistrado() {
+		return getVehiculos().size() == 0;
 	}
 
 }

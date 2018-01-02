@@ -13,7 +13,7 @@ import uo.ri.model.Cliente;
 import uo.ri.model.Mecanico;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
-import uo.ri.model.exception.BusinessException;
+import uo.ri.util.exception.BusinessException;
 
 
 public class AsignarTest {
@@ -35,7 +35,7 @@ public class AsignarTest {
 		averia = new Averia(vehiculo, "falla la junta la trocla");
 
 		mecanico = new Mecanico("dni-mecanico", "nombre", "apellidos");
-		Association.Asignar.link(mecanico, averia);
+		averia.assignTo(mecanico);
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class AsignarTest {
 
 	@Test
 	public void testAsignarUnlink() throws BusinessException {
-		Association.Asignar.unlink(mecanico, averia );
+		averia.desassign();
 		
 		assertTrue( ! mecanico.getAsignadas().contains( averia ));
 		assertTrue( mecanico.getAsignadas().size() == 0 );

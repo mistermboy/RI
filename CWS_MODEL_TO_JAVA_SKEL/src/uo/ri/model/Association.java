@@ -20,13 +20,11 @@ public class Association {
 		public static void link(TipoVehiculo tipoVehiculo, Vehiculo vehiculo) {
 			vehiculo._setTipo(tipoVehiculo);
 			tipoVehiculo._getVehiculos().add(vehiculo);
-
 		}
 
 		public static void unlink(TipoVehiculo tipoVehiculo, Vehiculo vehiculo) {
 			tipoVehiculo._getVehiculos().remove(vehiculo);
 			vehiculo._setTipo(null);
-
 		}
 	}
 
@@ -48,11 +46,13 @@ public class Association {
 		public static void link(Vehiculo vehiculo, Averia averia) {
 			averia._setVehiculo(vehiculo);
 			vehiculo._getAverias().add(averia);
+
 		}
 
 		public static void unlink(Vehiculo vehiculo, Averia averia) {
 			vehiculo._getAverias().remove(averia);
 			averia._setVehiculo(null);
+
 		}
 	}
 
@@ -97,11 +97,13 @@ public class Association {
 		public static void link(Mecanico mecanico, Averia averia) {
 			averia._setMecanico(mecanico);
 			mecanico._getAsignadas().add(averia);
+
 		}
 
 		public static void unlink(Mecanico mecanico, Averia averia) {
 			mecanico._getAsignadas().remove(averia);
 			averia._setMecanico(null);
+
 		}
 	}
 
@@ -112,6 +114,7 @@ public class Association {
 			intervencion._setMecanico(mecanico);
 			averia._getIntervenciones().add(intervencion);
 			mecanico._getIntervenciones().add(intervencion);
+
 		}
 
 		public static void unlink(Intervencion intervencion) {
@@ -121,6 +124,7 @@ public class Association {
 			intervencion._setMecanico(null);
 
 		}
+
 	}
 
 	public static class Sustituir {
@@ -130,6 +134,7 @@ public class Association {
 			sustitucion._setRepuesto(repuesto);
 			intervencion._getSustituciones().add(sustitucion);
 			repuesto._getSustituciones().add(sustitucion);
+
 		}
 
 		public static void unlink(Sustitucion sustitucion) {
@@ -139,7 +144,21 @@ public class Association {
 			sustitucion._setRepuesto(null);
 
 		}
+	}
 
+	public static class Recomendar {
+
+		public static void link(Cliente recomendador, Recomendacion recomendacion, Cliente recomendado) {
+			recomendacion._setRecomendado(recomendado);
+			recomendacion._setRecomendador(recomendador);
+			recomendador._getRecomendaciones().add(recomendacion);
+			recomendado._getRecomendaciones().add(recomendacion);
+		}
+
+		public static void unlink(Recomendacion recomendacion) {
+			recomendacion.getRecomendador()._getRecomendaciones().remove(recomendacion);
+			recomendacion._setRecomendador(null);
+		}
 	}
 
 }

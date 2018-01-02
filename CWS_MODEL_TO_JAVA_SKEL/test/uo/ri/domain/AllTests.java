@@ -1,4 +1,4 @@
-package uo.ri.domain;
+﻿package uo.ri.domain;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

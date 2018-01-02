@@ -3,28 +3,42 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Intervencion {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
+@Entity
+@Table(name = "TIntervenciones", uniqueConstraints = { @UniqueConstraint(columnNames = "AVERIA_ID, MECANICO_ID") })
+public class Intervencion {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne
 	private Averia averia;
+	@ManyToOne
 	private Mecanico mecanico;
 	private int minutos;
 
+	@OneToMany(mappedBy = "intervencion")
 	private Set<Sustitucion> sustituciones = new HashSet<>();
+
+	Intervencion() {
+	}
+
+	public Long getId() {
+		return id;
+	}
 
 	public Intervencion(Mecanico mecanico, Averia averia) {
 		super();
 		Association.Intervenir.link(averia, this, mecanico);
 	}
-	
-	public double getImporte() {
-		double acum=0;
-		for(Sustitucion sustitucion:sustituciones) {
-			acum+=sustitucion.getImporte();
-		}
-		acum+=(getMinutos() * this.averia.getVehiculo().getTipo().getPrecioHora())/60;
-		return acum;
-	}
-	
 
 	public Averia getAveria() {
 		return averia;
@@ -48,6 +62,15 @@ public class Intervencion {
 
 	public void setMinutos(int minutos) {
 		this.minutos = minutos;
+	}
+
+	public double getImporte() {
+		double acum = 0;
+		for (Sustitucion sustitucion : sustituciones) {
+			acum += sustitucion.getImporte();
+		}
+		acum += (getMinutos() * this.averia.getVehiculo().getTipo().getPrecioHora()) / 60;
+		return acum;
 	}
 
 	@Override

@@ -1,18 +1,36 @@
 package uo.ri.model;
 
-public class Sustitucion {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
+@Entity
+@Table(name = "TSustituciones", uniqueConstraints = { @UniqueConstraint(columnNames = "REPUESTO_ID, INTERVENCION_ID") })
+public class Sustitucion {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne
 	private Repuesto repuesto;
+	@ManyToOne
 	private Intervencion intervencion;
 	private int cantidad;
+
+	Sustitucion() {
+	}
+
+	public Long getId() {
+		return id;
+	}
 
 	public Sustitucion(Repuesto repuesto, Intervencion intervencion) {
 		super();
 		Association.Sustituir.link(repuesto, this, intervencion);
-	}
-
-	public double getImporte() {
-		return this.cantidad * this.repuesto.getPrecio();
 	}
 
 	public Repuesto getRepuesto() {
@@ -37,6 +55,10 @@ public class Sustitucion {
 
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public double getImporte() {
+		return this.cantidad * this.repuesto.getPrecio();
 	}
 
 	@Override

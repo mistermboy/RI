@@ -3,14 +3,28 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TMecanicos")
 public class Mecanico {
 
-	private String dni;
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)private Long id;
+	
+	@Column(unique=true) private String dni;
 	private String apellidos;
 	private String nombre;
-
-	private Set<Averia> asigandas = new HashSet<>();
-	private Set<Intervencion> intervenciones = new HashSet<>();
+	
+	@OneToMany(mappedBy="mecanico")  private Set<Averia> asignadas = new HashSet<>();
+	@OneToMany(mappedBy="mecanico")  private Set<Intervencion> intervenciones = new HashSet<>();
+	
+	Mecanico(){}
 
 	public Mecanico(String dni) {
 		super();
@@ -19,8 +33,13 @@ public class Mecanico {
 
 	public Mecanico(String dni, String nombre, String apellidos) {
 		this(dni);
-		this.nombre = nombre;
-		this.apellidos = apellidos;
+		this.nombre= nombre;
+		this.apellidos= apellidos;
+	}
+
+	
+	public Long getId() {
+		return id;
 	}
 
 	public String getApellidos() {
@@ -68,14 +87,20 @@ public class Mecanico {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Mecanico [dni=" + dni + ", apellidos=" + apellidos
+				+ ", nombre=" + nombre + "]";
+	}
+
 	Set<Averia> _getAsignadas() {
-		return asigandas;
+		return asignadas;
 	}
 
 	public Set<Averia> getAsignadas() {
-		return new HashSet<>(asigandas);
+		return new HashSet<>(asignadas);
 	}
-
+	
 	Set<Intervencion> _getIntervenciones() {
 		return intervenciones;
 	}
@@ -84,4 +109,5 @@ public class Mecanico {
 		return new HashSet<>(intervenciones);
 	}
 
+	
 }

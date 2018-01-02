@@ -18,8 +18,8 @@ import uo.ri.model.Repuesto;
 import uo.ri.model.Sustitucion;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
-import uo.ri.model.exception.BusinessException;
 import uo.ri.model.types.AveriaStatus;
+import uo.ri.util.exception.BusinessException;
 
 
 public class FacturarTest {

@@ -2,15 +2,36 @@ package uo.ri.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import alb.util.date.DateUtil;
+
+@Entity
+@Table(name = "TTarjetasCredito")
 public class TarjetaCredito extends MedioPago {
 
+	@Column(unique = true)
 	private String numero;
 	private String tipo;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date validez;
+
+	TarjetaCredito() {
+	}
 
 	public TarjetaCredito(String numero) {
 		super();
 		this.numero = numero;
+	}
+
+	public TarjetaCredito(String numero, String tipo, Date validez) {
+		this(numero);
+		this.tipo = tipo;
+		this.validez = validez;
 	}
 
 	public String getTipo() {
@@ -22,7 +43,11 @@ public class TarjetaCredito extends MedioPago {
 	}
 
 	public Date getValidez() {
-		return validez;
+		if (validez != null) {
+			return validez;
+		} else {
+			return DateUtil.tomorrow();
+		}
 	}
 
 	public void setValidez(Date validez) {
@@ -63,5 +88,4 @@ public class TarjetaCredito extends MedioPago {
 		return "TarjetaCredito [numero=" + numero + ", tipo=" + tipo + ", validez=" + validez + ", acumulado="
 				+ acumulado + "]";
 	}
-
 }

@@ -1,23 +1,66 @@
 package uo.ri.model;
 
-import uo.ri.model.exception.BusinessException;
-import uo.ri.model.types.FacturaStatus;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
+import alb.util.date.DateUtil;
+import uo.ri.model.types.FacturaStatus;
+import uo.ri.util.exception.BusinessException;
+
+@Entity
+@Table(name = "TCargos", uniqueConstraints = { @UniqueConstraint(columnNames = "FACTURA_ID, MEDIOPAGO_ID") })
 public class Cargo {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne
 	private Factura factura;
+	@ManyToOne
 	private MedioPago medioPago;
 	private double importe = 0.0;
 
-	public Cargo(Factura factura, MedioPago medioPago, double importe) throws BusinessException {
-		// incrementar el importe en el acumulado del medio de pago
-		// guardar el importe
-		// enlazar (link) factura, este cargo y medioDePago
-		super();
-		medioPago.acumulado += importe;
-		this.importe = importe;
-		Association.Cargar.link(factura, this, medioPago);
+	Cargo() {
+	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public Cargo(Factura factura, MedioPago medioPago, double importe) throws BusinessException {
+		super();
+		Association.Cargar.link(factura, this, medioPago);
+		if (medioPago instanceof Bono) {
+			((Bono) medioPago).pagar(importe);
+		} else if (medioPago instanceof TarjetaCredito) {
+			if (checkValidez()) {
+				medioPago.acumulado += importe;
+			} else {
+				throw new BusinessException("La fecha de la tarjeta no es válida");
+			}
+		} else {
+			medioPago.acumulado += importe;
+		}
+		this.importe = importe;
+
+	}
+
+	/**
+	 * Comprueba la validez de la tarjeta de crédito
+	 * 
+	 * @return true si es correcta ,falso en caso contrario
+	 */
+	private boolean checkValidez() {
+		if (((TarjetaCredito) medioPago).getValidez().after(DateUtil.today())) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -35,7 +78,6 @@ public class Cargo {
 			// desenlazar factura, cargo y edio de pago
 			Association.Cargar.unlink(this);
 		}
-
 	}
 
 	public Factura getFactura() {
