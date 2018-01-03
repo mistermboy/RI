@@ -1,5 +1,6 @@
 package uo.ri.model;
 
+import java.time.Instant;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import alb.util.date.DateUtil;
+import uo.ri.util.exception.BusinessException;
 
 @Entity
 @Table(name = "TTarjetasCredito")
@@ -25,6 +27,8 @@ public class TarjetaCredito extends MedioPago {
 
 	public TarjetaCredito(String numero) {
 		super();
+		this.validez = DateUtil.tomorrow();
+		this.tipo = "UNKNOWN";
 		this.numero = numero;
 	}
 
@@ -43,11 +47,8 @@ public class TarjetaCredito extends MedioPago {
 	}
 
 	public Date getValidez() {
-		if (validez != null) {
-			return validez;
-		} else {
-			return DateUtil.tomorrow();
-		}
+		return validez;
+
 	}
 
 	public void setValidez(Date validez) {
@@ -88,4 +89,27 @@ public class TarjetaCredito extends MedioPago {
 		return "TarjetaCredito [numero=" + numero + ", tipo=" + tipo + ", validez=" + validez + ", acumulado="
 				+ acumulado + "]";
 	}
+
+	@Override
+	public void pagar(double importe) throws BusinessException {
+		if (isValidNow()) {
+			super.acumulado += importe;
+		} else {
+			throw new BusinessException("Tarjeta de crédito no válida");
+		}
+
+	}
+
+	/**
+	 * Comprueba la validez de la tarjeta de crédito
+	 * 
+	 * @return true si es correcta ,falso en caso contrario
+	 */
+	public boolean isValidNow() {
+		if (getValidez().after(DateUtil.today())) {
+			return true;
+		}
+		return false;
+	}
+
 }

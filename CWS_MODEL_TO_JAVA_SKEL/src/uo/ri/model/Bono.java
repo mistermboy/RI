@@ -85,6 +85,7 @@ public class Bono extends MedioPago {
 				+ acumulado + "]";
 	}
 
+	@Override
 	public void pagar(double cantidad) throws BusinessException {
 		double resto = this.disponible - cantidad;
 		if (resto >= 0) {
@@ -95,4 +96,5 @@ public class Bono extends MedioPago {
 		}
 
 	}
+
 }

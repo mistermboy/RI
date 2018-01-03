@@ -8,7 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import alb.util.date.DateUtil;
 import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
 
@@ -35,32 +34,10 @@ public class Cargo {
 
 	public Cargo(Factura factura, MedioPago medioPago, double importe) throws BusinessException {
 		super();
-		Association.Cargar.link(factura, this, medioPago);
-		if (medioPago instanceof Bono) {
-			((Bono) medioPago).pagar(importe);
-		} else if (medioPago instanceof TarjetaCredito) {
-			if (checkValidez()) {
-				medioPago.acumulado += importe;
-			} else {
-				throw new BusinessException("La fecha de la tarjeta no es válida");
-			}
-		} else {
-			medioPago.acumulado += importe;
-		}
+		medioPago.pagar(importe);
 		this.importe = importe;
+		Association.Cargar.link(factura, this, medioPago);
 
-	}
-
-	/**
-	 * Comprueba la validez de la tarjeta de crédito
-	 * 
-	 * @return true si es correcta ,falso en caso contrario
-	 */
-	private boolean checkValidez() {
-		if (((TarjetaCredito) medioPago).getValidez().after(DateUtil.today())) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -94,6 +71,12 @@ public class Cargo {
 
 	void _setMedioPago(MedioPago medioPago) {
 		this.medioPago = medioPago;
+	}
+	
+	
+
+	public double getImporte() {
+		return importe;
 	}
 
 	@Override

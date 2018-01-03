@@ -99,4 +99,9 @@ public class Recomendacion {
 		}
 
 	}
+
+	public void unlink() {
+		Association.Recomendar.unlink(this);
+
+	}
 }

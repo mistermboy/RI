@@ -148,16 +148,20 @@ public class Association {
 
 	public static class Recomendar {
 
-		public static void link(Cliente recomendador, Recomendacion recomendacion, Cliente recomendado) {
-			recomendacion._setRecomendado(recomendado);
-			recomendacion._setRecomendador(recomendador);
-			recomendador._getRecomendaciones().add(recomendacion);
-			recomendado._getRecomendaciones().add(recomendacion);
+		public static void link(Cliente clienteRecomendador, Recomendacion recomendacion, Cliente clienteRecomendado) {
+			recomendacion._setRecomendador(clienteRecomendador);
+			recomendacion._setRecomendado(clienteRecomendado);
+			clienteRecomendador._getRecomendacionesHechas().add(recomendacion);
+			clienteRecomendado._setRecomendacionRecibida(recomendacion);
 		}
 
 		public static void unlink(Recomendacion recomendacion) {
-			recomendacion.getRecomendador()._getRecomendaciones().remove(recomendacion);
+			recomendacion.getRecomendador()._getRecomendacionesHechas().remove(recomendacion);
+			recomendacion.getRecomendador()._setRecomendacionRecibida(null);
+			recomendacion.getRecomendado()._getRecomendacionesHechas().remove(recomendacion);
+			recomendacion.getRecomendado()._setRecomendacionRecibida(null);
 			recomendacion._setRecomendador(null);
+			recomendacion._setRecomendado(null);
 		}
 	}
 

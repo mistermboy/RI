@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -33,7 +34,9 @@ public class Cliente {
 	@OneToMany(mappedBy = "cliente")
 	private Set<MedioPago> mediosPago = new HashSet<>();
 	@OneToMany(mappedBy = "cliente")
-	private Set<Recomendacion> recomendaciones = new HashSet<>();
+	private Set<Recomendacion> recomendacionesHechas = new HashSet<>();
+	@ManyToOne
+	private Recomendacion recomendacionRecibida;
 
 	Cliente() {
 	}
@@ -111,12 +114,16 @@ public class Cliente {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
 	}
 
-	Set<Recomendacion> _getRecomendaciones() {
-		return recomendaciones;
+	Set<Recomendacion> _getRecomendacionesHechas() {
+		return recomendacionesHechas;
 	}
 
-	public Set<Recomendacion> getRecomendaciones() {
-		return new HashSet<>(recomendaciones);
+	public Set<Recomendacion> getRecomendacionesHechas() {
+		return new HashSet<>(recomendacionesHechas);
+	}
+
+	public void setRecomendacionesHechas(Set<Recomendacion> recomendaciones) {
+		this.recomendacionesHechas = recomendaciones;
 	}
 
 	Set<Vehiculo> _getVehiculos() {
@@ -133,6 +140,14 @@ public class Cliente {
 
 	public Set<MedioPago> getMediosPago() {
 		return new HashSet<>(mediosPago);
+	}
+
+	public Recomendacion getRecomendacionRecibida() {
+		return recomendacionRecibida;
+	}
+
+	void _setRecomendacionRecibida(Recomendacion recomendacion) {
+		this.recomendacionRecibida = recomendacion;
 	}
 
 	/**
@@ -179,7 +194,7 @@ public class Cliente {
 	 * @return
 	 */
 	private boolean checkUsadas() {
-		for (Recomendacion r : this.getRecomendaciones()) {
+		for (Recomendacion r : this.getRecomendacionesHechas()) {
 			if (r.isUsada_bono()) {
 				return true;
 			}
@@ -191,7 +206,7 @@ public class Cliente {
 	 * Devuelve el número de recomendaciones del cliente
 	 */
 	public int numRecomendaciones() {
-		return this.recomendaciones.size();
+		return this.recomendacionesHechas.size();
 
 	}
 
@@ -201,7 +216,7 @@ public class Cliente {
 	 * @return
 	 */
 	private boolean recomendadosWithoutReparaciones() {
-		for (Recomendacion r : this.getRecomendaciones()) {
+		for (Recomendacion r : this.getRecomendacionesHechas()) {
 			for (Vehiculo v : r.getRecomendado().getVehiculos()) {
 				if (v.getAverias().size() > 0) {
 					return false;
@@ -217,7 +232,7 @@ public class Cliente {
 	 * @return true en caso afirmativo, false en caso contrario
 	 */
 	private boolean notHasRecomendaciones() {
-		return this.recomendaciones.size() == 0;
+		return this.recomendacionesHechas.size() == 0;
 	}
 
 	/**
