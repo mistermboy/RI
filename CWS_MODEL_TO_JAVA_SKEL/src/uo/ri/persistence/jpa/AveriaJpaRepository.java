@@ -5,6 +5,7 @@ import java.util.List;
 import uo.ri.business.repository.AveriaRepository;
 import uo.ri.model.Averia;
 import uo.ri.persistence.jpa.util.BaseRepository;
+import uo.ri.persistence.jpa.util.Jpa;
 
 public class AveriaJpaRepository 
 		extends BaseRepository<Averia> 
@@ -12,14 +13,16 @@ public class AveriaJpaRepository
 
 	@Override
 	public List<Averia> findByIds(List<Long> idsAveria) {
-		// TODO Auto-generated method stub
-		return null;
+		return Jpa.getManager().createNamedQuery("Averia.findByIds", Averia.class)
+				.setParameter(1, idsAveria)
+				.getResultList();
 	}
 
 	@Override
 	public List<Averia> findNoFacturadasByDni(String dni) {
-		// TODO Auto-generated method stub
-		return null;
+		return Jpa.getManager().createNamedQuery("Averia.findNoFacturadasByDni", Averia.class)
+				.setParameter(1, dni)
+				.getResultList();
 	}
 
 }

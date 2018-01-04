@@ -7,13 +7,22 @@ import uo.ri.util.exception.BusinessException;
 
 public interface AdminService {
 
-	void newMechanic(MechanicDto mecanico) throws BusinessException;
-	void deleteMechanic(Long idMecanico) throws BusinessException;
+
+	void addMechanic(MechanicDto mecanico) throws BusinessException;
+	void deleteMechanic(Long idMechanicDto) throws BusinessException;
 	void updateMechanic(MechanicDto mecanico) throws BusinessException;
 
 	MechanicDto findMechanicById(Long id) throws BusinessException;
 	List<MechanicDto> findAllMechanics() throws BusinessException;
-	
-	// resto de métodos que faltan...
+
+	/**
+	 * Generate the vouchers (bonos) following one or several policies:
+	 * 	- by number of breakdowns
+	 * 	- by number of recommendations
+	 * 	- by invoices over 500€
+	 * @return a counter with the number of generated vouchers
+	 * @throws BusinessException
+	 */
+	int generateVouchers() throws BusinessException;
 
 }

@@ -11,17 +11,17 @@ public class AddMechanicAction implements Action {
 
 	@Override
 	public void execute() throws BusinessException {
-		
+
 		// Pedir datos
 		MechanicDto m = new MechanicDto();
-		m.dni = Console.readString("Dni"); 
-		m.name = Console.readString("Nombre"); 
+		m.dni = Console.readString("Dni");
+		m.name = Console.readString("Nombre");
 		m.surname = Console.readString("Apellidos");
-		
+
 		// Procesar
 		AdminService as = Factory.service.forAdmin();
-		as.newMechanic( m );
-				
+		as.addMechanic(m);
+
 		// Mostrar resultado
 		Console.println("Nuevo mecánico añadido");
 	}

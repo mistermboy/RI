@@ -17,7 +17,7 @@ public class AdminServiceImpl implements AdminService {
 	private CommandExecutor executor = Factory.executor.forExecutor();
 
 	@Override
-	public void newMechanic(MechanicDto mecanico) throws BusinessException {
+	public void addMechanic(MechanicDto mecanico) throws BusinessException {
 		executor.execute(new AddMechanic(mecanico));
 	}
 
@@ -39,6 +39,12 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public MechanicDto findMechanicById(Long id) throws BusinessException {
 		return executor.execute(new FindMechanicById(id));
+	}
+
+	@Override
+	public int generateVouchers() throws BusinessException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

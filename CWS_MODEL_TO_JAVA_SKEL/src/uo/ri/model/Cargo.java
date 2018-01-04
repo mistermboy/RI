@@ -12,9 +12,7 @@ import uo.ri.model.types.FacturaStatus;
 import uo.ri.util.exception.BusinessException;
 
 @Entity
-@Table(name = "TCargos", uniqueConstraints= {
-		@UniqueConstraint(columnNames="FACTURA_ID, MEDIOPAGO_ID")
-})
+@Table(name = "TCargos", uniqueConstraints = { @UniqueConstraint(columnNames = "FACTURA_ID, MEDIOPAGO_ID") })
 public class Cargo {
 
 	@Id
@@ -35,11 +33,8 @@ public class Cargo {
 	}
 
 	public Cargo(Factura factura, MedioPago medioPago, double importe) throws BusinessException {
-		// incrementar el importe en el acumulado del medio de pago
-		// guardar el importe
-		// enlazar (link) factura, este cargo y medioDePago
 		super();
-		medioPago.acumulado += importe;
+		medioPago.pagar(importe);
 		this.importe = importe;
 		Association.Cargar.link(factura, this, medioPago);
 
@@ -76,6 +71,12 @@ public class Cargo {
 
 	void _setMedioPago(MedioPago medioPago) {
 		this.medioPago = medioPago;
+	}
+	
+	
+
+	public double getImporte() {
+		return importe;
 	}
 
 	@Override

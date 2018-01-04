@@ -17,7 +17,7 @@ import uo.ri.util.exception.BusinessException;
 public class BonoPor3RecomendacionesTests {
 
 	private Cliente c;
-	
+
 	private Cliente cr1; // cliente recomendado 1
 	private Cliente cr2; // cliente recomendado 2
 	private Cliente cr3; // cliente recomendado 3
@@ -35,76 +35,80 @@ public class BonoPor3RecomendacionesTests {
 	}
 
 	/**
-	 * Un cliente recien registrado no puede tener derecho a bono por recomendaciones
+	 * Un cliente recien registrado no puede tener derecho a bono por
+	 * recomendaciones
 	 */
 	@Test
 	public void testClienteNuevo() {
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
-	}
-	
-	/**
-	 * Un cliente con vehiculo pero sin averias no puede ser elegible 
-	 * para bono por recomendaciones
-	 */
-	@Test
-	public void testClienteConVehiculo() {
-		addVehiculo( c );
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
 
 	/**
-	 * Un cliente con vehiculo y averia pero sin recomendados 
-	 * no puede ser elejible para bono por recomendaciones
-	 * @throws BusinessException 
+	 * Un cliente con vehiculo pero sin averias no puede ser elegible para bono por
+	 * recomendaciones
+	 */
+	@Test
+	public void testClienteConVehiculo() {
+		addVehiculo(c);
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
+	}
+
+	/**
+	 * Un cliente con vehiculo y averia pero sin recomendados no puede ser elejible
+	 * para bono por recomendaciones
+	 * 
+	 * @throws BusinessException
 	 */
 	@Test
 	public void testClienteConVehiculoYAveria() throws BusinessException {
 		addVehiculoConAveria(c, m);
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
-	
+
 	/**
-	 * Un cliente con 3 recomendados que han hecho reparaciones, pero sin 
-	 * reparaciones realizadas por él no puede ser elegible para bono 
-	 * por recomendaciones
-	 * @throws BusinessException 
+	 * Un cliente con 3 recomendados que han hecho reparaciones, pero sin
+	 * reparaciones realizadas por él no puede ser elegible para bono por
+	 * recomendaciones
+	 * 
+	 * @throws BusinessException
 	 */
 	@Test
 	public void testClienteSinReparaciones3Recomendados() throws BusinessException {
 		recomendar(c, cr1);
 		recomendar(c, cr2);
 		recomendar(c, cr3);
-		addVehiculo( c );
+		addVehiculo(c);
 		addVehiculoConAveria(cr1, m);
 		addVehiculoConAveria(cr2, m);
 		addVehiculoConAveria(cr3, m);
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
 
 	/**
 	 * Un cliente con reparaciones y 3 recomendaciones no puede ser elegible si
 	 * sus recomendados no han hecho reparaciones
 	 */
-	@Test
-	public void testCliente3RecomendadosSinReparaciones() throws BusinessException {
-		recomendar(c, cr1);
-		recomendar(c, cr2);
-		recomendar(c, cr3);
-		addVehiculoConAveria(c, m);
-		addVehiculo(cr1);	// <-- Sin averia
-		addVehiculo(cr2);	// <-- Sin averia
-		addVehiculo(cr3);	// <-- Sin averia
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
-	}
+	 @Test
+	 public void testCliente3RecomendadosSinReparaciones() throws
+	 BusinessException {
+	 recomendar(c, cr1);
+	 recomendar(c, cr2);
+	 recomendar(c, cr3);
+	 addVehiculoConAveria(c, m);
+	 addVehiculo(cr1); // <-- Sin averia
+	 addVehiculo(cr2); // <-- Sin averia
+	 addVehiculo(cr3); // <-- Sin averia
 	
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
+	}
+
 	/**
-	 * Un cliente con reparaciones y 2 recomendaciones que han hecho reparaciones 
-	 * y 1 que no tiene reparaciones no puede ser elegible para bono 
-	 * por recomendaciones
+	 * Un cliente con reparaciones y 2 recomendaciones que han hecho reparaciones y
+	 * 1 que no tiene reparaciones no puede ser elegible para bono por
+	 * recomendaciones
 	 */
 	@Test
 	public void testCliente3Recomendados1SinReparaciones() throws BusinessException {
@@ -113,14 +117,14 @@ public class BonoPor3RecomendacionesTests {
 		addVehiculoConAveria(c, m);
 		addVehiculoConAveria(cr1, m);
 		addVehiculoConAveria(cr2, m);
-		addVehiculo(cr3);	// <-- Sin averia
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false );
+		addVehiculo(cr3); // <-- Sin averia
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
-	
+
 	/**
-	 * Un cliente con reparaciones y 3 recomendaciones que han hecho reparaciones
-	 * sí es elegible para bono por recomendaciones
+	 * Un cliente con reparaciones y 3 recomendaciones que han hecho reparaciones sí
+	 * es elegible para bono por recomendaciones
 	 */
 	@Test
 	public void testCliente3RecomendadosConReparaciones() throws BusinessException {
@@ -131,14 +135,14 @@ public class BonoPor3RecomendacionesTests {
 		addVehiculoConAveria(cr1, m);
 		addVehiculoConAveria(cr2, m);
 		addVehiculoConAveria(cr3, m);
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() );
+
+		assertTrue(c.elegibleBonoPorRecomendaciones());
 	}
 
 	/**
-	 * Un cliente con reparaciones y 3 recomendaciones que han hecho reparaciones
-	 * y una recomendacion ya usada para bono generado no es elegible 
-	 * para bono por recomendaciones
+	 * Un cliente con reparaciones y 3 recomendaciones que han hecho reparaciones y
+	 * una recomendacion ya usada para bono generado no es elegible para bono por
+	 * recomendaciones
 	 */
 	@Test
 	public void testCliente3RecomendadosConReparacionesUnaUsada() throws BusinessException {
@@ -149,16 +153,16 @@ public class BonoPor3RecomendacionesTests {
 		addVehiculoConAveria(cr1, m);
 		addVehiculoConAveria(cr2, m);
 		addVehiculoConAveria(cr3, m);
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() );
+
+		assertTrue(c.elegibleBonoPorRecomendaciones());
 		r1.markAsUsadaBono();
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false);
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
 
 	/**
-	 * Un cliente con reparaciones y 4 recomendaciones, solo 3 han hecho 
-	 * reparaciones y una recomendacion ya usada para bono generado no es elegible 
+	 * Un cliente con reparaciones y 4 recomendaciones, solo 3 han hecho
+	 * reparaciones y una recomendacion ya usada para bono generado no es elegible
 	 * para bono por recomendaciones
 	 */
 	@Test
@@ -171,20 +175,20 @@ public class BonoPor3RecomendacionesTests {
 		addVehiculoConAveria(cr1, m);
 		addVehiculoConAveria(cr2, m);
 		addVehiculoConAveria(cr3, m);
-		addVehiculo(cr4);	// sin reparaciones
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() );
-		r1.markAsUsadaBono(); 
-		
-		assertTrue( c.elegibleBonoPorRecomendaciones() == false);
+		addVehiculo(cr4); // sin reparaciones
+
+		assertTrue(c.elegibleBonoPorRecomendaciones());
+		r1.markAsUsadaBono();
+
+		assertTrue(c.elegibleBonoPorRecomendaciones() == false);
 	}
 
 	private Vehiculo addVehiculo(Cliente c2) {
-		Vehiculo v = new Vehiculo( Random.string( 7 ));
+		Vehiculo v = new Vehiculo(Random.string(7));
 		Association.Poseer.link(c2, v);
 		return v;
 	}
-	
+
 	private Vehiculo addVehiculoConAveria(Cliente c2, Mecanico m2) throws BusinessException {
 		Vehiculo v = addVehiculo(c2);
 		addAveria(v, m2);
@@ -192,13 +196,13 @@ public class BonoPor3RecomendacionesTests {
 	}
 
 	private Averia addAveria(Vehiculo v2, Mecanico m2) throws BusinessException {
-		sleep( 10 /*msec*/ );
-		Averia a = new Averia( v2 );
-		a.assignTo( m2 );
+		sleep(10 /* msec */ );
+		Averia a = new Averia(v2);
+		a.assignTo(m2);
 		a.markAsFinished();
 		return a;
 	}
-	
+
 	private Recomendacion recomendar(Cliente recomendador, Cliente recomendado) {
 		return new Recomendacion(recomendador, recomendado);
 	}

@@ -34,6 +34,8 @@ public class Factura {
 	private Date fecha;
 	private double importe;
 	private double iva;
+	private boolean usada_bono;
+	
 	@Enumerated(EnumType.STRING)
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
 
@@ -211,9 +213,70 @@ public class Factura {
 		return id;
 	}
 
-	public void settle() {
-		this.status = FacturaStatus.ABONADA;
+	public void settle() throws BusinessException {
+		if (!hasAverias()) {
+			throw new BusinessException("No se puede liquidar la factura");
+		}else if(checkSobrePagada()) {
+			throw new BusinessException("No se puede liquidar la factura");
+		}else {
+			this.status = FacturaStatus.ABONADA;
+		}
+	}
 
+	/**
+	 * Comprueba si la avería está sobre pagada
+	 * 
+	 * @return true si lo está, false en caso contrario
+	 */
+	private boolean checkSobrePagada() {
+		double acum = 0.0;
+		for (Cargo c : this.cargos) {
+			acum += c.getImporte();
+		}
+		if (this.importe - acum > 0.01 || this.importe - acum < -0.01) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Comprueba si la factura tiene averias
+	 * 
+	 * @return true si las tiene, false en caso contrario
+	 */
+	private boolean hasAverias() {
+		return this.averias.size() > 0;
+	}
+
+	public boolean isUsada_bono() {
+		return usada_bono;
+	}
+
+	public void setUsada_bono(boolean usada_bono) {
+		this.usada_bono = usada_bono;
+	}
+
+	public boolean puedeGenerarBono500() {
+		if (this.importe > 500 && this.status.equals(FacturaStatus.ABONADA) && !isUsada_bono()) {
+			return true;
+		}
+		return false;
+	}
+
+	public void markAsBono500Used() throws BusinessException {
+		if (puedeGenerarBono500()) {
+			setUsada_bono(true);
+		} else {
+			throw new BusinessException("No es posible generar bono por factura superior a 500 euros");
+		}
+
+	}
+
+	public boolean isSettled() {
+		if (this.status.equals(FacturaStatus.ABONADA)) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -37,13 +37,26 @@ public class CashServiceImpl implements CashService {
 	}
 
 	@Override
-	public void settleInvoice(Long idInvoiceDto, Map<Long, Double> cargos)
+	public InvoiceDto settleInvoice(Long idInvoiceDto, Map<Long, Double> cargos)
 			throws BusinessException {
+				return null;
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public List<BreakdownDto> findRepairsByClient(String dni) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public InvoiceDto findInvoiceByNumber(Long numeroFactura) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PaymentMeanDto> findPaymentMeansForInvoice(Long idFactura) throws BusinessException {
 		// TODO Auto-generated method stub
 		return null;
 	}

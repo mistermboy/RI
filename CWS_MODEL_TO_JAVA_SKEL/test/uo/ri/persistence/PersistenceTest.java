@@ -34,6 +34,7 @@ import uo.ri.model.Sustitucion;
 import uo.ri.model.TarjetaCredito;
 import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
+import uo.ri.model.types.Address;
 import uo.ri.util.exception.BusinessException;
 
 
@@ -218,6 +219,8 @@ public class PersistenceTest {
 	protected List<Object> createGraph() throws BusinessException {
 
 		cliente = new Cliente("dni", "nombre", "apellidos");
+		Address address = new Address("street", "city", "zipcode");
+		cliente.setAddress(address);
 		Vehiculo vehiculo = new Vehiculo("1234 GJI", "seat", "ibiza");
 		Association.Poseer.link(cliente, vehiculo);
 		
@@ -237,6 +240,7 @@ public class PersistenceTest {
 		sustitucion.setCantidad(2);
 		
 		Bono bono = new Bono("B-100", 100.0);
+		bono.setDescripcion( "Voucher just for testing" );
 		Association.Pagar.link(cliente, bono);
 		
 		TarjetaCredito tarjetaCredito = new TarjetaCredito( "1234567" );
@@ -315,10 +319,10 @@ public class PersistenceTest {
 		res.add( s.getIntervencion().getAveria().getFactura() );
 		
 		Cliente cl = mapper.merge(cliente);
-		res.add( cl );
 		for(MedioPago mp: cl.getMediosPago()) {
 			res.add( mp );
 		}
+		res.add( cl );
 		
 		return res;
 	}

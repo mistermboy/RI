@@ -41,6 +41,11 @@
 	<named-query name="Mecanico.findAll">
 		<query>select m from Mecanico m</query>
 	</named-query>
+	
+	<named-query name="Mecanico.findByDni">
+        <query>select m from Mecanico m where m.dni = ?1</query>
+    </named-query>
+	
 
 <!-- 
 	<named-query name="findItemsOnSaleByCategoryId">

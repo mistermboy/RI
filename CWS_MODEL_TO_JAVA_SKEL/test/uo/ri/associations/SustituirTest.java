@@ -18,6 +18,7 @@ import uo.ri.model.TipoVehiculo;
 import uo.ri.model.Vehiculo;
 import uo.ri.util.exception.BusinessException;
 
+
 public class SustituirTest {
 	private Mecanico mecanico;
 	private Averia averia;

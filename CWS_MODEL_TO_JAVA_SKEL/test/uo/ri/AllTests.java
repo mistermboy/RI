@@ -1,6 +1,5 @@
 package uo.ri;
 
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -10,9 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	uo.ri.associations.AllTests.class,
 	uo.ri.domain.AllTests.class,
 	uo.ri.persistence.PersistenceTest.class,
-
-	uo.ri.amp.domain.AllTests.class,
-//	uo.ri.amp.service.AllTests.class
+	uo.ri.amp.AllTests.class
 
 })
-public class AllTests { }
+public class AllTests {
+
+}
