@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import uo.ri.model.types.Address;
@@ -33,9 +33,9 @@ public class Cliente {
 	private Set<Vehiculo> vehiculos = new HashSet<>();
 	@OneToMany(mappedBy = "cliente")
 	private Set<MedioPago> mediosPago = new HashSet<>();
-	@OneToMany(mappedBy = "cliente")
+	@OneToMany(mappedBy = "recomendador")
 	private Set<Recomendacion> recomendacionesHechas = new HashSet<>();
-	@ManyToOne
+	@OneToOne
 	private Recomendacion recomendacionRecibida;
 
 	Cliente() {

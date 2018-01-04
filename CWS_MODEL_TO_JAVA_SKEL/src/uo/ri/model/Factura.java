@@ -34,8 +34,8 @@ public class Factura {
 	private Date fecha;
 	private double importe;
 	private double iva;
-	
 	private boolean usada_bono;
+	
 	@Enumerated(EnumType.STRING)
 	private FacturaStatus status = FacturaStatus.SIN_ABONAR;
 
