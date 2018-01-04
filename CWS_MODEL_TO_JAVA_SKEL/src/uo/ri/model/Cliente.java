@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import uo.ri.model.types.Address;
@@ -33,10 +32,6 @@ public class Cliente {
 	private Set<Vehiculo> vehiculos = new HashSet<>();
 	@OneToMany(mappedBy = "cliente")
 	private Set<MedioPago> mediosPago = new HashSet<>();
-	@OneToMany(mappedBy = "recomendador")
-	private Set<Recomendacion> recomendacionesHechas = new HashSet<>();
-	@OneToOne
-	private Recomendacion recomendacionRecibida;
 
 	Cliente() {
 	}
@@ -114,18 +109,6 @@ public class Cliente {
 		return "Cliente [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", address=" + address + "]";
 	}
 
-	Set<Recomendacion> _getRecomendacionesHechas() {
-		return recomendacionesHechas;
-	}
-
-	public Set<Recomendacion> getRecomendacionesHechas() {
-		return new HashSet<>(recomendacionesHechas);
-	}
-
-	public void setRecomendacionesHechas(Set<Recomendacion> recomendaciones) {
-		this.recomendacionesHechas = recomendaciones;
-	}
-
 	Set<Vehiculo> _getVehiculos() {
 		return vehiculos;
 	}
@@ -140,14 +123,6 @@ public class Cliente {
 
 	public Set<MedioPago> getMediosPago() {
 		return new HashSet<>(mediosPago);
-	}
-
-	public Recomendacion getRecomendacionRecibida() {
-		return recomendacionRecibida;
-	}
-
-	void _setRecomendacionRecibida(Recomendacion recomendacion) {
-		this.recomendacionRecibida = recomendacion;
 	}
 
 	/**
@@ -173,66 +148,14 @@ public class Cliente {
 	 * @return true en caso afirmativo, false en caso contrario
 	 */
 	public boolean elegibleBonoPorRecomendaciones() {
-		if (numRecomendaciones() >= 3) {
-			if (esRecienRegistrado() || vehiculoSinAverias() || notHasRecomendaciones()
-					|| recomendadosWithoutReparaciones()) {
-				return false;
-			}
-			if (checkUsadas()) {
-				return false;
-			}
-			return true;
-		} else {
-			return false;
+		boolean ret = true;
+		;
+		if (esRecienRegistrado()) {
+			ret = false;
+		} else if (vehiculoSinAverias()) {
+			ret = false;
 		}
-
-	}
-
-	/**
-	 * Comprueba si alguna de las recomendaciones ha sido usada
-	 * 
-	 * @return
-	 */
-	private boolean checkUsadas() {
-		for (Recomendacion r : this.getRecomendacionesHechas()) {
-			if (r.isUsada_bono()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Devuelve el número de recomendaciones del cliente
-	 */
-	public int numRecomendaciones() {
-		return this.recomendacionesHechas.size();
-
-	}
-
-	/**
-	 * Comprueba si los recomendados no tienen reparaciones
-	 * 
-	 * @return
-	 */
-	private boolean recomendadosWithoutReparaciones() {
-		for (Recomendacion r : this.getRecomendacionesHechas()) {
-			for (Vehiculo v : r.getRecomendado().getVehiculos()) {
-				if (v.getAverias().size() > 0) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Comprueba si el cliente no tiene recomendaciones
-	 * 
-	 * @return true en caso afirmativo, false en caso contrario
-	 */
-	private boolean notHasRecomendaciones() {
-		return this.recomendacionesHechas.size() == 0;
+		return ret;
 	}
 
 	/**

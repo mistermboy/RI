@@ -12,7 +12,6 @@ import uo.ri.model.Cliente;
 import uo.ri.model.Vehiculo;
 import uo.ri.util.exception.BusinessException;
 
-
 public class PoseerTest {
 	private Vehiculo vehiculo;
 	private Cliente cliente;

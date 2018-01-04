@@ -4,34 +4,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import uo.ri.util.exception.BusinessException;
-
 @Entity
 @Table(name = "TBonos")
 public class Bono extends MedioPago {
-
+	
 	private double disponible = 0.0;
 	private String descripcion;
-	@Column(unique = true)
-	private String codigo;
-
-	Bono() {
-	}
-
+	@Column(unique = true) private String codigo;
+	
+	Bono(){}
+	
 	public Bono(String codigo) {
 		super();
 		this.codigo = codigo;
-		this.descripcion = "";
 	}
 
 	public Bono(String codigo, double disponible) {
 		this(codigo);
 		this.disponible = disponible;
-	}
-
-	public Bono(String code, String descripcion, double disponible) {
-		this(code, disponible);
-		this.descripcion = descripcion;
 	}
 
 	public double getDisponible() {
@@ -84,17 +74,4 @@ public class Bono extends MedioPago {
 		return "Bono [disponible=" + disponible + ", descripcion=" + descripcion + ", codigo=" + codigo + ", acumulado="
 				+ acumulado + "]";
 	}
-
-	@Override
-	public void pagar(double cantidad) throws BusinessException {
-		double resto = this.disponible - cantidad;
-		if (resto >= 0) {
-			this.disponible -= cantidad;
-			super.acumulado += cantidad;
-		} else {
-			throw new BusinessException("La cantidad a pagar es mayor que la disponible");
-		}
-
-	}
-
 }

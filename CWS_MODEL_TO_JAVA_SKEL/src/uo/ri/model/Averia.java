@@ -269,15 +269,9 @@ public class Averia {
 
 	/**
 	 * Marca la avería como usada para un bono
-	 * @throws BusinessException 
 	 */
-	public void markAsBono3Used() throws BusinessException {
-		if (esElegibleParaBono3()) {
-			this.setUsada_bono(true);
-		} else {
-			throw new BusinessException("La avería no puede ser marcada para bono 3");
-		}
-
+	public void markAsBono3Used() {
+		this.setUsada_bono(true);
 	}
 
 	public boolean isUsada_bono() {

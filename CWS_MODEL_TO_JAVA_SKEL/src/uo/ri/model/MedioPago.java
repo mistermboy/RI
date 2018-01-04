@@ -13,27 +13,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import uo.ri.util.exception.BusinessException;
-
 @Entity
 @Table(name = "TMediosPago")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy=InheritanceType.JOINED)
 public abstract class MedioPago {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)private Long id;
 
 	protected double acumulado = 0.0;
-
-	@ManyToOne
-	private Cliente cliente;
-	@OneToMany(mappedBy = "medioPago")
-	private Set<Cargo> cargos = new HashSet<>();
-
-	MedioPago() {
-	}
-
+	
+	@ManyToOne private Cliente cliente;
+	@OneToMany(mappedBy="medioPago") private Set<Cargo> cargos = new HashSet<>();
+	
+	MedioPago(){}
+	
 	public Long getId() {
 		return id;
 	}
@@ -45,6 +38,7 @@ public abstract class MedioPago {
 	public void setAcumulado(double acumulado) {
 		this.acumulado = acumulado;
 	}
+	
 
 	public Cliente getCliente() {
 		return cliente;
@@ -78,6 +72,7 @@ public abstract class MedioPago {
 			return false;
 		return true;
 	}
+	
 
 	Set<Cargo> _getCargos() {
 		return cargos;
@@ -86,7 +81,7 @@ public abstract class MedioPago {
 	public Set<Cargo> getCargos() {
 		return new HashSet<>(cargos);
 	}
-
-	public abstract void pagar(double cantidad) throws BusinessException;
-
+	
+	
+	
 }
