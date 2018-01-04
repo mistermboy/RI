@@ -7,22 +7,24 @@ import uo.ri.model.Averia;
 import uo.ri.persistence.jpa.util.BaseRepository;
 import uo.ri.persistence.jpa.util.Jpa;
 
-public class AveriaJpaRepository 
-		extends BaseRepository<Averia> 
-		implements AveriaRepository {
+public class AveriaJpaRepository extends BaseRepository<Averia> implements AveriaRepository {
 
 	@Override
 	public List<Averia> findByIds(List<Long> idsAveria) {
-		return Jpa.getManager().createNamedQuery("Averia.findByIds", Averia.class)
-				.setParameter(1, idsAveria)
+		return Jpa.getManager().createNamedQuery("Averia.findByIds", Averia.class).setParameter(1, idsAveria)
 				.getResultList();
 	}
 
 	@Override
 	public List<Averia> findNoFacturadasByDni(String dni) {
-		return Jpa.getManager().createNamedQuery("Averia.findNoFacturadasByDni", Averia.class)
-				.setParameter(1, dni)
+		return Jpa.getManager().createNamedQuery("Averia.findNoFacturadasByDni", Averia.class).setParameter(1, dni)
 				.getResultList();
+	}
+
+	@Override
+	public List<Averia> findWithUnusedBono3ByClienteId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

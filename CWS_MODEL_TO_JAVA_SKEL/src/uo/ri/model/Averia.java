@@ -254,7 +254,7 @@ public class Averia {
 	 * @return true en caso afirmativo, false en caso contrario
 	 */
 	public boolean esElegibleParaBono3() {
-		if (!isUsada_bono()) {
+		if (!isUsadaBono3()) {
 			if (!this.status.equals(AveriaStatus.FACTURADA)) {
 				return false;
 			} else {
@@ -269,7 +269,8 @@ public class Averia {
 
 	/**
 	 * Marca la avería como usada para un bono
-	 * @throws BusinessException 
+	 * 
+	 * @throws BusinessException
 	 */
 	public void markAsBono3Used() throws BusinessException {
 		if (esElegibleParaBono3()) {
@@ -280,12 +281,19 @@ public class Averia {
 
 	}
 
-	public boolean isUsada_bono() {
+	public boolean isUsadaBono3() {
 		return usada_bono;
 	}
 
 	public void setUsada_bono(boolean usada_bono) {
 		this.usada_bono = usada_bono;
+	}
+
+	public boolean isInvoiced() {
+		if (getStatus() == AveriaStatus.FACTURADA) {
+			return true;
+		}
+		return false;
 	}
 
 }

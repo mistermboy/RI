@@ -28,6 +28,8 @@ public class Cliente {
 	private String nombre;
 	private String apellidos;
 	private Address address;
+	private String email;
+	private String phone;
 
 	@OneToMany(mappedBy = "cliente")
 	private Set<Vehiculo> vehiculos = new HashSet<>();
@@ -256,6 +258,22 @@ public class Cliente {
 	 */
 	private boolean esRecienRegistrado() {
 		return getVehiculos().size() == 0;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

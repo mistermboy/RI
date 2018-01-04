@@ -31,8 +31,9 @@ public class Intervencion {
 	Intervencion() {
 	}
 
-	public Long getId() {
-		return id;
+	public Intervencion(Mecanico m, Averia a, int minutes) {
+		this(m, a);
+		this.minutos = minutes;
 	}
 
 	public Intervencion(Mecanico mecanico, Averia averia) {
@@ -117,4 +118,7 @@ public class Intervencion {
 		return new HashSet<>(sustituciones);
 	}
 
+	public Long getId() {
+		return id;
+	}
 }

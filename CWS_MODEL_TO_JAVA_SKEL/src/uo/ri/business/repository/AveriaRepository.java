@@ -8,4 +8,5 @@ public interface AveriaRepository extends Repository<Averia>{
 
 	List<Averia> findByIds(List<Long> idsAveria);
 	List<Averia> findNoFacturadasByDni(String dni);
+	List<Averia> findWithUnusedBono3ByClienteId(Long id);
 }
