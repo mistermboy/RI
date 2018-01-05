@@ -46,6 +46,19 @@
         <query>select m from Mecanico m where m.dni = ?1</query>
     </named-query>
 	
+	<!-- Client queries -->
+	<named-query name="Cliente.findAll">
+		<query>select c from Cliente c</query>
+	</named-query>
+	
+	<named-query name="Cliente.findByDni">
+        <query>select c from Cliente c where c.dni = ?1</query>
+    </named-query>
+    
+    <named-query name="Cliente.findById">
+        <query>select c from Cliente c where c.id = ?1</query>
+    </named-query>
+    
 
 <!-- 
 	<named-query name="findItemsOnSaleByCategoryId">

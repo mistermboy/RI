@@ -25,29 +25,37 @@ import uo.ri.model.types.Address;
 public class DtoAssembler {
 
 	public static ClientDto toDto(Cliente c) {
-		 ClientDto dto = new ClientDto();
-		 
-		 dto.id = c.getId();
-		 dto.dni = c.getDni();
-		 dto.name = c.getNombre();
-		 dto.surname = c.getApellidos();
-		 
-		 return dto;
+		ClientDto dto = new ClientDto();
+
+		dto.id = c.getId();
+		dto.dni = c.getDni();
+		dto.name = c.getNombre();
+		dto.surname = c.getApellidos();
+
+		dto.addressStreet = c.getAddress().getStreet();
+		dto.addressZipcode = c.getAddress().getZipCode();
+		dto.addressCity = c.getAddress().getCity();
+
+		dto.phone = c.getPhone();
+		dto.email = c.getEmail();
+
+		return dto;
 	}
 
 	public static List<ClientDto> toClientDtoList(List<Cliente> clientes) {
 		List<ClientDto> res = new ArrayList<>();
-		for(Cliente c: clientes) {
-			res.add( toDto( c ) );
+		for (Cliente c : clientes) {
+			res.add(toDto(c));
 		}
 		return res;
 	}
 
 	public static Cliente toEntity(ClientDto dto) {
 		Cliente c = new Cliente(dto.dni, dto.name, dto.surname);
-		Address addr = new Address(
-				dto.addressStreet, dto.addressCity, dto.addressZipcode );
-		c.setAddress( addr );
+		Address addr = new Address(dto.addressStreet, dto.addressCity, dto.addressZipcode);
+		c.setAddress(addr);
+		c.setPhone(dto.phone);
+		c.setEmail(dto.email);
 		return c;
 	}
 
@@ -66,16 +74,16 @@ public class DtoAssembler {
 
 	public static List<MechanicDto> toMechanicDtoList(List<Mecanico> list) {
 		List<MechanicDto> res = new ArrayList<>();
-		for(Mecanico m: list) {
-			res.add( toDto( m ) );
+		for (Mecanico m : list) {
+			res.add(toDto(m));
 		}
 		return res;
 	}
 
 	public static List<VoucherDto> toVoucherDtoList(List<Bono> list) {
 		List<VoucherDto> res = new ArrayList<>();
-		for(Bono b: list) {
-			res.add( toDto( b ) );
+		for (Bono b : list) {
+			res.add(toDto(b));
 		}
 		return res;
 	}
@@ -122,32 +130,25 @@ public class DtoAssembler {
 	}
 
 	public static List<PaymentMeanDto> toPaymentMeanDtoList(List<MedioPago> list) {
-		return list.stream()
-				.map( mp -> toDto( mp ) )
-				.collect( Collectors.toList() );
+		return list.stream().map(mp -> toDto(mp)).collect(Collectors.toList());
 	}
 
 	private static PaymentMeanDto toDto(MedioPago mp) {
 		if (mp instanceof Bono) {
-			return toDto( (Bono) mp );
-		}
-		else if (mp instanceof TarjetaCredito) {
-			return toDto( (TarjetaCredito) mp );
-		}
-		else if (mp instanceof Metalico) {
-			return toDto( (Metalico) mp);
-		}
-		else {
+			return toDto((Bono) mp);
+		} else if (mp instanceof TarjetaCredito) {
+			return toDto((TarjetaCredito) mp);
+		} else if (mp instanceof Metalico) {
+			return toDto((Metalico) mp);
+		} else {
 			throw new RuntimeException("Unexpected type of payment mean");
 		}
 	}
 
 	public static List<BreakdownDto> toBreakdownDtoList(List<Averia> list) {
-		return list.stream()
-				.map( a -> toDto( a ) )
-				.collect( Collectors.toList() );
+		return list.stream().map(a -> toDto(a)).collect(Collectors.toList());
 	}
-	
+
 	public static BreakdownDto toDto(Averia a) {
 		BreakdownDto dto = new BreakdownDto();
 		dto.id = a.getId();

@@ -12,27 +12,29 @@ public class AddClientAction implements Action {
 	@Override
 	public void execute() throws BusinessException {
 
-		
 		ClientDto c = new ClientDto();
 		c.name = Console.readString("Nombre");
 		c.surname = Console.readString("Apellidos");
 		c.dni = Console.readString("Dni");
-		c.addressZipcode = Console.readString("Codigo Postal(número)");
-		c.phone = Console.readString("Telefono(número)");
+		c.addressStreet = Console.readString("Calle");
+		c.addressCity = Console.readString("Ciudad");
+		c.addressZipcode = Console.readString("Codigo Postal");
+		c.phone = Console.readString("Telefono");
 		c.email = Console.readString("Correo");
 
-		//String recomendacion = Console.readString("¿Viene usted recomendado por otro cliente?  [s|n]");
+		// String recomendacion = Console.readString("¿Viene usted recomendado por otro
+		// cliente? [s|n]");
 
-//		if (recomendacion.equals("s")) {
-//			long idRecomendador = Console.readLong("Id del recomendador");
-//			ServicesFactory.getForemanService().addClientWithRecomendator(dni, nombre, apellidos, zipcode, telefono,
-//					correo, idRecomendador);
-//		} else if (recomendacion.equals("n")) {
-//			ServicesFactory.getForemanService().addClient(dni, nombre, apellidos, zipcode, telefono, correo);
-//		}
-		
-		ForemanService as = Factory.service.forForeman();
-		as.addClient(c, null);
+		ForemanService fs = Factory.service.forForeman();
+		fs.addClient(c, null);
+
+		// if (recomendacion.equals("s")) {
+		// long id_recomendador = Console.readLong("Id del recomendador");
+		// fs.addClient(c, id_recomendador);
+		//
+		// } else if (recomendacion.equals("n")) {
+		// fs.addClient(c, null);
+		// }
 
 		Console.println("Nuevo cliente añadido");
 

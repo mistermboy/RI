@@ -20,7 +20,7 @@ public class BusinessFactory implements ServiceFactory {
 
 	@Override
 	public ForemanService forForeman() {
-		throw new RuntimeException("Not yet implemented");
+		return new ForemanServiceImpl();
 	}
 
 	@Override

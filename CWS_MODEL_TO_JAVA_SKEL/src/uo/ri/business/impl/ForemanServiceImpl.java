@@ -5,6 +5,7 @@ import java.util.List;
 import uo.ri.business.ForemanService;
 import uo.ri.business.dto.ClientDto;
 import uo.ri.business.impl.foreman.AddClient;
+import uo.ri.business.impl.foreman.DeleteClient;
 import uo.ri.conf.Factory;
 import uo.ri.util.exception.BusinessException;
 
@@ -30,8 +31,8 @@ public class ForemanServiceImpl implements ForemanService {
 	}
 
 	@Override
-	public void deleteClient(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
+	public void deleteClient(Long idClient) throws BusinessException {
+		executor.execute(new DeleteClient(idClient));
 		
 	}
 

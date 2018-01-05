@@ -89,4 +89,11 @@ public abstract class MedioPago {
 
 	public abstract void pagar(double cantidad) throws BusinessException;
 
+	/**
+	 * LLama al unLink de Association
+	 */
+	public void unLink() {
+		Association.Pagar.unlink(cliente, this);
+	}
+
 }
