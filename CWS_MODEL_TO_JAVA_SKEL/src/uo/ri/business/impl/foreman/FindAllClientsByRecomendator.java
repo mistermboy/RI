@@ -1,44 +1,54 @@
 package uo.ri.business.impl.foreman;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import alb.util.jdbc.Jdbc;
-import uo.ri.common.BusinessException;
-import uo.ri.conf.PersistenceFactory;
-import uo.ri.persistence.ClientesGateway;
+import uo.ri.business.dto.ClientDto;
+import uo.ri.business.impl.Command;
+import uo.ri.business.impl.util.DtoAssembler;
+import uo.ri.business.repository.ClienteRepository;
+import uo.ri.conf.Factory;
+import uo.ri.model.Cliente;
+import uo.ri.model.Recomendacion;
+import uo.ri.util.exception.BusinessException;
+import uo.ri.util.exception.Check;
 
-public class FindAllClientsByRecomendator {
+public class FindAllClientsByRecomendator implements Command<List<ClientDto>> {
+
+	private ClienteRepository cR = Factory.repository.forCliente();
 
 	private Long idRecomendador;
 
-	public FindAllClientsByRecomendator(Long idRecomendator) {
-		this.idRecomendador = idRecomendator;
+	public FindAllClientsByRecomendator(Long idRecomendador) {
+		this.idRecomendador = idRecomendador;
 	}
 
-	public List<Map<String, Object>> execute() throws BusinessException {
+	public List<ClientDto> execute() throws BusinessException {
 
-		List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
-
-		Connection c = null;
-
-		try {
-			c = Jdbc.getConnection();
-
-			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
-			cGate.setConnection(c);
-
-			map = cGate.findAllClientsByRecomendator(idRecomendador);
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			Jdbc.close(c);
+		Cliente client = getClient(idRecomendador);
+		List<Cliente> clientsRecomendados = new ArrayList<Cliente>();
+		for (Recomendacion rec : client.getRecomendacionesHechas()) {
+			clientsRecomendados.add(rec.getRecomendado());
 		}
-		return map;
+
+		return DtoAssembler.toClientDtoList(clientsRecomendados);
+	}
+
+	/**
+	 * Comprueba si el id del cliente existe y retorna el cluente al que corresponde
+	 * dicho id
+	 * 
+	 * @param idClient
+	 * @return Cliente
+	 * @throws BusinessException
+	 */
+	private Cliente getClient(Long idClient) throws BusinessException {
+
+		Cliente client = cR.findById(idClient);
+		Check.isNotNull(client, "El cliente no existe");
+
+		return client;
+
 	}
 
 }

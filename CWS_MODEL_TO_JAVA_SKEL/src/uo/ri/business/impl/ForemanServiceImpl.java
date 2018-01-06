@@ -7,6 +7,7 @@ import uo.ri.business.dto.ClientDto;
 import uo.ri.business.impl.foreman.AddClient;
 import uo.ri.business.impl.foreman.DeleteClient;
 import uo.ri.business.impl.foreman.FindAllClients;
+import uo.ri.business.impl.foreman.FindAllClientsByRecomendator;
 import uo.ri.business.impl.foreman.FindClientById;
 import uo.ri.business.impl.foreman.UpdateClient;
 import uo.ri.conf.Factory;
@@ -43,9 +44,8 @@ public class ForemanServiceImpl implements ForemanService {
 	}
 
 	@Override
-	public List<ClientDto> findRecomendedClientsByClienteId(Long id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ClientDto> findRecomendedClientsByClienteId(Long idRecomendador) throws BusinessException {
+		return executor.execute(new FindAllClientsByRecomendator(idRecomendador));
 	}
 
 }
