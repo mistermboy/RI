@@ -1,49 +1,36 @@
 package uo.ri.business.impl.foreman;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import uo.ri.business.dto.ClientDto;
+import uo.ri.business.impl.Command;
+import uo.ri.business.repository.ClienteRepository;
+import uo.ri.conf.Factory;
+import uo.ri.model.Cliente;
+import uo.ri.model.types.Address;
+import uo.ri.util.exception.BusinessException;
+import uo.ri.util.exception.Check;
 
-import alb.util.jdbc.Jdbc;
+public class UpdateClient implements Command<Void> {
 
-public class UpdateClient {
+	private ClientDto dtoClient;
 
-	private Long idClient;
-	
-	private String dni;
-	private String nombre;
-	private String apellidos;
-	private String correo;
-	private int zipcode;
-	private int telefono;
+	private ClienteRepository cR = Factory.repository.forCliente();
 
-	public UpdateClient(long idClient,String dni, String nombre,String apellidos,int zipcode, int telefono, String correo) {
-		this.dni = dni;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.zipcode = zipcode;
-		this.telefono = telefono;
-		this.correo = correo;
-		this.idClient=idClient;
+	public UpdateClient(ClientDto dtoClient) {
+		this.dtoClient = dtoClient;
 	}
 
-	public void execute() throws BusinessException {
+	public Void execute() throws BusinessException {
 
-		Connection c = null;
+		Cliente client = cR.findById(dtoClient.id);
+		Check.isNotNull(client, "El cliente no existe");
+		
+		client.setNombre(dtoClient.name);
+		client.setApellidos(dtoClient.surname);
+		client.setAddress(new Address(dtoClient.addressStreet, dtoClient.addressCity, dtoClient.addressZipcode));
+		client.setEmail(dtoClient.email);
+		client.setPhone(dtoClient.phone);
 
-		try {
-			c = Jdbc.getConnection();
-
-			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
-			cGate.setConnection(c);
-
-			cGate.update(idClient, dni, nombre, apellidos, zipcode, telefono, correo);;
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			Jdbc.close(c);
-		}
-
+		return null;
 	}
 
 }

@@ -1,38 +1,22 @@
 package uo.ri.business.impl.foreman;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import alb.util.jdbc.Jdbc;
-import uo.ri.common.BusinessException;
-import uo.ri.conf.PersistenceFactory;
-import uo.ri.persistence.ClientesGateway;
+import uo.ri.business.dto.ClientDto;
+import uo.ri.business.impl.Command;
+import uo.ri.business.impl.util.DtoAssembler;
+import uo.ri.business.repository.ClienteRepository;
+import uo.ri.conf.Factory;
+import uo.ri.model.Cliente;
 
-public class FindAllClients {
+public class FindAllClients implements Command<List<ClientDto>> {
 
-	public List<Map<String, Object>> execute() throws BusinessException {
+	private ClienteRepository cR = Factory.repository.forCliente();;
 
-		List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
+	public List<ClientDto> execute() {
 
-		Connection c = null;
-
-		try {
-			c = Jdbc.getConnection();
-
-			ClientesGateway cGate = PersistenceFactory.getClientesGateway();
-			cGate.setConnection(c);
-
-			map = cGate.findAllClients();
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			Jdbc.close(c);
-		}
-		return map;
+		List<Cliente> listClients = cR.findAll();
+		return DtoAssembler.toClientDtoList(listClients);
 	}
 
 }
