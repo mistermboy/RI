@@ -59,6 +59,15 @@
         <query>select c from Cliente c where c.id = ?1</query>
     </named-query>
     
+	
+	<named-query name="Cliente.findWithThreeUnusedBreakdowns">
+        <query> 
+            select v.cliente from Vehiculo v where v.id in (
+                select v2.id from Averia a join a.vehiculo v2 where a.usada_bono = false
+                group by v2.id having count(a)>=3 )
+        </query>
+    </named-query>
+
 
 <!-- 
 	<named-query name="findItemsOnSaleByCategoryId">

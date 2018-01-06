@@ -2066,7 +2066,6 @@ INSERT INTO TCLIENTES VALUES(197,'Moreno L\u00f3pez','775429118','Sancho','GOZ\u
 INSERT INTO TCLIENTES VALUES(198,'Romero D\u00edez','170947071','Sebastian','GIJ\u00c3\u201cN','Calle de Alonso Quintanilla','72096',NULL,NULL,NULL)
 INSERT INTO TCLIENTES VALUES(199,'Blanco Sanz','305992285','Felipe','GOZ\u00c3\u201cN','C/ Fern\u00e1ndez Ladreda','65159',NULL,NULL,NULL)
 INSERT INTO TCLIENTES VALUES(200,'Mart\u00ednez Ram\u00edrez','691572805','Sof\u00eda','CANDAMO','Calle de Juan Escalante de Mendoza','06653',NULL,NULL,NULL)
-INSERT INTO TCLIENTES VALUES(516,'qweqwe','1233','Pablo','spain','qweqwe','123455',NULL,'werwer','456456')
 INSERT INTO TAVERIAS VALUES(1,'Llevaba bastante tiempo feliz con mi PEUGEOT 308 HDI 1.6 FAP 110CV tantos como duro la amp...','2016-05-31 00:00:00.000000',98.0E0,'FACTURADA',184,NULL,247,FALSE)
 INSERT INTO TAVERIAS VALUES(2,'Pierde agua...','2017-10-09 00:00:00.000000',214.0E0,'FACTURADA',121,NULL,36,FALSE)
 INSERT INTO TAVERIAS VALUES(3,'Se rompio el compresor del climatizador, el aire acondicionado nio enfriaba nada...','2017-10-22 00:00:00.000000',108.0E0,'FACTURADA',290,NULL,90,FALSE)

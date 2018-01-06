@@ -1,5 +1,7 @@
 package uo.ri.persistence.jpa;
 
+import java.util.List;
+
 import uo.ri.business.repository.ClienteRepository;
 import uo.ri.model.Cliente;
 import uo.ri.persistence.jpa.util.BaseRepository;
@@ -17,6 +19,12 @@ public class ClienteJpaRepository extends BaseRepository<Cliente> implements Cli
 	public Cliente findById(Long idClient) {
 		return Jpa.getManager().createNamedQuery("Cliente.findById", Cliente.class).setParameter(1, idClient)
 				.getResultList().stream().findFirst().orElse(null);
+	}
+
+	@Override
+	public List<Cliente> findWithThreeUnusedBreakdowns() {
+		return Jpa.getManager().createNamedQuery("Cliente.findWithThreeUnusedBreakdowns", Cliente.class)
+				.getResultList();
 	}
 
 }

@@ -51,8 +51,7 @@ public class JpaRepositoryFactory implements RepositoryFactory {
 
 	@Override
 	public RecomendacionRepository forRecomendacion() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RecomendacionJpaRepository();
 	}
 
 	@Override

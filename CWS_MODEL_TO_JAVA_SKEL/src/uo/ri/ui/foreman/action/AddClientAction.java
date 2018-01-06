@@ -22,19 +22,17 @@ public class AddClientAction implements Action {
 		c.phone = Console.readString("Telefono");
 		c.email = Console.readString("Correo");
 
-		// String recomendacion = Console.readString("¿Viene usted recomendado por otro
-		// cliente? [s|n]");
+		String recomendacion = Console.readString("¿Viene usted recomendado por otro cliente? [s|n]");
 
 		ForemanService fs = Factory.service.forForeman();
-		fs.addClient(c, null);
+		
+		if (recomendacion.equals("s")) {
+			long id_recomendador = Console.readLong("Id del recomendador");
+			fs.addClient(c, id_recomendador);
 
-		// if (recomendacion.equals("s")) {
-		// long id_recomendador = Console.readLong("Id del recomendador");
-		// fs.addClient(c, id_recomendador);
-		//
-		// } else if (recomendacion.equals("n")) {
-		// fs.addClient(c, null);
-		// }
+		} else if (recomendacion.equals("n")) {
+			fs.addClient(c, null);
+		}
 
 		Console.println("Nuevo cliente añadido");
 

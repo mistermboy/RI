@@ -97,4 +97,8 @@ public class Bono extends MedioPago {
 
 	}
 
+	public void link(Cliente client) {
+		Association.Pagar.link(client, this);
+	}
+
 }

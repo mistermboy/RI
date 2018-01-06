@@ -8,6 +8,7 @@ import uo.ri.business.impl.admin.AddMechanic;
 import uo.ri.business.impl.admin.DeleteMechanic;
 import uo.ri.business.impl.admin.FindAllMechanics;
 import uo.ri.business.impl.admin.FindMechanicById;
+import uo.ri.business.impl.admin.GenerateBonos;
 import uo.ri.business.impl.admin.UpdateMechanic;
 import uo.ri.conf.Factory;
 import uo.ri.util.exception.BusinessException;
@@ -43,8 +44,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public int generateVouchers() throws BusinessException {
-		// TODO Auto-generated method stub
-		return 0;
+		return executor.execute(new GenerateBonos());
 	}
 
 }

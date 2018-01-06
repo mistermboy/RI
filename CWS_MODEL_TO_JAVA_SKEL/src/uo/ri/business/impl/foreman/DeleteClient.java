@@ -77,7 +77,7 @@ public class DeleteClient implements Command<Void> {
 	}
 
 	/**
-	 * Comprueba si el id del cliente existe y retorna el cluente al que corresponde
+	 * Comprueba si el id del cliente existe y retorna el cliente al que corresponde
 	 * dicho id
 	 * 
 	 * @param idClient
