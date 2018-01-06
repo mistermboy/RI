@@ -45,8 +45,9 @@ public class DeleteClient implements Command<Void> {
 	 */
 	private void removeMediosPago(Cliente client) {
 		for (MedioPago med : client.getMediosPago()) {
-			mR.remove(med);
 			med.unLink();
+			mR.remove(med);
+
 		}
 
 	}

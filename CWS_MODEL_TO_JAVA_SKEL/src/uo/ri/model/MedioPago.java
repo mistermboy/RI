@@ -3,6 +3,7 @@ package uo.ri.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import uo.ri.util.exception.BusinessException;
 @Entity
 @Table(name = "TMediosPago")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 public abstract class MedioPago {
 
 	@Id
@@ -30,9 +32,6 @@ public abstract class MedioPago {
 	private Cliente cliente;
 	@OneToMany(mappedBy = "medioPago")
 	private Set<Cargo> cargos = new HashSet<>();
-
-	MedioPago() {
-	}
 
 	public Long getId() {
 		return id;

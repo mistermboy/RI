@@ -1,5 +1,6 @@
 package uo.ri.business.impl.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import alb.util.random.Random;
@@ -10,6 +11,7 @@ import uo.ri.conf.Factory;
 import uo.ri.model.Averia;
 import uo.ri.model.Bono;
 import uo.ri.model.Cliente;
+import uo.ri.model.MedioPago;
 import uo.ri.util.exception.BusinessException;
 
 public class GenerateBonos implements Command<Integer> {
@@ -27,12 +29,13 @@ public class GenerateBonos implements Command<Integer> {
 	/**
 	 * Genera los nuevos bonos en la tabla Mediospago y actualiza el usada_bono de
 	 * las averias
-	 * 
+	 *
 	 * @param clients
 	 * @throws BusinessException
 	 */
 	private int createBonos(List<Cliente> clients) throws BusinessException {
 		int numBonosGenerados = 0;
+		List<String> codes = new ArrayList<String>();
 		for (Cliente client : clients) {
 			List<Averia> avs = client.getAveriasBono3NoUsadas();
 
@@ -47,23 +50,68 @@ public class GenerateBonos implements Command<Integer> {
 			}
 
 			for (int i = 0; i < nBonos; i++) {
-				String finalCode = generateNewCodigo();
+				String finalCode = generateNewCodigo(codes);
+				codes.add(finalCode);
 				Bono b = new Bono(finalCode, "Por tres averías", 20.0);
 				b.link(client);
 				mR.add(b);
 			}
+
 		}
+
+		List<String> reps = new ArrayList<String>();
+		int numReps = 0;
+		for (String cod : codes) {
+			if (!isInrep(cod, reps)) {
+				reps.add(cod);
+			} else {
+				numReps++;
+			}
+
+		}
+		if (numReps > 0) {
+			throw new BusinessException("Num Reps" + numReps);
+		}
+
 		return numBonosGenerados;
+	}
+
+	private boolean isInrep(String cod, List<String> reps) {
+		for (String cods : reps) {
+			if (cods.equals(cod)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
 	 * Genera un código para un nuevo bono. En función del último bono se le sumará
 	 * 10 al nuevo código
-	 * 
+	 *
 	 * @return
 	 */
-	private String generateNewCodigo() {
-		return "B" + Random.string(4);
+	private String generateNewCodigo(List<String> codes) {
+		String bonoCode = "";
+		do {
+			bonoCode = "B" + Random.integer(2000, 3000);
+		} while (assertBonoNotRepeated(bonoCode, codes));
+
+		return bonoCode;
 	}
 
+	/**
+	 * Comprueba que el código del bono no esté repetido
+	 *
+	 * @param bonoCode
+	 * @return
+	 */
+	private boolean assertBonoNotRepeated(String bonoCode, List<String> codes) {
+		for (String c : codes) {
+			if (c.equals(bonoCode)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

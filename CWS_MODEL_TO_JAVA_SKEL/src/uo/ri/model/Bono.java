@@ -1,6 +1,7 @@
 package uo.ri.model;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -8,6 +9,7 @@ import uo.ri.util.exception.BusinessException;
 
 @Entity
 @Table(name = "TBonos")
+@DiscriminatorValue(value = "TBonos")
 public class Bono extends MedioPago {
 
 	private double disponible = 0.0;

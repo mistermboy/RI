@@ -1,9 +1,9 @@
 package uo.ri.model;
 
-import java.time.Instant;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -14,6 +14,7 @@ import uo.ri.util.exception.BusinessException;
 
 @Entity
 @Table(name = "TTarjetasCredito")
+@DiscriminatorValue(value = "TTarjetasCredito")
 public class TarjetaCredito extends MedioPago {
 
 	@Column(unique = true)

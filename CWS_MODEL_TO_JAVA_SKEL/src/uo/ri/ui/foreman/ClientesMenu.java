@@ -4,6 +4,7 @@ import alb.util.menu.BaseMenu;
 import uo.ri.ui.foreman.action.AddClientAction;
 import uo.ri.ui.foreman.action.DeleteClientAction;
 import uo.ri.ui.foreman.action.ListClientsAction;
+import uo.ri.ui.foreman.action.ListClientsByRecomendatorAction;
 import uo.ri.ui.foreman.action.ShowClientDetailsAction;
 import uo.ri.ui.foreman.action.UpdateClientAction;
 
@@ -15,13 +16,8 @@ public class ClientesMenu extends BaseMenu {
 				{ "Añadir cliente", AddClientAction.class }, { "Eliminar cliente", DeleteClientAction.class },
 				{ "Modificar datos de cliente", UpdateClientAction.class },
 				{ "Listar clientes", ListClientsAction.class },
-				{ "Mostrar detalles de un cliente", ShowClientDetailsAction.class }};
+				{ "Mostrar detalles de un cliente", ShowClientDetailsAction.class },
+				{ "Listar clientes recomendados por otro cliente", ListClientsByRecomendatorAction.class } };
 	}
 
 }
-// , { "Modificar datos de cliente", UpdateClientAction.class },
-// { "Eliminar cliente", DeleteClientAction.class },
-// { "Mostrar detalles de un cliente", ShowClientDetailAction.class },
-// { "Listar clientes", ListClientsAction.class },
-// { "Listar clientes recomendados por otro cliente",
-// ListClientsByRecomendatorAction.class },

@@ -37,7 +37,7 @@ public class Cliente {
 	private Set<MedioPago> mediosPago = new HashSet<>();
 	@OneToMany(mappedBy = "recomendador")
 	private Set<Recomendacion> recomendacionesHechas = new HashSet<>();
-	@OneToOne
+	@OneToOne(mappedBy = "recomendado")
 	private Recomendacion recomendacionRecibida;
 
 	Cliente() {
