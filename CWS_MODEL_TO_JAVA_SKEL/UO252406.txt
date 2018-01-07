@@ -1,0 +1,6 @@
+Nombre: Pablo Menéndez Suárez
+DNI: 71899158P
+
+Me ha tocado implementar el caso de uso 1
+	* Administrador. Generación automática de bonos: por 3 averías.
+	* Jefe Taller. Gestión de Clientes
