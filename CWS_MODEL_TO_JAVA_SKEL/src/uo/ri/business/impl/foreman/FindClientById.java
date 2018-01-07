@@ -7,6 +7,7 @@ import uo.ri.business.repository.ClienteRepository;
 import uo.ri.conf.Factory;
 import uo.ri.model.Cliente;
 import uo.ri.util.exception.BusinessException;
+import uo.ri.util.exception.Check;
 
 public class FindClientById implements Command<ClientDto> {
 
@@ -19,7 +20,10 @@ public class FindClientById implements Command<ClientDto> {
 	}
 
 	public ClientDto execute() throws BusinessException {
+
 		Cliente client = cR.findById(idClient);
+		Check.isNotNull(client, "El cliente no existe");
+
 		return client == null ? null : DtoAssembler.toDto(client);
 
 	}
