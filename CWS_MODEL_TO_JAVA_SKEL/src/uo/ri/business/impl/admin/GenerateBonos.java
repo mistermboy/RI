@@ -58,31 +58,7 @@ public class GenerateBonos implements Command<Integer> {
 			}
 
 		}
-
-		List<String> reps = new ArrayList<String>();
-		int numReps = 0;
-		for (String cod : codes) {
-			if (!isInrep(cod, reps)) {
-				reps.add(cod);
-			} else {
-				numReps++;
-			}
-
-		}
-		if (numReps > 0) {
-			throw new BusinessException("Num Reps" + numReps);
-		}
-
 		return numBonosGenerados;
-	}
-
-	private boolean isInrep(String cod, List<String> reps) {
-		for (String cods : reps) {
-			if (cods.equals(cod)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**

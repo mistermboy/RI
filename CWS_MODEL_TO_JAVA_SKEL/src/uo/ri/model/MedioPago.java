@@ -33,8 +33,8 @@ public abstract class MedioPago {
 	@OneToMany(mappedBy = "medioPago")
 	private Set<Cargo> cargos = new HashSet<>();
 
-	public Long getId() {
-		return id;
+	MedioPago() {
+
 	}
 
 	public double getAcumulado() {
@@ -87,6 +87,10 @@ public abstract class MedioPago {
 	}
 
 	public abstract void pagar(double cantidad) throws BusinessException;
+
+	public Long getId() {
+		return id;
+	}
 
 	/**
 	 * LLama al unLink de Association

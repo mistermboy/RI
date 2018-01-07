@@ -49,23 +49,6 @@ public class AddClient implements Command<Void> {
 	}
 
 	/**
-	 * Comprueba si el recomendador dispone de alguna factura abonada
-	 * 
-	 * @param recomendador
-	 * @return
-	 */
-	private boolean hasFacturaAbonada(Cliente recomendador) {
-		for (Vehiculo ve : recomendador.getVehiculos()) {
-			for (Averia a : ve.getAverias()) {
-				if (a.getFactura().isSettled()) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Crea la recomendación
 	 */
 	private void createRecomendation(Cliente recomendador, Cliente clienteRecomendado) {
