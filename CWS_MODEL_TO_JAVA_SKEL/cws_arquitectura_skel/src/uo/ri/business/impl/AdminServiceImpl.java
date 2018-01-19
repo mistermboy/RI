@@ -4,6 +4,8 @@ import java.util.List;
 
 import uo.ri.business.AdminService;
 import uo.ri.business.dto.MechanicDto;
+import uo.ri.business.dto.VoucherDto;
+import uo.ri.business.dto.VoucherSummary;
 import uo.ri.business.impl.admin.AddMechanic;
 import uo.ri.business.impl.admin.DeleteMechanic;
 import uo.ri.business.impl.admin.FindAllMechanics;
@@ -45,6 +47,16 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int generateVouchers() throws BusinessException {
 		return executor.execute(new GenerateBonos());
+	}
+
+	@Override
+	public List<VoucherDto> findVouchersByClientId(Long id) throws BusinessException {
+		return null;
+	}
+
+	@Override
+	public List<VoucherSummary> getVoucherSummary() throws BusinessException {
+		return null;
 	}
 
 }

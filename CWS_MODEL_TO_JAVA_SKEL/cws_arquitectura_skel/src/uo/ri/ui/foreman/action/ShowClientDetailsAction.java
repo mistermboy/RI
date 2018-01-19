@@ -18,6 +18,10 @@ public class ShowClientDetailsAction implements Action {
 		ForemanService fS = Factory.service.forForeman();
 
 		ClientDto client = fS.findClientById(idClient);
+		
+		if (client == null) {
+			throw new BusinessException("No existe el cliente");
+		}
 
 		Console.println("\nDetalles del cliente:\n");
 		Printer.printClientDetails(client);

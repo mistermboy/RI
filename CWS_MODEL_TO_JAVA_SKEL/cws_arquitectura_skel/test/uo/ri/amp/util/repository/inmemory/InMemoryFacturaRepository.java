@@ -20,6 +20,7 @@ public class InMemoryFacturaRepository
 
 	@Override
 	public Long getNextInvoiceNumber() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -27,7 +28,7 @@ public class InMemoryFacturaRepository
 	public List<Factura> findUnusedWithBono500() {
 		return entities.values().stream()
 				.filter(f -> f.getImporte() >= 500)
-				.filter(f -> ! f.isUsada_bono())
+				.filter(f -> ! f.isBono500Used())
 				.collect( Collectors.toList());
 	}
 

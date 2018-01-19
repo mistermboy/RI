@@ -54,7 +54,7 @@ public class AddClientTests extends BaseServiceTests {
 		Long WITHOUT_RECOMENDATION = null;
 		Cliente c = FixtureRepository.registerNewClient();
 		ClientDto client = Fixture.newClientDto();
-		client.dni = c.getDni();
+		client.dni = c.getDni(); // <---repeated dni
 		
 		ForemanService svc = Factory.service.forForeman();
 		try {

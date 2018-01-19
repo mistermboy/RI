@@ -9,7 +9,7 @@ import static uo.ri.amp.service.util.FixtureRepository.findVouchersByClientId;
 import uo.ri.amp.util.repository.inmemory.InMemoryCommandExecutorFactory;
 import uo.ri.amp.util.repository.inmemory.InMemoryRepositoryFactory;
 import uo.ri.business.dto.ClientDto;
-import uo.ri.business.impl.BusinessFactory;
+import uo.ri.business.impl.BusinessServiceFactory;
 import uo.ri.conf.Factory;
 import uo.ri.model.Bono;
 import uo.ri.model.Cliente;
@@ -22,7 +22,7 @@ public abstract class BaseServiceTests {
 	 * Does the dependency injection for all Business layer tests
 	 */
 	public BaseServiceTests() {
-		Factory.service = new BusinessFactory();
+		Factory.service = new BusinessServiceFactory();
 		Factory.executor = new InMemoryCommandExecutorFactory();
 		Factory.repository = new InMemoryRepositoryFactory();
 	}
@@ -39,7 +39,7 @@ public abstract class BaseServiceTests {
 	protected void assertSameData(ClientDto dto, Cliente entity) {
 		assertTrue( entity.getAddress().getStreet().equals( dto.addressStreet) );
 		assertTrue( entity.getAddress().getCity().equals( dto.addressCity) );
-		assertTrue( entity.getAddress().getZipCode().equals( dto.addressZipcode) );
+		assertTrue( entity.getAddress().getZipcode().equals( dto.addressZipcode) );
 		assertTrue( entity.getEmail().equals( dto.email ));
 		assertTrue( entity.getPhone().equals( dto.phone ));
 		assertTrue( entity.getNombre().equals( dto.name ));

@@ -23,14 +23,13 @@ public class UpdateClientTests extends BaseServiceTests {
 
 	/**
 	 * Se actualiza el cliente con todos los campos del dto
-	 * 
-	 * @throws BusinessException
+	 * @throws BusinessException 
 	 */
 	@Test
 	public void testUpdate() throws BusinessException {
 		Cliente c = FixtureRepository.registerNewClient();
-		ClientDto dto = DtoAssembler.toDto(c);
-
+		ClientDto dto = DtoAssembler.toDto( c );
+		
 		dto.addressStreet = "m-" + dto.addressStreet;
 		dto.addressCity = "m-" + dto.addressCity;
 		dto.addressZipcode = "m-" + dto.addressZipcode;
@@ -38,14 +37,14 @@ public class UpdateClientTests extends BaseServiceTests {
 		dto.phone = "m-" + dto.phone;
 		dto.name = "m-" + dto.name;
 		dto.surname = "m-" + dto.surname;
-
+		
 		ForemanService svc = Factory.service.forForeman();
-		svc.updateClient(dto);
-
-		Cliente expected = FixtureRepository.findClientByDni(c.getDni());
+		svc.updateClient( dto );
+		
+		Cliente expected = FixtureRepository.findClientByDni( c.getDni() );
 		assertSameData(dto, expected);
 	}
-
+	
 	/**
 	 * Si el cliente no existe salta una excepción
 	 */
@@ -53,29 +52,29 @@ public class UpdateClientTests extends BaseServiceTests {
 	public void testUpdateClientDoesNotExist() throws BusinessException {
 		ClientDto dto = Fixture.newClientDto();
 		Long DOES_NOT_EXIST = -12345L;
-
+		
 		dto.id = DOES_NOT_EXIST;
-
+		
 		ForemanService svc = Factory.service.forForeman();
-		svc.updateClient(dto);
+		svc.updateClient( dto );
 	}
-
+	
 	/**
 	 * El atributo dni no se actualiza aunque el dto lleve nuevo dni
 	 */
 	@Test
 	public void testDniDoesNotUpdate() throws BusinessException {
 		Cliente c = FixtureRepository.registerNewClient();
-		ClientDto dto = DtoAssembler.toDto(c);
+		ClientDto dto = DtoAssembler.toDto( c );
 		String previousDni = c.getDni();
 
-		dto.dni = "m-" + dto.dni;
-
+		dto.dni = "m-" + dto.dni; // <-- must be ignored
+		
 		ForemanService svc = Factory.service.forForeman();
-		svc.updateClient(dto);
-
-		Cliente expected = FixtureRepository.findClientByDni(c.getDni());
-		assertTrue(expected.getDni().equals(previousDni));
+		svc.updateClient( dto );
+		
+		Cliente expected = FixtureRepository.findClientByDni( c.getDni() );
+		assertTrue( expected.getDni().equals( previousDni ));
 	}
 
 }

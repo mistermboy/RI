@@ -35,4 +35,14 @@ public class MedioPagoJpaRepository extends BaseRepository<MedioPago> implements
 		return null;
 	}
 
+	@Override
+	public List<MedioPago> findPaymentMeansByInvoiceId(Long idFactura) {
+		return null;
+	}
+
+	@Override
+	public Object[] findAggregateVoucherDataByClientId(Long id) {
+		return null;
+	}
+
 }

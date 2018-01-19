@@ -26,32 +26,35 @@ import uo.ri.util.exception.BusinessException;
 public class FixtureRepository {
 
 	public static Bono findVoucherByCode(String code) {
-		return repository().forMedioPago().findVoucherByCode(code);
+		return repository().forMedioPago().findVoucherByCode( code );
 	}
 
 	public static TarjetaCredito findCardByNumber(String cardNumber) {
-		return repository().forMedioPago().findCreditCardByNumber(cardNumber);
+		return repository().forMedioPago().findCreditCardByNumber( cardNumber );
 	}
 
 	public static Metalico findCashByClientId(Long id) {
-		return repository().forMedioPago().findByClientId(id).stream().filter(mp -> mp instanceof Metalico)
-				.map(mp -> (Metalico) mp).findFirst().orElse(null);
+		return repository().forMedioPago().findByClientId(id).stream()
+				.filter( mp -> mp instanceof Metalico)
+				.map( mp -> (Metalico) mp)
+				.findFirst()
+				.orElse(  null );
 	}
 
 	public static List<Bono> findVouchersByClientId(Long id) {
-		return repository().forMedioPago().findVouchersByClientId(id);
+		return repository().forMedioPago().findVouchersByClientId( id );
 	}
-
+	
 	public static Cliente findClientByDni(String dni) {
 		return repository().forCliente().findByDni(dni);
 	}
 
 	public static Cliente registerNewClient() {
 		Cliente c = new Cliente(Random.string(4), "n", "a");
-		c.setEmail("email@client");
+		c.setEmail( "email@client" );
 		c.setPhone("123-456-789");
-		c.setAddress(new Address("street", "city", "zipcode"));
-		repository().forCliente().add(c);
+		c.setAddress( new Address("street", "city", "zipcode"));
+		repository().forCliente().add( c );
 		return c;
 	}
 
@@ -63,8 +66,8 @@ public class FixtureRepository {
 
 	public static Cliente registerNewClientWithCash() {
 		Cliente c = registerNewClient();
-		Metalico m = new Metalico(c);
-		repository().forMedioPago().add(m);
+		Metalico m = new Metalico( c );
+		repository().forMedioPago().add( m );
 		return c;
 	}
 
@@ -76,18 +79,18 @@ public class FixtureRepository {
 
 	public static Vehiculo registerNewVehicle() {
 		Vehiculo v = new Vehiculo("mat-" + Random.integer(1000, 9999));
-		v.setMarca("seat");
-		v.setModelo("ibiza");
-		repository().forVehiculo().add(v);
+		v.setMarca( "seat" );
+		v.setModelo( "ibiza" );
+		repository().forVehiculo().add( v );
 		return v;
 	}
-
+	
 	public static Vehiculo registerNewVehicleFor(Cliente c) {
 		Vehiculo v = registerNewVehicle();
-		Association.Poseer.link(c, v);
+		Association.Poseer.link(c,  v);
 		return v;
 	}
-
+	
 	public static TarjetaCredito registerNewCreditCard() {
 		String number = Random.string('0', '9', 16);
 		TarjetaCredito tc = new TarjetaCredito(number, "TC", DateUtil.tomorrow());
@@ -98,7 +101,7 @@ public class FixtureRepository {
 	public static Bono registerNewVoucherWithAvailable(double available) {
 		String code = "B-" + Random.string(4);
 		Bono b = new Bono(code, available);
-		repository().forMedioPago().add(b);
+		repository().forMedioPago().add( b );
 		return b;
 	}
 
@@ -108,47 +111,54 @@ public class FixtureRepository {
 		return tc;
 	}
 
-	public static Factura registerNewInvoiceWithChargesToCard(TarjetaCredito tc) throws BusinessException {
-
+	public static Factura registerNewInvoiceWithChargesToCard(TarjetaCredito tc) 
+			throws BusinessException {
+		
 		Long number = Random.longInteger(1000, 10000);
-		Factura f = new Factura(number);
+		Factura f = new Factura( number );
 		new Cargo(f, tc, f.getImporte());
 		return f;
 	}
 
-	public static Factura registerNewInvoiceForAmount(double amount) throws BusinessException {
-
+	public static Factura registerNewInvoiceForAmount(double amount) 
+			throws BusinessException {
+		
 		Factura f = createInvoiceForAmount(amount);
-		repository().forFactura().add(f);
+		repository().forFactura().add( f );
 		return f;
 	}
 
-	public static Factura registerNewInvoiceForClientWithAmount(Cliente c, double amount) throws BusinessException {
+	public static Factura registerNewInvoiceForClientWithAmount(
+				Cliente c, double amount) 
+				throws BusinessException {
 		Factura f = createInvoiceForAmount(amount);
 		Vehiculo v = f.getAverias().stream().findFirst().orElse(null).getVehiculo();
-		Association.Poseer.link(c, v);
-		repository().forFactura().add(f);
+		Association.Poseer.link(c,  v);
+		repository().forFactura().add( f );
 		return f;
 	}
 
-	private static Factura createInvoiceForAmount(double amount) throws BusinessException {
-
-		double IVA = 0.21;
+	private static Factura createInvoiceForAmount(double amount) 
+			throws BusinessException {
+		
+		double IVA = 0.21; // 21% current IVA, not 18%
 		double EUROS_PER_HOUR = 50.0;
-		TipoVehiculo tv = new TipoVehiculo("TV", EUROS_PER_HOUR);
+		TipoVehiculo tv = new TipoVehiculo("TV", EUROS_PER_HOUR /*€/hour*/);
 		Vehiculo v = new Vehiculo("1234-ABC");
 		Association.Clasificar.link(tv, v);
 		Averia a = newAveria(v);
 		Association.Averiar.link(v, a);
 		Mecanico m = new Mecanico("123a");
-		a.assignTo(m);
-
+		a.assignTo( m );
+		
 		amount /= 1 + IVA;
-		int minutes = (int) (amount * 60 / EUROS_PER_HOUR);
+		int minutes = (int)(amount /*€*/ 
+				* 60 /* mins/hour */ 
+				/ EUROS_PER_HOUR /*€/hour*/);
 		new Intervencion(m, a, minutes);
 		a.markAsFinished();
-
-		Factura f = new Factura(123L, Arrays.asList(a));
+		
+		Factura f = new Factura( 123L, Arrays.asList( a ) );
 		return f;
 	}
 
@@ -156,30 +166,31 @@ public class FixtureRepository {
 		return Factory.repository;
 	}
 
-	public static Factura registerNewSettledInvoiceForAmount(Cliente c, double amount) throws BusinessException {
-
+	public static Factura registerNewSettledInvoiceForAmount(Cliente c, double amount) 
+			throws BusinessException {
+		
 		Factura f = createInvoiceForAmount(amount);
-		Vehiculo v = f.getAverias().stream().findFirst().orElse(null).getVehiculo();
-		Association.Poseer.link(c, v);
+		Vehiculo v = f.getAverias().stream().findFirst().orElse( null).getVehiculo();
+		Association.Poseer.link(c,  v);
 
 		TarjetaCredito tc = FixtureRepository.registerNewCreditCardForClient(c);
 		new Cargo(f, tc, f.getImporte());
 		f.settle();
-
-		repository().forFactura().add(f);
+		
+		repository().forFactura().add( f );
 		return f;
 	}
 
 	public static Averia registerNewBreakdownFor(Vehiculo v) {
 		Averia a = newAveria(v);
-		Association.Averiar.link(v, a);
-		repository().forAveria().add(a);
+		Association.Averiar.link(v,  a);
+		repository().forAveria().add( a );
 		return a;
 	}
 
 	private static Averia newAveria(Vehiculo v) {
-		sleep(5);
-		Averia a = new Averia(v);
+		sleep(5 /* ms */ );
+		Averia a = new Averia( v );
 		return a;
 	}
 
@@ -187,45 +198,47 @@ public class FixtureRepository {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-
+			// don't care
 		}
 	}
 
-	public static Averia registerNewInvoicedBreakdownFor(Vehiculo v) throws BusinessException {
-
+	public static Averia registerNewInvoicedBreakdownFor(Vehiculo v) 
+			throws BusinessException {
+		
 		Averia a = newAveria(v);
-		Association.Averiar.link(v, a);
+		Association.Averiar.link(v,  a);
 		Mecanico m = new Mecanico("dni");
-		a.assignTo(m);
+		a.assignTo( m );
 		a.markAsFinished();
-		Factura f = new Factura(123L);
-		f.addAveria(a);
-		TarjetaCredito tc = registerNewCreditCardForClient(v.getCliente());
+		Factura f = new Factura( 123L );
+		f.addAveria( a );
+		TarjetaCredito tc = registerNewCreditCardForClient( v.getCliente() );
 		new Cargo(f, tc, f.getImporte());
 		f.settle();
-
-		repository().forAveria().add(a);
+		
+		repository().forAveria().add( a );
 		return a;
 	}
 
 	public static Cliente registerNewClientWithBreakDown() {
 		Cliente c = registerNewClient();
 		Vehiculo v = registerNewVehicleFor(c);
-		registerNewBreakdownFor(v);
+		registerNewBreakdownFor( v );
 		return c;
 	}
 
-	public static Recomendacion registerNewClientWithBreakdownRecommendedBy(Cliente recommender) {
+	public static Recomendacion 
+			registerNewClientWithBreakdownRecommendedBy(Cliente recommender) {
 		Cliente c = registerNewClientWithBreakDown();
 		Recomendacion r = new Recomendacion(recommender, c);
-		repository().forRecomendacion().add(r);
+		repository().forRecomendacion().add( r );
 		return r;
 	}
 
 	public static Recomendacion registerNewClientRecommendedBy(Cliente recommender) {
 		Cliente c = registerNewClient();
 		Recomendacion r = new Recomendacion(recommender, c);
-		repository().forRecomendacion().add(r);
+		repository().forRecomendacion().add( r );
 		return r;
 	}
 

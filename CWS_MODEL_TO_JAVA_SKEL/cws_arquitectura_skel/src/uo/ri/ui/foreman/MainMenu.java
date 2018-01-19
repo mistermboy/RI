@@ -2,7 +2,7 @@ package uo.ri.ui.foreman;
 
 import alb.util.menu.BaseMenu;
 import alb.util.menu.NotYetImplementedAction;
-import uo.ri.business.impl.BusinessFactory;
+import uo.ri.business.impl.BusinessServiceFactory;
 import uo.ri.conf.Factory;
 import uo.ri.persistence.jpa.JpaRepositoryFactory;
 import uo.ri.persistence.jpa.executor.JpaExecutorFactory;
@@ -26,7 +26,7 @@ public class MainMenu extends BaseMenu {
 	private MainMenu config() {
 		Factory.executor = new JpaExecutorFactory();
         Factory.repository = new JpaRepositoryFactory();
-        Factory.service = new BusinessFactory();
+        Factory.service = new BusinessServiceFactory();
         
 		
 		return this;

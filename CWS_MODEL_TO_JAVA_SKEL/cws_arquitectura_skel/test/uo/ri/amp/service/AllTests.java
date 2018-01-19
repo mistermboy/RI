@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+	uo.ri.amp.service.cash.AllTests.class,
 	uo.ri.amp.service.foreman.AllTests.class,
 	uo.ri.amp.service.admin.AllTests.class
 })

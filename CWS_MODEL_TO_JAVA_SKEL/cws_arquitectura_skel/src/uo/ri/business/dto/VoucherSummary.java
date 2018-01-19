@@ -10,6 +10,8 @@ public class VoucherSummary {
 	public int emitted;			
 	public double totalAmount;	
 	public double available;	
-	public double consumed;	
+	public double consumed;
+	public Object name;
+	public Object surname;	
 	
 }

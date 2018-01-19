@@ -51,7 +51,8 @@ public class CargoTests {
 	}
 
 	/**
-	 * A charge to a voucher increases the accumulated and decreases the available
+	 * A charge to a voucher increases the accumulated and decreases the
+	 * available
 	 * 
 	 * @throws BusinessException
 	 */
@@ -68,28 +69,26 @@ public class CargoTests {
 
 	/**
 	 * A credit card cannot be charged if its expiration date is over
-	 * 
 	 * @throws BusinessException
 	 */
-	@Test(expected = BusinessException.class)
+	@Test(expected=BusinessException.class)
 	public void tesChargeExpiredCard() throws BusinessException {
 		TarjetaCredito t = new TarjetaCredito("123", "TTT", DateUtil.yesterday());
 		Factura f = new Factura(123L);
 
-		new Cargo(f, t, 100.0);
+		new Cargo(f, t, 100.0); // Card validity date expired exception
 	}
 
 	/**
 	 * A voucher cannot be charged if it has no available money
-	 * 
 	 * @throws BusinessException
 	 */
-	@Test(expected = BusinessException.class)
+	@Test(expected=BusinessException.class)
 	public void testEmptyVoucherCannotBeCharged() throws BusinessException {
 		Bono b = new Bono("123", "For test", 150.0);
 		Factura f = new Factura(123L);
 
-		new Cargo(f, b, 151.0);
+		new Cargo(f, b, 151.0);  // Not enough money exception
 	}
 
 }

@@ -290,4 +290,8 @@ public class Factura {
 		return false;
 	}
 
+	public boolean isBono500Used() {
+		return this.usada_bono;
+	}
+
 }

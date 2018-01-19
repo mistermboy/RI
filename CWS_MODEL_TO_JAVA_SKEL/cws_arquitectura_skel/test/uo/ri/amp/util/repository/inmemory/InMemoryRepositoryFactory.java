@@ -23,6 +23,7 @@ public class InMemoryRepositoryFactory implements RepositoryFactory {
 
 	@Override
 	public MecanicoRepository forMechanic() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -48,6 +49,7 @@ public class InMemoryRepositoryFactory implements RepositoryFactory {
 
 	@Override
 	public RepuestoRepository forRepuesto() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -26,7 +26,7 @@ public class Address {
 		return city;
 	}
 
-	public String getZipCode() {
+	public String getZipcode() {
 		return zipCode;
 	}
 
@@ -71,5 +71,6 @@ public class Address {
 	public String toString() {
 		return "Address [street=" + street + ", city=" + city + ", zipCode=" + zipCode + "]";
 	}
+
 
 }

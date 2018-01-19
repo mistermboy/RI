@@ -36,7 +36,7 @@ public class Bono extends MedioPago {
 		this.descripcion = descripcion;
 	}
 
-	public double getDisponible() {
+	public Double getDisponible() {
 		return disponible;
 	}
 

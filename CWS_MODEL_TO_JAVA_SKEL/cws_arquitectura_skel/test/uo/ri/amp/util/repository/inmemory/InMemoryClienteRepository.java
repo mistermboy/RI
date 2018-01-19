@@ -23,7 +23,7 @@ public class InMemoryClienteRepository
 		return entities.values().stream()
 				.filter( c -> c.getRecomendacionesHechas().size() >= 3)
 				.flatMap( c -> c.getRecomendacionesHechas().stream() )
-				.filter(r -> ! r.isUsada_bono())
+				.filter(r -> ! r.isUsada())
 				.map(r -> r.getRecomendador())
 				.distinct()
 				.collect( Collectors.toList() );

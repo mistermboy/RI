@@ -112,4 +112,8 @@ public class Recomendacion {
 		Association.Recomendar.unlink(this);
 
 	}
+
+	public boolean isUsada() {
+		return this.usada_bono;
+	}
 }

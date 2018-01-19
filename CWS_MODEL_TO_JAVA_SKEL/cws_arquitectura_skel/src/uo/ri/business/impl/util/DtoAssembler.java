@@ -33,7 +33,7 @@ public class DtoAssembler {
 		dto.surname = c.getApellidos();
 
 		dto.addressStreet = c.getAddress().getStreet();
-		dto.addressZipcode = c.getAddress().getZipCode();
+		dto.addressZipcode = c.getAddress().getZipcode();
 		dto.addressCity = c.getAddress().getCity();
 
 		dto.phone = c.getPhone();

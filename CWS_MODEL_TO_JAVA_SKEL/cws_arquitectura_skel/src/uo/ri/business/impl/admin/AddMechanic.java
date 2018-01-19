@@ -7,7 +7,6 @@ import uo.ri.business.repository.MecanicoRepository;
 import uo.ri.conf.Factory;
 import uo.ri.model.Mecanico;
 import uo.ri.util.exception.BusinessException;
-import uo.ri.util.exception.Check;
 
 public class AddMechanic implements Command<Void> {
 
@@ -20,25 +19,10 @@ public class AddMechanic implements Command<Void> {
 
 	public Void execute() throws BusinessException {
 
-		assertDniNotRepeated(dto.dni);
-
 		Mecanico m = DtoAssembler.toEntity(dto);
 		r.add(m);
 
 		return null;
-	}
-
-	/**
-	 * Comprueba que el dni no esté repetido
-	 * 
-	 * @param dni
-	 * @throws BusinessException
-	 */
-	private void assertDniNotRepeated(String dni) throws BusinessException {
-
-		Mecanico m = r.findByDni(dni);
-		Check.isNull(m, "El dni ya esxiste");
-
 	}
 
 }

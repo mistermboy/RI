@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import alb.util.reflection.ReflectionUtil;
-import uo.ri.model.Cliente;
-import uo.ri.model.Factura;
-import uo.ri.model.MedioPago;
 
 public abstract class BaseMemoryRepository<T> {
 	long counter = 0L;
@@ -46,36 +43,6 @@ public abstract class BaseMemoryRepository<T> {
 	private Long getAttr(T owner, String fieldName) {
 		Field field = ReflectionUtil.getField(owner.getClass(), fieldName);
 		return (Long) ReflectionUtil.getFieldValue(owner, field);
-	}
-
-	public List<Cliente> findWithRecomendations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Cliente> findWithThreeUnusedBreakdowns() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Cliente> findRecomendedBy(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Factura> findUnusedWithBono500() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<MedioPago> findPaymentMeansByInvoiceId(Long idFactura) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object[] findAggregateVoucherDataByClientId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

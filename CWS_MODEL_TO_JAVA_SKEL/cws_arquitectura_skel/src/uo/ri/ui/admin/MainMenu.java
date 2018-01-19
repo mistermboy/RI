@@ -1,7 +1,7 @@
 package uo.ri.ui.admin;
 
 import alb.util.menu.BaseMenu;
-import uo.ri.business.impl.BusinessFactory;
+import uo.ri.business.impl.BusinessServiceFactory;
 import uo.ri.conf.Factory;
 import uo.ri.persistence.jpa.JpaRepositoryFactory;
 import uo.ri.persistence.jpa.executor.JpaExecutorFactory;
@@ -27,7 +27,7 @@ public class MainMenu extends BaseMenu {
 	 * @return this
 	 */
 	private MainMenu configure() {
-		Factory.service = new BusinessFactory();
+		Factory.service = new BusinessServiceFactory();
 		Factory.repository = new JpaRepositoryFactory();
 		Factory.executor = new JpaExecutorFactory();
 		

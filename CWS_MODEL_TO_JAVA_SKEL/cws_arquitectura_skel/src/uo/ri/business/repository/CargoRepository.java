@@ -1,5 +1,7 @@
 package uo.ri.business.repository;
 
-public interface CargoRepository {
+import uo.ri.model.Cargo;
+
+public interface CargoRepository extends Repository<Cargo> {
 
 }
