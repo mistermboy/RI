@@ -1,0 +1,220 @@
+﻿==========CONSULTAS SIMPLES================ 
+doc("pokemon.xml")/pokemons/pokemon[height<4 and weight>20 and weight<40][5]
+
+RESULTADO:
+<pokemon>
+  <id>265</id>
+  <identifier>wurmple</identifier>
+  <species_id>265</species_id>
+  <height>3</height>
+  <weight>36</weight>
+  <base_experience>39</base_experience>
+  <order>308</order>
+  <is_default>1</is_default>
+</pokemon>
+
+
+//
+count(doc('pokemon.xml')/pokemons/pokemon[base_experience>600])
+
+RESULTADO:
+1
+
+//
+count(doc('pokemon.xml')/pokemons/pokemon[base_experience>600])
+
+RESULTADO:
+<pokemon>
+  <id>144</id>
+  <identifier>articuno</identifier>
+  <species_id>144</species_id>
+  <height>17</height>
+  <weight>554</weight>
+  <base_experience>261</base_experience>
+  <order>187</order>
+  <is_default>1</is_default>
+</pokemon>
+
+==========CONSULTAS FLWOR================ 
+
+
+//Lista el nombre de cada pokemon junto con su peso y altura siempre y cuando el pokemon disponga de una experiencia base mayor a 50;
+
+for $b in doc("pokemon.xml")/pokemons/pokemon
+  let $i := $b/identifier
+  let $h := $b/height
+  let $w := $b/weight
+  let $b := $b/base_experience
+  return	<pokemon>{if($b > 50) then(
+        $i,$w,$h)else()
+     }</pokemon>
+ 
+ 
+ 
+        
+ //Agrupa los pokemons en función de su altura en diferentes categorias  y muestra el número de pokemons que hay por categoría ordenado de menor a mayor
+ 
+for $p in doc('pokemon.xml')//pokemons/pokemon  
+  let $h := $p/height
+  let $type :=  if($h < 1) then
+                     "short"
+                  else if($h >= 1 and $h < 10) then
+                     "standard"
+                  else if($h >= 10 and $h < 30) then
+                     "high"
+                  else if($h >= 30 and $h < 50) then
+                     "veryHigh"
+                  else
+                     "superHigh" 
+  group by $type
+  order by count($p)
+  return element{ $type } { count($p) }
+  
+  
+  RESULTADO:
+  <superHigh>9</superHigh>
+<veryHigh>15</veryHigh>
+<short>105</short>
+<standard>318</standard>
+<high>331</high>
+  
+ //Agrupa los pokemons en función de su peso en diferentes categorias  y muestra el número de pokemons que hay por categoría ordenado de menor a mayor
+ 
+for $p in doc('pokemon.xml')//pokemons/pokemon  
+  let $w := $p/weight
+  let $type :=  if($w < 10) then
+                     "lightWeight"
+                  else if($w >= 10 and $w < 100) then
+                     "standard"
+                  else if($w >= 100 and $w < 500) then
+                     "heavy"
+                  else if($w >= 500 and $w < 1000) then
+                     "veryHeavy"
+                  else
+                     "superHeavy" 
+  group by $type
+  order by count($p)
+  return element{ $type } { count($p) }
+  
+  
+  RESULTADO:
+  <superHeavy>100</superHeavy>
+<veryHeavy>123</veryHeavy>
+<lightWeight>126</lightWeight>
+<standard>150</standard>
+<heavy>279</heavy>
+  
+ //Agrupa los pokemons en función de su experiencia base y muestra los pokemons que se encuentran en cada categoria
+ 
+ for $p in doc('pokemon.xml')//pokemons/pokemon  
+  let $h := $p/base_experience
+  let $type :=  if($h < 100) then
+                     "lowExperience"
+                  else if($h >= 100 and $h < 300) then
+                     "standardExperience"
+                  else if($h >= 300 and $h < 600) then
+                     "highExperience"
+                  else
+                     "superHighExperience" 
+  group by $type
+  return element{ $type } { $p/identifier}
+  
+ 
+ 
+ 
+ //Agrupa los pokemons en función de su peso en diferentes categorias 
+ y muestra el número de pokemons que hay por categoría ordenado de menor a mayor así como la experiencia base media de la categoría
+ 
+ for $p in doc('pokemon.xml')//pokemons/pokemon  
+  let $h := $p/height
+  let $type :=  if($h < 1) then
+                     "short"
+                  else if($h >= 1 and $h < 10) then
+                     "standard"
+                  else if($h >= 10 and $h < 30) then
+                     "high"
+                  else if($h >= 30 and $h < 50) then
+                     "veryHigh"
+                  else
+                     "superHigh" 
+  group by $type
+  order by count($p)
+  return element{ $type } { count($p), <averageExperience>{sum($p/base_experience) div count($p) }</averageExperience> } 
+ 
+ RESULTADO:
+ 
+ <superHigh>9<averageExperience>225.88888888888889</averageExperience>
+</superHigh>
+<veryHigh>15<averageExperience>278.6666666666667</averageExperience>
+</veryHigh>
+<short>105<averageExperience>0</averageExperience>
+</short>
+<standard>318<averageExperience>97.20125786163523</averageExperience>
+</standard>
+<high>331<averageExperience>182.46223564954684</averageExperience>
+</high>
+ 
+
+ //Muestra en una tabla el nombre,peso,altura y experiencia base de cada pokemon ordenados por nombre siempre y cuando su peso sea superior a 1000
+ 
+ <html>
+<head> <title>Pokemons</title>
+</head>
+<body>
+<table border="1">
+  <tr> <th> Nombre </th> <th>Peso</th> <th>Altura</th> <th> Experiencia base </th> </tr>{
+for $i in doc('pokemon.xml')/pokemons/pokemon
+  where  $i/weight >1000
+  order by $i/identifier
+  return
+ <tr><th> {$i/identifier} </th> <th>{$i/weight} </th> <th> {$i/height} </th> <th> {$i/base_experience} </th> </tr> }
+</table>
+</body>
+</html>
+
+
+
+==========CONSULTAS FLWOR ANIDADAS O MÚLTIPLES================ 
+
+
+//Saca cada pokemon con su tipo
+for $p in doc('pokemon.xml')//pokemon
+   for $ie in doc('poke_types.xml')//type
+     for $t in doc('types.xml')//type
+       where $p/id=$ie/pokemon_id and $ie/type_id=$t/id
+       return <evoluciones> {$p/identifier,$t/identifier}</evoluciones>
+
+
+
+//Saca cada pokemon con su habitat
+for $p in doc('species.xml')//especie
+   for $h in doc('habitat.xml')//habitat
+   where $p/habitat_id = $h/pokemon_habitat_id
+   return <pokemon>{$p/identifier,$h/name}</pokemon>
+
+
+
+
+// Muestra en una tabla el nombre,peso,altura,experiencia base,tipo y habitat de cada pokemon ordenados por nombre 
+ <html>
+<head> <title>Pokemons</title>
+</head>
+<body>
+<table border="1">
+  <tr> <th> Nombre </th> <th>Peso</th> <th>Altura</th> <th> Experiencia base </th>  <th>Tipo</th> <th>Habitat</th></tr>{
+for $p in doc('pokemon.xml')//pokemon
+   for $e in doc('species.xml')//especie
+     for $h in doc('habitat.xml')//habitat
+       for $ie in doc('poke_types.xml')//type
+         for $t in doc('types.xml')//type
+           where $p/id=$ie/pokemon_id and $ie/type_id=$t/id and $e/habitat_id = $h/pokemon_habitat_id and $p/id=$e/id 
+  order by $p/identifier
+  return
+ <tr><th> {$p/identifier} </th> <th>{$p/weight} </th> <th> {$p/height} </th> <th> {$p/base_experience} </th> <th> {$t/identifier} </th> <th> {$h/name} </th>  </tr> }
+</table>
+</body>
+</html>
+
+
+
+ 
